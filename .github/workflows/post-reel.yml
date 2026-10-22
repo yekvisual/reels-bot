@@ -6,6 +6,11 @@ on:
     - cron: "0 16 * * *"
   workflow_dispatch:
     inputs:
+      mode:
+        description: "paylas = Reels paylaş, kontrol = token/hesap kontrolü, deneme = paylaşmadan sıradakini göster"
+        type: choice
+        options: [paylas, kontrol, deneme]
+        default: paylas
       file:
         description: "Belirli bir video (örn. videos/ornek.mp4). Boş = sıradaki"
         required: false
@@ -40,7 +45,13 @@ jobs:
           VIDEO_BASE_URL: ${{ vars.VIDEO_BASE_URL }}
           DEFAULT_CAPTION: ${{ vars.DEFAULT_CAPTION }}
           REEL_FILE: ${{ inputs.file }}
-        run: python publish.py
+          MODE: ${{ inputs.mode || 'paylas' }}
+        run: |
+          case "$MODE" in
+            kontrol) python publish.py --check ;;
+            deneme)  python publish.py --dry-run ;;
+            *)       python publish.py ;;
+          esac
 
       - name: posted.json'u kaydet
         run: |
