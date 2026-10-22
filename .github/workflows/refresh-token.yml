@@ -1,0 +1,31 @@
+name: Instagram token yenile
+
+# Instagram Login token'ları 60 günde sona erer. Bu iş ayda iki kez
+# token'ı yeniler ve IG_ACCESS_TOKEN secret'ını günceller.
+# Gerekli: GH_PAT secret'ı (bu repo için "Secrets: Read and write" izinli fine-grained token).
+
+on:
+  schedule:
+    - cron: "0 3 1,15 * *"
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Token'ı yenile ve secret'ı güncelle
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          resp=$(curl -sS -G "https://graph.instagram.com/refresh_access_token" \
+            --data-urlencode "grant_type=ig_refresh_token" \
+            --data-urlencode "access_token=${IG_ACCESS_TOKEN}")
+          new_token=$(echo "$resp" | jq -r '.access_token // empty')
+          if [ -z "$new_token" ]; then
+            echo "Yenileme başarısız: $(echo "$resp" | jq -c '.error // .')"
+            exit 1
+          fi
+          echo "::add-mask::$new_token"
+          gh secret set IG_ACCESS_TOKEN --repo "$GITHUB_REPOSITORY" --body "$new_token"
+          echo "Token yenilendi, $(echo "$resp" | jq -r '.expires_in') saniye geçerli."

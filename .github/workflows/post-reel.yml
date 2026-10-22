@@ -1,0 +1,53 @@
+name: Reels paylaş
+
+on:
+  schedule:
+    # Her gün 16:00 UTC = 19:00 Türkiye saati. Değiştirmek için: https://crontab.guru
+    - cron: "0 16 * * *"
+  workflow_dispatch:
+    inputs:
+      file:
+        description: "Belirli bir video (örn. videos/ornek.mp4). Boş = sıradaki"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: reels-publish
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r requirements.txt
+
+      - name: Sıradaki Reels'i paylaş
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_API: ${{ vars.IG_API || 'instagram' }}
+          UPLOAD_MODE: ${{ vars.UPLOAD_MODE }}
+          VIDEO_BASE_URL: ${{ vars.VIDEO_BASE_URL }}
+          DEFAULT_CAPTION: ${{ vars.DEFAULT_CAPTION }}
+          REEL_FILE: ${{ inputs.file }}
+        run: python publish.py
+
+      - name: posted.json'u kaydet
+        run: |
+          if ! git diff --quiet posted.json; then
+            git config user.name "reels-bot"
+            git config user.email "reels-bot@users.noreply.github.com"
+            git add posted.json
+            git commit -m "Reels paylaşıldı [skip ci]"
+            git push
+          fi
