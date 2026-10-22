@@ -222,6 +222,11 @@ def main():
     api = InstagramAPI(cfg)
 
     if args.check:
+        # Token'ın yalnızca türünü gösterir (ilk 4 karakter + uzunluk), değerini değil
+        print(f"Token   : {cfg.token[:4]}… ({len(cfg.token)} karakter)")
+        if cfg.api == "instagram" and not cfg.token.startswith("IG"):
+            print("UYARI   : Instagram Login token'ları genelde 'IG' ile başlar; "
+                  "'EA' ile başlıyorsa Facebook token'ıdır, sayılardan oluşuyorsa App ID/Secret'tır.")
         info, limit = api.account_info()
         print(f"Hesap   : @{info.get('username')} ({info.get('account_type')})")
         print(f"Gönderi : {info.get('media_count')}")
