@@ -1,0 +1,60 @@
+name: Instagram paylaşımlarını eşitle
+
+# Her gün @yekvisual'ın son paylaşımlarını (Instagram Login API) instagram/son.json'a
+# ve küçük görsellerini instagram/<id>.jpg olarak bu depoya yazar.
+# yekvisual.github.io sitesi build sırasında bu dosyaları okur.
+on:
+  schedule:
+    - cron: "30 4 * * *" # 07:30 Türkiye
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Son paylaşımları çek
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p instagram
+          resp=$(curl -sS -G "https://graph.instagram.com/v21.0/me/media" \
+            --data-urlencode "fields=id,caption,media_type,media_url,thumbnail_url,permalink,timestamp" \
+            --data-urlencode "limit=9" \
+            --data-urlencode "access_token=${IG_ACCESS_TOKEN}")
+          if [ "$(echo "$resp" | jq -r '.data | length // 0')" = "0" ]; then
+            echo "Paylaşım alınamadı: $(echo "$resp" | jq -c '.error // .')"; exit 1
+          fi
+          # Küçük görselleri indir (video için thumbnail_url, görsel için media_url)
+          echo "$resp" | jq -c '.data[]' | while read -r o; do
+            id=$(echo "$o" | jq -r .id)
+            url=$(echo "$o" | jq -r '.thumbnail_url // .media_url // empty')
+            [ -n "$url" ] && curl -sS -L "$url" -o "instagram/$id.jpg" || true
+          done
+          # Yerel görseli olanları yaz; CDN linkleri saklanmaz (süreli)
+          echo "$resp" | jq '[.data[] | {id, caption: (.caption // ""), media_type, permalink, timestamp}]' > instagram/son.json
+          # Listede olmayan eski görselleri temizle
+          for f in instagram/*.jpg; do
+            [ -e "$f" ] || continue
+            id=$(basename "$f" .jpg)
+            jq -e --arg id "$id" 'map(select(.id == $id)) | length > 0' instagram/son.json >/dev/null || rm -f "$f"
+          done
+          echo "$(jq length instagram/son.json) paylaşım yazıldı."
+      - name: Commit
+        run: |
+          git config user.name "yekvisual-bot"
+          git config user.email "yekvisual-bot@users.noreply.github.com"
+          git add instagram
+          if ! git diff --cached --quiet; then
+            git commit -m "Instagram paylaşımları güncellendi [bot]"
+            git push
+          fi
+      - name: Siteyi yeniden kur
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: gh workflow run deploy.yml --repo yekvisual/yekvisual.github.io --ref main || echo "Site tetiklenemedi (GH_PAT bu depoya yetkili değil); bir sonraki toplamada güncellenir."
