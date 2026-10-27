@@ -91,6 +91,14 @@ Token 60 günde sona erer. `refresh-token.yml` ayda iki kez yeniler:
 
 Kurmazsanız 60 günde bir 1. adımdaki gibi yeni token alıp secret'ı güncelleyin.
 
+### Bu Mac'ten kurulum (GH_PAT gerekmez)
+
+- `./token-ayarla.sh` — Meta panelinden kopyaladığınız token'ı panodan okur, @yekvisual'a ait olduğunu
+  doğrular, `IG_ACCESS_TOKEN` secret'ına ve Anahtar Zinciri'ne yazar, panoyu temizler, eşitleme işini
+  açıp bir kez çalıştırır. Token ekrana basılmaz.
+- `./token-yenile.sh` — Anahtar Zinciri'ndeki token'ı yeniler ve secret'ı günceller (60 gün dolmadan,
+  ör. ayda bir elle ya da launchd ile haftalık).
+
 ## Bilgisayardan kullanım
 
 ```bash
