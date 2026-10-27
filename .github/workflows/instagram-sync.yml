@@ -20,10 +20,14 @@ jobs:
       - name: Son paylaşımları çek
         env:
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
         run: |
           set -euo pipefail
           mkdir -p instagram
-          resp=$(curl -sS -G "https://graph.instagram.com/v21.0/me/media" \
+          # Secret'lerdeki olası satır sonu/boşlukları temizle (publish.py de strip ediyor)
+          IG_ACCESS_TOKEN="$(printf %s "$IG_ACCESS_TOKEN" | tr -d '[:space:]')"
+          IG_USER_ID="$(printf %s "${IG_USER_ID:-me}" | tr -d '[:space:]')"
+          resp=$(curl -sS -G "https://graph.instagram.com/v21.0/${IG_USER_ID:-me}/media" \
             --data-urlencode "fields=id,caption,media_type,media_url,thumbnail_url,permalink,timestamp" \
             --data-urlencode "limit=9" \
             --data-urlencode "access_token=${IG_ACCESS_TOKEN}")
