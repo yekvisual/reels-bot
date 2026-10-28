@@ -27,6 +27,16 @@ if [ "$user" != "$HESAP" ]; then
 fi
 echo "Anahtar geçerli: @$user ($(jq -r '.account_type' <<<"$resp"))"
 
+# Yorum → DM yanıtı (dm.py) için yorum ve mesaj izinleri
+uid=$(jq -r '.user_id' <<<"$resp")
+for p in "conversations?platform=instagram:instagram_business_manage_messages" "media?fields=comments{id}:instagram_business_manage_comments"; do
+  ucu=${p%%:*} izin=${p#*:}
+  r=$(curl -sS -G "https://graph.instagram.com/v26.0/$uid/$ucu&limit=1" --data-urlencode "access_token=$T")
+  if jq -e '.error' <<<"$r" >/dev/null; then
+    echo "UYARI: $izin izni yok gibi ($(jq -r '.error.message' <<<"$r")); DM yanıtı çalışmaz."
+  fi
+done
+
 # Yerel yenileme (token-yenile.sh) buradan okur.
 security add-generic-password -U -a "$REPO" -s reels-bot-ig -w "$T"
 printf %s "$T" | gh secret set IG_ACCESS_TOKEN -R "$REPO"

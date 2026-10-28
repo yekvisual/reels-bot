@@ -1,0 +1,52 @@
+name: Yorumlara DM ile yanıt ver
+
+# Yorumlara anahtar kelime yazanlara özel yanıt gönderir, DM'den dönenlerin takibini
+# kontrol edip kaynakları iletir (dm.py, kurallar: dm/kurallar.json).
+# GitHub zamanlanmış işleri birkaç dakika gecikmeli başlatabilir.
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "calistir = gönder, deneme = gönderilecekleri göster, gönderme"
+        type: choice
+        options: [calistir, deneme]
+        default: calistir
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dm-yanit
+  cancel-in-progress: false
+
+jobs:
+  dm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r requirements.txt
+
+      - name: Yorumları ve DM'leri işle
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          MODE: ${{ inputs.mode || 'calistir' }}
+        run: |
+          if [ "$MODE" = deneme ]; then python dm.py --deneme; else python dm.py; fi
+
+      - name: dm/durum.json'u kaydet
+        run: |
+          if ! git diff --quiet dm/durum.json 2>/dev/null || [ -n "$(git status --porcelain dm/durum.json)" ]; then
+            git config user.name "reels-bot"
+            git config user.email "reels-bot@users.noreply.github.com"
+            git add dm/durum.json
+            git commit -m "DM durumu [skip ci]"
+            git pull --rebase -q && git push
+          fi

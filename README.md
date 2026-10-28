@@ -99,6 +99,24 @@ Kurmazsanız 60 günde bir 1. adımdaki gibi yeni token alıp secret'ı güncell
 - `./token-yenile.sh` — Anahtar Zinciri'ndeki token'ı yeniler ve secret'ı günceller (60 gün dolmadan,
   ör. ayda bir elle ya da launchd ile haftalık).
 
+## Yorumlara DM ile yanıt
+
+`dm.py` (`.github/workflows/dm-yanit.yml`, 10 dakikada bir) yorumlara anahtar kelimeyi
+(açıklamadaki "yorumlara X yaz") yazanlara özel yanıt gönderir: takip edip mesaja yazmalarını
+ister. Yazdıklarında takip ediyorlarsa `dm/kurallar.json`'daki kaynakları, etmiyorlarsa
+hatırlatma gönderir. DM'ye doğrudan kelimeyi yazanlar da aynı akıştan geçer; başka mesajlara
+dokunmaz.
+
+- Token'da ayrıca `instagram_business_manage_comments` ve `instagram_business_manage_messages`
+  izinleri olmalı (Meta paneli → izinleri ekle → Generate token → `./token-ayarla.sh`).
+- Instagram sınırları: yoruma tek özel yanıt, yorumdan sonra 7 gün içinde; DM'ye kişinin son
+  mesajından sonra 24 saat içinde. Daha eskiler uygulamadan elle yanıtlanır.
+- Yeni paylaşım için `dm/kurallar.json`'a `video` (ya da eski paylaşım için `kod`), `baslik`,
+  `icerik` ekleyin.
+- `python dm.py --deneme` gönderilecekleri gösterir; `python dm.py --incele` paylaşımları ve
+  konuşmaları `dm/inceleme/rapor.json`'a yazar (depoya girmez).
+- Depo herkese açık olduğu için `dm/durum.json`'da yalnızca yorum kimliklerinin özetleri durur.
+
 ## Bilgisayardan kullanım
 
 ```bash

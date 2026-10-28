@@ -9,6 +9,7 @@ Kullanım:
     python publish.py --check      # token / hesap / kota kontrolü
     python publish.py --dry-run    # ne paylaşılacağını göster, paylaşma
     python publish.py --file videos/ornek.mp4   # belirli bir videoyu paylaş
+    python publish.py --karusel kaydirmali/001_bir-yil   # klasördeki 01, 02, … karelerini kaydırmalı post yap
 """
 
 import argparse
@@ -153,6 +154,27 @@ class InstagramAPI:
                 raise RuntimeError("Video işleme zaman aşımına uğradı.")
             time.sleep(interval_s)
 
+    def create_carousel_container(self, folder: Path, caption: str):
+        """Klasördeki .jpg/.mp4 kareleri ad sırasıyla (01, 02, …) kaydırmalı posta çevirir."""
+        uid = self.user_id()
+        items = sorted(p for p in folder.iterdir() if p.suffix.lower() in {".jpg", ".jpeg"} | VIDEO_EXTS
+                       and p.stem[:2].isdigit())
+        if not 2 <= len(items) <= 20:
+            sys.exit(f"HATA: kaydırmalı post 2–20 kare olmalı, {folder} içinde {len(items)} var.")
+        children = []
+        for item in items:
+            params = {"is_carousel_item": "true"}
+            if item.suffix.lower() in VIDEO_EXTS:
+                params.update(media_type="VIDEO", video_url=self.public_url(item))
+            else:
+                params["image_url"] = self.public_url(item)
+            cid = self.post(f"{uid}/media", **params)["id"]
+            print(f"  {item.name}: {cid}")
+            if item.suffix.lower() in VIDEO_EXTS:
+                self.wait_until_ready(cid, interval_s=10)
+            children.append(cid)
+        return self.post(f"{uid}/media", media_type="CAROUSEL", children=",".join(children), caption=caption)["id"]
+
     def publish(self, container_id: str):
         uid = self.user_id()
         media_id = self.post(f"{uid}/media_publish", creation_id=container_id)["id"]
@@ -197,10 +219,31 @@ def main():
     parser.add_argument("--check", action="store_true", help="token ve hesap kontrolü")
     parser.add_argument("--dry-run", action="store_true", help="paylaşmadan sıradaki videoyu göster")
     parser.add_argument("--file", default=os.environ.get("REEL_FILE") or None, help="belirli bir video")
+    parser.add_argument("--karusel", default=os.environ.get("KARUSEL_DIR") or None,
+                        help="kaydırmalı post klasörü (kareler 01.jpg, 02.mp4 …, açıklama aciklama.txt)")
     args = parser.parse_args()
 
     load_dotenv()
     posted = load_posted()
+
+    if args.karusel:
+        folder = (ROOT / args.karusel).resolve()
+        rel = folder.relative_to(ROOT).as_posix()
+        if rel in {e["file"] for e in posted}:
+            sys.exit(f"HATA: {rel} zaten paylaşılmış (posted.json).")
+        caption = (folder / "aciklama.txt").read_text(encoding="utf-8").strip()
+        if args.dry_run:
+            print(f"Kaydırmalı post: {rel}\nAçıklama: {caption!r}")
+            return
+        api = InstagramAPI(Config())
+        print(f"Kaydırmalı post hazırlanıyor: {rel}")
+        container_id = api.create_carousel_container(folder, caption)
+        media_id, permalink = api.publish(container_id)
+        print(f"Paylaşıldı: {permalink or media_id}")
+        posted.append({"file": rel, "media_id": media_id, "permalink": permalink,
+                       "posted_at": datetime.now(timezone.utc).isoformat(timespec="seconds")})
+        save_posted(posted)
+        return
 
     if args.file:
         video = (ROOT / args.file).resolve()

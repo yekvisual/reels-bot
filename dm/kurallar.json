@@ -1,0 +1,34 @@
+{
+  "_not": "Her paylaşım ya 'video' (posted.json'daki dosya), 'kod' (instagram.com/reel/<kod>) ya da 'aciklama' (paylaşım açıklamasında geçen metin) ile bulunur. 'anahtar' yazılmazsa açıklamadaki \"yorumlara X yaz\" kelimesi kullanılır. 'icerik'teki ilk link teslim edildi mi diye bakılır, her paylaşımda farklı olmalı. 'baslik' takip mesajında geçer, değiştirilirse yarım kalan konuşmalar tanınmaz.",
+  "takip_sart": true,
+  "mesaj": {
+    "takip_iste": "Merhaba, {baslik} için linkleri hemen göndereyim. @yekvisual'ı takip edip bu mesaja \"tamam\" yazmanız yeterli.",
+    "takip_yok": "Takibinizi henüz göremiyorum. @yekvisual'ı takip ettikten sonra buraya bir mesaj yazın, hemen göndereyim.",
+    "teslim": "{baslik} için linkler:\n\n{icerik}\n\nDenerseniz sonucu merak ediyorum."
+  },
+  "paylasimlar": [
+    {
+      "aciklama": "1 yılda neler oldu?",
+      "anahtar": [
+        "liste"
+      ],
+      "baslik": "1 yılın araç listesi",
+      "icerik": "Tam liste (27 araç, ücretsiz planlar ve linkler): https://yeklab.com.tr/gundem/2026/10/bir-yilda-neler-oldu/\n\nİlk denemek için:\n• Gemini (Nano Banana 2): https://gemini.google.com\n• ChatGPT Images 2.5: https://chatgpt.com\n• Kling 4.0: https://kling.ai\n• ElevenLabs: https://elevenlabs.io\n• Suno: https://suno.com"
+    },
+    {
+      "video": "videos/003_flux3klein.mp4",
+      "baslik": "FLUX 3 Klein",
+      "icerik": "Türkçe özet: https://yeklab.com.tr/gundem/2026/10/flux-3-image-klein/\nResmi duyuru: https://bfl.ai/blog/flux-3-image-klein\nModel dosyaları: https://huggingface.co/black-forest-labs/flux-3-image-klein"
+    },
+    {
+      "video": "videos/002_kimi31.mp4",
+      "baslik": "Kimi K3.1",
+      "icerik": "Türkçe özet: https://yeklab.com.tr/gundem/2026/10/kimi-k3-1-pro/\nKimi: https://moonshot.ai\nModel dosyaları: https://huggingface.co/moonshotai"
+    },
+    {
+      "video": "videos/001_kling4.mp4",
+      "baslik": "Kling 4.0",
+      "icerik": "Türkçe rehber: https://yeklab.com.tr/gundem/2026/10/kling-4-0/\nKling: https://klingai.com"
+    }
+  ]
+}
