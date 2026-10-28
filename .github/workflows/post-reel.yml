@@ -18,6 +18,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: reels-publish
@@ -61,4 +62,14 @@ jobs:
             git add posted.json
             git commit -m "Reels paylaşıldı [skip ci]"
             git push
+            echo "YENI_PAYLASIM=1" >> "$GITHUB_ENV"
           fi
+
+      - name: Sitedeki Instagram bölümünü güncelle
+        if: env.YENI_PAYLASIM == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Instagram'ın yeni gönderiyi listelemesi için kısa bekleme, sonra eşitle
+          sleep 60
+          gh workflow run instagram-sync.yml --repo "$GITHUB_REPOSITORY"

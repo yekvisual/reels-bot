@@ -5,7 +5,7 @@ name: Instagram paylaşımlarını eşitle
 # yekvisual.github.io sitesi build sırasında bu dosyaları okur.
 on:
   schedule:
-    - cron: "30 4 * * *" # 07:30 Türkiye
+    - cron: "15 */3 * * *" # 3 saatte bir (paylaşım sonrası ayrıca tetiklenir)
   workflow_dispatch:
 
 permissions:
@@ -58,7 +58,3 @@ jobs:
             git commit -m "Instagram paylaşımları güncellendi [bot]"
             git push
           fi
-      - name: Siteyi yeniden kur
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
-        run: gh workflow run deploy.yml --repo yekvisual/yekvisual.github.io --ref main || echo "Site tetiklenemedi (GH_PAT bu depoya yetkili değil); bir sonraki toplamada güncellenir."
