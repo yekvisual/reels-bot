@@ -238,6 +238,7 @@ def main():
         api = InstagramAPI(Config())
         print(f"Kaydırmalı post hazırlanıyor: {rel}")
         container_id = api.create_carousel_container(folder, caption)
+        api.wait_until_ready(container_id, interval_s=5)
         media_id, permalink = api.publish(container_id)
         print(f"Paylaşıldı: {permalink or media_id}")
         posted.append({"file": rel, "media_id": media_id, "permalink": permalink,
