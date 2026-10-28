@@ -48,6 +48,17 @@ def norm(s):
     return " ".join(re.findall(r"\w+", s))
 
 
+def benzerlik(a, b):
+    """İki kelime arasındaki düzenleme uzaklığı (ekleme, silme, değiştirme, yan yana yer değişimi)."""
+    d = [[i + j if i * j == 0 else 0 for j in range(len(b) + 1)] for i in range(len(a) + 1)]
+    for i in range(1, len(a) + 1):
+        for j in range(1, len(b) + 1):
+            d[i][j] = min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] != b[j - 1]))
+            if i > 1 and j > 1 and a[i - 1] == b[j - 2] and a[i - 2] == b[j - 1]:
+                d[i][j] = min(d[i][j], d[i - 2][j - 2] + 1)
+    return d[len(a)][len(b)]
+
+
 def ozet(*parca):
     return hashlib.sha256("|".join(map(str, parca)).encode()).hexdigest()[:16]
 
@@ -130,8 +141,21 @@ class DM:
         return p["kural"] and p["kural"].get("aktif", True) and p["anahtar"]
 
     def eslesir(self, metin, anahtarlar):
+        """Anahtar kelime ya da ona benzeyen yazım: ek almış hali (listeyi), uzatılmış harf
+        (listeee), tek harf hatası/yer değişimi (lste, lsite). Benzerlik yalnızca kısa yorumlarda
+        ve ilk harf tutuyorsa aranır; kısa anahtarlar ("ai") yalnızca birebir eşleşir."""
         n = norm(metin)
-        return any(n == a or f" {a} " in f" {n} " for a in anahtarlar)
+        kelimeler = n.split()
+        for a in anahtarlar:
+            if n == a or a in kelimeler or n.replace(" ", "") == a:
+                return True
+            if len(a) < 4:
+                continue
+            for k in kelimeler:
+                k = re.sub(r"(.)\1+", r"\1", k)
+                if k.startswith(a) or (len(kelimeler) <= 4 and k[:1] == a[:1] and benzerlik(k, a) <= 1):
+                    return True
+        return False
 
     # --- 1. Yorumlar --------------------------------------------------------------------
     def yorumlar(self, paylasimlar):
