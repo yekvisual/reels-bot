@@ -1,11 +1,9 @@
 name: Instagram paylaşımlarını eşitle
 
-# Her gün @yekvisual'ın son paylaşımlarını (Instagram Login API) instagram/son.json'a
+# Yalnızca paylaşımdan sonra (post-reel tetikler) ya da elle: @yekvisual'ın son paylaşımlarını (Instagram Login API) instagram/son.json'a
 # ve küçük görsellerini instagram/<id>.jpg olarak bu depoya yazar.
 # yekvisual.github.io sitesi build sırasında bu dosyaları okur.
 on:
-  schedule:
-    - cron: "15 */3 * * *" # 3 saatte bir (paylaşım sonrası ayrıca tetiklenir)
   workflow_dispatch:
 
 permissions:

@@ -70,6 +70,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          # Instagram'ın yeni gönderiyi listelemesi için kısa bekleme, sonra eşitle
-          sleep 60
+          # Yükleme ve işleme uzun sürebilir; 10 dakika bekleyip eşitle
+          sleep 600
           gh workflow run instagram-sync.yml --repo "$GITHUB_REPOSITORY"
