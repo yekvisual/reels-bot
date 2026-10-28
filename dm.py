@@ -33,7 +33,8 @@ from publish import ROOT, Config, InstagramAPI, load_dotenv, load_posted
 
 DM_DIR = ROOT / "dm"
 KURAL_FILE = DM_DIR / "kurallar.json"
-DURUM_FILE = DM_DIR / "durum.json"
+# Mac'teki sık çalıştırma (dm-zamanla.sh) kendi durum dosyasını kullanır; depodakiyle çakışmaz
+DURUM_FILE = Path(os.environ["DM_DURUM"]) if os.environ.get("DM_DURUM") else DM_DIR / "durum.json"
 INCELEME_DIR = DM_DIR / "inceleme"
 
 YORUM_PENCERE = timedelta(days=7)    # özel yanıt yorumdan sonra en geç 7 gün içinde
