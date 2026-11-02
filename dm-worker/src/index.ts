@@ -219,14 +219,18 @@ async function disKural(env: Env, k: any): Promise<Response> {
 
 // --- Panel API ------------------------------------------------------------------------
 async function hesapEkle(env: Env, token: string): Promise<Response> {
-  token = token.replace(/\s/g, "");
-  const ig = new IG(token);
-  let ben: any;
   try {
-    ben = await ig.get("me", { fields: "user_id,username" });
+    return json({ ok: true, ...(await hesapKaydet(env, token)) });
   } catch (e) {
     return json({ hata: `Instagram anahtarı kabul etmedi: ${(e as Error).message}` }, 400);
   }
+}
+
+/** Uzun ömürlü anahtarla hesabı kaydeder ve webhook aboneliğini açar. */
+async function hesapKaydet(env: Env, token: string): Promise<{ kullanici: string; abonelik: string }> {
+  token = token.replace(/\s/g, "");
+  const ig = new IG(token);
+  const ben: any = await ig.get("me", { fields: "user_id,username" });
   const id = String(ben.user_id ?? ben.id);
   await env.DB.prepare(
     `INSERT INTO hesaplar (id, kullanici, token, token_yenilendi, aktif) VALUES (?, ?, ?, ?, 1)
@@ -240,7 +244,64 @@ async function hesapEkle(env: Env, token: string): Promise<Response> {
     abonelik = `webhook aboneliği açılamadı (${(e as Error).message}); DM'ler dakikada bir yoklanacak`;
   }
   await kaydet(env, id, `hesap eklendi: @${ben.username}; ${abonelik}`);
-  return json({ ok: true, kullanici: ben.username, abonelik });
+  return { kullanici: ben.username, abonelik };
+}
+
+// --- Instagram girişiyle hesap bağlama (OAuth) -----------------------------------------
+const OAUTH_IZINLER = "instagram_business_basic,instagram_business_manage_messages,instagram_business_manage_comments";
+const oauthDonus = (url: URL) => `${url.origin}/oauth`;
+
+/** Panelden "Instagram ile bağla": imzalı state çerezi yazıp Instagram'ın onay sayfasına gönderir. */
+async function baglan(req: Request, env: Env, url: URL): Promise<Response> {
+  if (!(await oturumVar(req, env))) return Response.redirect(`${url.origin}/`, 303);
+  if (!env.INSTAGRAM_APP_ID) return new Response("INSTAGRAM_APP_ID tanımlı değil (wrangler.toml).", { status: 500 });
+  const nonce = crypto.randomUUID();
+  const state = `${nonce}.${await hmac(env.PANEL_SIFRE, "oauth" + nonce)}`;
+  const hedef = new URL("https://www.instagram.com/oauth/authorize");
+  for (const [k, v] of Object.entries({
+    client_id: env.INSTAGRAM_APP_ID, redirect_uri: oauthDonus(url), response_type: "code", scope: OAUTH_IZINLER, state,
+    force_reauth: "true", // farklı bir hesap bağlanabilsin diye tarayıcıdaki oturumu sormadan kabul etmesin
+  })) hedef.searchParams.set(k, v);
+  return new Response(null, {
+    status: 303,
+    headers: { Location: hedef.toString(), "Set-Cookie": `baglan=${state}; Path=/oauth; HttpOnly; Secure; SameSite=Lax; Max-Age=600` },
+  });
+}
+
+/** Instagram'dan dönüş: kodu kısa ömürlü, sonra uzun ömürlü anahtara çevirir ve hesabı kaydeder. */
+async function oauth(req: Request, env: Env, url: URL): Promise<Response> {
+  const panel = (mesaj: string, hata = false) =>
+    Response.redirect(`${url.origin}/?${hata ? "hata" : "mesaj"}=${encodeURIComponent(mesaj)}#hesap`, 303);
+  if (url.searchParams.get("error")) {
+    return panel(`Instagram bağlanmadı: ${url.searchParams.get("error_description") ?? url.searchParams.get("error_reason") ?? "reddedildi"}`, true);
+  }
+  const state = url.searchParams.get("state") ?? "";
+  const cerez = (req.headers.get("Cookie") ?? "").match(/(?:^|;\s*)baglan=([^;]+)/)?.[1] ?? "";
+  const nonce = state.split(".")[0];
+  if (!state || !esit(state, cerez) || !esit(state.split(".")[1] ?? "", await hmac(env.PANEL_SIFRE, "oauth" + nonce))) {
+    return panel("Bağlantı doğrulanamadı; panelden yeniden deneyin.", true);
+  }
+  const kod = (url.searchParams.get("code") ?? "").replace(/#_$/, "");
+  if (!kod) return panel("Instagram kod göndermedi.", true);
+  try {
+    const govde = new URLSearchParams({
+      client_id: env.INSTAGRAM_APP_ID ?? "", client_secret: env.APP_SECRET, grant_type: "authorization_code",
+      redirect_uri: oauthDonus(url), code: kod,
+    });
+    const kisa: any = await (await fetch("https://api.instagram.com/oauth/access_token", { method: "POST", body: govde })).json();
+    if (!kisa.access_token) throw new Error(kisa.error_message ?? kisa.error?.message ?? JSON.stringify(kisa).slice(0, 200));
+    const uzunUrl = new URL("https://graph.instagram.com/access_token");
+    uzunUrl.searchParams.set("grant_type", "ig_exchange_token");
+    uzunUrl.searchParams.set("client_secret", env.APP_SECRET);
+    uzunUrl.searchParams.set("access_token", kisa.access_token);
+    const uzun: any = await (await fetch(uzunUrl)).json();
+    if (!uzun.access_token) throw new Error(uzun.error?.message ?? "uzun ömürlü anahtar alınamadı");
+    const sonuc = await hesapKaydet(env, uzun.access_token);
+    return panel(`@${sonuc.kullanici} bağlandı; ${sonuc.abonelik}`);
+  } catch (e) {
+    await kaydet(env, null, `Instagram girişi başarısız: ${(e as Error).message}`);
+    return panel(`Instagram bağlanamadı: ${(e as Error).message}`, true);
+  }
 }
 
 async function paylasimlar(env: Env, hesapId: string): Promise<Response> {
@@ -353,6 +414,7 @@ async function api(req: Request, env: Env, url: URL): Promise<Response> {
       hesaplar: liste, sablonlar, hazir_sorular: hazirSorular(ayar), son_webhook: Number(ayar.son_webhook ?? 0),
       deneme: env.DENEME === "1", kayit, uyarilar: uyarilar(ayar),
       bildirim: !!(env.TELEGRAM_TOKEN && env.TELEGRAM_CHAT), link_kok: env.LINK_KOK ?? null, otomasyon: !!env.OTOMASYON_ANAHTARI,
+      oauth: !!env.INSTAGRAM_APP_ID,
     });
   }
   if (yol === "/api/hesap" && req.method === "POST") return hesapEkle(env, String(govde.token ?? ""));
@@ -409,6 +471,8 @@ export default {
   async fetch(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(req.url);
     if (url.pathname === "/webhook") return webhook(req, env, ctx);
+    if (url.pathname === "/baglan") return baglan(req, env, url);
+    if (url.pathname === "/oauth") return oauth(req, env, url);
     const l = url.pathname.match(/^\/l\/([a-z0-9]{4,16})\/?$/);
     if (l) return linkYonlendir(req, env, l[1], ctx);
     if (url.pathname === "/giris" && req.method === "POST") {

@@ -196,6 +196,7 @@ textarea { min-height: 90px; resize: vertical; }
   th, td { padding: 10px 12px; }
   .istat { grid-template-columns: repeat(2, 1fr); }
 }
+a.d.pasif { pointer-events: none; opacity: .5; }
 .serit { background: var(--kotu-acik); color: var(--kotu); border-bottom: 1px solid #f3c2c2; padding: 10px 24px; display: flex; gap: 10px; align-items: flex-start; font-size: 13px; }
 .serit b { font-weight: 600; }
 .serit span { display: block; }
@@ -261,9 +262,15 @@ textarea { min-height: 90px; resize: vertical; }
 <dialog id="hesapPencere">
   <form method="dialog" id="hesapForm">
     <h3>Hesap ekle</h3>
-    <p class="not" style="margin:0">Meta geliştirici panelinde uygulamayı açın → Instagram → API setup with Instagram login →
-      hesabın yanında <b>Generate token</b>. Kopyaladığınız anahtarı buraya yapıştırın. Var olan hesabın anahtarını yenilemek için de kullanılır.</p>
-    <label class="alan">Instagram anahtarı <textarea name="token" rows="3" placeholder="IGAA…" required></textarea></label>
+    <div id="baglanKutu">
+      <p class="not" style="margin:0 0 10px">Bağlanacak hesabın Instagram'da açık olması gerekmez; Instagram size hangi hesapla gireceğinizi sorar.
+        Hesabın Meta panelinde <b>Instagram tester</b> olarak eklenmiş ve daveti Instagram'da kabul etmiş olması gerekir.</p>
+      <a class="d ana" id="baglanDugme" href="/baglan" style="display:inline-flex;justify-content:center;width:100%">Instagram ile bağla</a>
+      <p class="not" id="baglanYok" hidden style="margin:10px 0 0;color:var(--uyari)">Instagram girişi için wrangler.toml'da INSTAGRAM_APP_ID boş; şimdilik anahtar yapıştırın.</p>
+      <p class="not" style="margin:14px 0 4px;text-align:center">— ya da anahtarı elle yapıştırın —</p>
+    </div>
+    <label class="alan">Instagram anahtarı <small>Meta paneli → Instagram → API setup with Instagram login → hesabın yanında <b>Generate token</b>.</small>
+      <textarea name="token" rows="3" placeholder="IGAA…"></textarea></label>
     <div class="satir">
       <button class="d" value="iptal" formnovalidate>Vazgeç</button>
       <button class="d ana" value="ekle">Ekle</button>
@@ -345,7 +352,7 @@ const yuzde = (a, b) => (b ? Math.round((a / b) * 100) : 0) + "%";
 
 function girisGoster() {
   const hata = new URLSearchParams(location.search).get("hata");
-  const hataMetin = hata === "2" ? "Çok fazla yanlış deneme. 15 dakika sonra tekrar deneyin." : hata ? "Şifre yanlış." : null;
+  const hataMetin = hata === "2" ? "Çok fazla yanlış deneme. 15 dakika sonra tekrar deneyin." : hata === "1" ? "Şifre yanlış." : hata ? hata : null;
   $("#uygulama").replaceChildren(el("form", { class: "giris kutu", method: "post", action: "/giris" },
     el("div", { class: "logo" }, el("i", {}, "YL"), "YEK Lab DM"),
     hataMetin ? el("p", { class: "not", style: "color:var(--kotu);margin:0" }, hataMetin) : null,
@@ -356,6 +363,13 @@ function girisGoster() {
 // --- Veri -------------------------------------------------------------------------------
 async function yukle() {
   durum.veri = await istek("/api/durum");
+  $("#baglanYok").hidden = durum.veri.oauth;
+  $("#baglanDugme").classList.toggle("pasif", !durum.veri.oauth);
+  const qs = new URLSearchParams(location.search);
+  if (qs.has("mesaj") || (qs.has("hata") && !/^\d$/.test(qs.get("hata")))) {
+    setTimeout(() => bildir(qs.get("mesaj") || qs.get("hata")), 300);
+    history.replaceState(null, "", location.pathname + location.hash);
+  }
   const hesaplar = durum.veri.hesaplar;
   if (!durum.hesap || !hesaplar.some((h) => h.id === durum.hesap)) durum.hesap = hesaplar[0]?.id ?? null;
   kabukCiz();
@@ -674,6 +688,7 @@ $("#kuralSil").addEventListener("click", async () => {
 $("#hesapPencere").addEventListener("close", async () => {
   const f = $("#hesapForm");
   if ($("#hesapPencere").returnValue !== "ekle") return;
+  if (!f.token.value.trim()) return bildir("Anahtar boş; 'Instagram ile bağla' düğmesini kullanın ya da anahtar yapıştırın.");
   try {
     const v = await istek("/api/hesap", { method: "POST", body: JSON.stringify({ token: f.token.value }) });
     f.reset();

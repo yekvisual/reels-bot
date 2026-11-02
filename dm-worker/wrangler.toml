@@ -22,6 +22,9 @@ DENEME = "0" # "1" yapılırsa yalnızca olay günlüğüne yazar (README: Eski 
 LINK_KOK = "https://yeklab.com.tr/l"
 # Tıklama sayacına JSON ile sorabilen site
 SITE_KOK = "https://yeklab.com.tr"
+# Panelden "Instagram ile bağla": Meta → uygulama → Instagram → API setup with Instagram login → Instagram app ID.
+# Aynı sayfada Business login settings → OAuth redirect URIs'e https://yeklab-dm.yeklab.workers.dev/oauth eklenmeli.
+INSTAGRAM_APP_ID = ""
 
 # Gizli değerler (wrangler secret put …): APP_SECRET, VERIFY_TOKEN, PANEL_SIFRE, OTOMASYON_ANAHTARI (publish.py),
 # TELEGRAM_TOKEN + TELEGRAM_CHAT (hata bildirimi), HEALTHCHECK_URL (isteğe bağlı: her dakika ping)

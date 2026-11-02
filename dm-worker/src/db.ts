@@ -9,6 +9,7 @@ export interface Env {
   TELEGRAM_TOKEN?: string;     // hata bildirimi: BotFather'dan alınan bot anahtarı
   TELEGRAM_CHAT?: string;      // bildirimin gideceği sohbet kimliği
   HEALTHCHECK_URL?: string;    // her dakikalık iş sonunda ping (healthchecks.io); kesilirse onlar haber verir
+  INSTAGRAM_APP_ID?: string;   // panelden Instagram girişiyle hesap bağlamak için (boşsa yalnız anahtar yapıştırma)
   LINK_KOK?: string;           // "https://yeklab.com.tr/l"
   SITE_KOK?: string;           // CORS için site adresi
   DENEME?: string;

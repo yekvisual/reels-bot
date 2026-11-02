@@ -33,8 +33,16 @@ npm run deploy                        # adres: https://yeklab-dm.<alt-alan>.work
 
 Sonra:
 
-1. Paneli açın → **+ Hesap** → Meta panelinde hesabın yanındaki **Generate token** ile aldığınız anahtarı yapıştırın.
-   Her hesap için tekrarlayın. Anahtarlar her pazartesi kendiliğinden yenilenir.
+1. Hesap bağlama, iki yol:
+   - **Instagram ile bağla** (kolay): Panel → Hesaplar → Hesap ekle → "Instagram ile bağla". Instagram hangi hesapla gireceğinizi sorar,
+     onaylayınca anahtar kendiliğinden alınır ve webhook aboneliği açılır. Bir kez hazırlık: Meta paneli → Instagram → API setup with
+     Instagram login → **Business login settings** → OAuth redirect URIs'e `https://yeklab-dm.yeklab.workers.dev/oauth` ekleyin ve
+     aynı sayfadaki **Instagram app ID**'yi `wrangler.toml` → `INSTAGRAM_APP_ID`'ye yazıp `npm run deploy`.
+   - **Anahtar yapıştır**: Meta panelinde hesabın yanındaki **Generate token** ile alınan anahtar aynı pencereye yapıştırılır.
+
+   Her iki yolda da bağlanacak hesap Meta panelinde **Instagram tester** olmalı (App roles → Roles → Add people → Instagram tester) ve
+   daveti Instagram'da kabul etmeli (Ayarlar → Web sitesi izinleri → Uygulamalar ve web siteleri → Tester davetleri). Uygulama Advanced
+   Access almadığı sürece Meta bunu şart koşuyor. Anahtarlar her pazartesi kendiliğinden yenilenir.
 2. Meta panelinde **Webhooks**: Callback URL `https://…workers.dev/webhook`, Verify token = `VERIFY_TOKEN`;
    `messages` ve `messaging_postbacks` alanlarına abone olun.
 3. Meta webhook'ları yalnızca Live moddaki uygulamaya gönderir. Gizlilik politikası adresi olarak
