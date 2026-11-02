@@ -10,6 +10,7 @@ Kullanım:
     python publish.py --dry-run    # ne paylaşılacağını göster, paylaşma
     python publish.py --file videos/ornek.mp4   # belirli bir videoyu paylaş
     python publish.py --karusel kaydirmali/001_bir-yil   # klasördeki 01, 02, … karelerini kaydırmalı post yap
+    python publish.py --hikaye hikaye/2026-11-02_terra.mp4  # story (video ya da jpg; bağlantı çıkartması API'de yok)
 """
 
 import argparse
@@ -175,6 +176,12 @@ class InstagramAPI:
             children.append(cid)
         return self.post(f"{uid}/media", media_type="CAROUSEL", children=",".join(children), caption=caption)["id"]
 
+    def create_story_container(self, item: Path):
+        uid = self.user_id()
+        if item.suffix.lower() in VIDEO_EXTS:
+            return self.post(f"{uid}/media", media_type="STORIES", video_url=self.public_url(item))["id"]
+        return self.post(f"{uid}/media", media_type="STORIES", image_url=self.public_url(item))["id"]
+
     def publish(self, container_id: str):
         uid = self.user_id()
         media_id = self.post(f"{uid}/media_publish", creation_id=container_id)["id"]
@@ -221,10 +228,31 @@ def main():
     parser.add_argument("--file", default=os.environ.get("REEL_FILE") or None, help="belirli bir video")
     parser.add_argument("--karusel", default=os.environ.get("KARUSEL_DIR") or None,
                         help="kaydırmalı post klasörü (kareler 01.jpg, 02.mp4 …, açıklama aciklama.txt)")
+    parser.add_argument("--hikaye", default=os.environ.get("HIKAYE_FILE") or None,
+                        help="story olarak paylaşılacak video ya da jpg")
     args = parser.parse_args()
 
     load_dotenv()
     posted = load_posted()
+
+    if args.hikaye:
+        item = (ROOT / args.hikaye).resolve()
+        rel = item.relative_to(ROOT).as_posix()
+        if rel in {e["file"] for e in posted}:
+            sys.exit(f"HATA: {rel} zaten paylaşılmış (posted.json).")
+        if args.dry_run:
+            print(f"Story: {rel} ({item.stat().st_size / 1_048_576:.1f} MB)")
+            return
+        api = InstagramAPI(Config())
+        print(f"Story hazırlanıyor: {rel}")
+        container_id = api.create_story_container(item)
+        api.wait_until_ready(container_id, interval_s=5)
+        media_id, permalink = api.publish(container_id)
+        print(f"Story paylaşıldı: {permalink or media_id}")
+        posted.append({"file": rel, "tur": "hikaye", "media_id": media_id, "permalink": permalink,
+                       "posted_at": datetime.now(timezone.utc).isoformat(timespec="seconds")})
+        save_posted(posted)
+        return
 
     if args.karusel:
         folder = (ROOT / args.karusel).resolve()
