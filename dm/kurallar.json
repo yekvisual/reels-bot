@@ -18,17 +18,34 @@
     {
       "video": "videos/003_flux3klein.mp4",
       "baslik": "FLUX 3 Klein",
-      "icerik": "Türkçe özet: https://yeklab.com.tr/gundem/2026/10/flux-3-image-klein/\nResmi duyuru: https://bfl.ai/blog/flux-3-image-klein\nModel dosyaları: https://huggingface.co/black-forest-labs/flux-3-image-klein"
+      "icerik": "Türkçe özet: https://yeklab.com.tr/gundem/2026/10/flux-3-image-klein/\nResmi duyuru: https://bfl.ai/blog/flux-3-image-klein\nModel dosyaları: https://huggingface.co/black-forest-labs/flux-3-image-klein",
+      "anahtar": [
+        "flux"
+      ]
     },
     {
       "video": "videos/002_kimi31.mp4",
       "baslik": "Kimi K3.1",
-      "icerik": "Türkçe özet: https://yeklab.com.tr/gundem/2026/10/kimi-k3-1-pro/\nKimi: https://moonshot.ai\nModel dosyaları: https://huggingface.co/moonshotai"
+      "icerik": "Türkçe özet: https://yeklab.com.tr/gundem/2026/10/kimi-k3-1-pro/\nKimi: https://moonshot.ai\nModel dosyaları: https://huggingface.co/moonshotai",
+      "anahtar": [
+        "kimi"
+      ]
     },
     {
       "video": "videos/001_kling4.mp4",
       "baslik": "Kling 4.0",
-      "icerik": "Türkçe rehber: https://yeklab.com.tr/gundem/2026/10/kling-4-0/\nKling: https://klingai.com"
+      "icerik": "Türkçe rehber: https://yeklab.com.tr/gundem/2026/10/kling-4-0/\nKling: https://klingai.com",
+      "anahtar": [
+        "kling"
+      ]
+    },
+    {
+      "video": "videos/004_flux3klein-denedim.mp4",
+      "anahtar": [
+        "flux"
+      ],
+      "baslik": "FLUX 3 Klein denemesi",
+      "icerik": "Türkçe özet: https://yeklab.com.tr/gundem/2026/10/flux-3-image-klein/\nResmi duyuru: https://bfl.ai/blog/flux-3-image-klein\nModel dosyaları: https://huggingface.co/black-forest-labs/flux-3-image-klein"
     }
   ]
 }

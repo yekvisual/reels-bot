@@ -14,6 +14,8 @@ Kullanım:
 """
 
 import argparse
+import re
+import subprocess
 import json
 import os
 import sys
@@ -214,6 +216,59 @@ def next_video(posted):
     return None
 
 
+# --- DM otomasyonu (dm-worker) --------------------------------------------------------------
+DM_WORKER_URL = os.environ.get("DM_WORKER_URL", "https://yeklab-dm.yeklab.workers.dev").rstrip("/")
+# Açıklamadaki "yorumlara X yaz" kalıbı (dm.py ile aynı)
+CTA = re.compile(r"yorumlara\s+[\"“”'‘’]?([^\s\"“”'‘’,.!]+)[\"“”'‘’]?\s+yaz", re.I)
+
+
+def dm_anahtari():
+    """Worker'ın dış API anahtarı: GitHub'da DM_WORKER_ANAHTAR secret'ı, Mac'te Keychain (reels-bot-dm)."""
+    anahtar = os.environ.get("DM_WORKER_ANAHTAR", "").strip()
+    if anahtar:
+        return anahtar
+    try:
+        return subprocess.run(
+            ["security", "find-generic-password", "-a", "yekvisual/reels-bot", "-s", "reels-bot-dm", "-w"],
+            capture_output=True, text=True, check=True).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return ""
+
+
+def dm_kurali_kur(media_id: str, rel: str, caption: str, user_id: str):
+    """Paylaşımdan hemen sonra Worker'a kuralı gönderir: dm/kurallar.json'da kayıt varsa linkler aktif kural olur,
+    yoksa ama açıklamada "yorumlara X yaz" varsa kural pasif açılır ve bildirim gider. Hata paylaşımı başarısız saymaz."""
+    anahtar = dm_anahtari()
+    if not anahtar:
+        print("  DM kuralı: anahtar yok (DM_WORKER_ANAHTAR / Keychain reels-bot-dm), atlandı")
+        return
+    kayit, takip = {}, True
+    try:
+        kurallar = json.loads((ROOT / "dm" / "kurallar.json").read_text(encoding="utf-8"))
+        takip = kurallar.get("takip_sart", True)
+        for k in kurallar.get("paylasimlar", []):
+            if k.get("video") == rel or k.get("klasor") == rel or (k.get("aciklama") and k["aciklama"] in caption):
+                kayit = k
+                break
+    except (OSError, ValueError) as exc:
+        print(f"  UYARI dm/kurallar.json okunamadı: {exc}")
+    kelimeler = kayit.get("anahtar") or [m.group(1) for m in CTA.finditer(caption)]
+    govde = {
+        "hesap": user_id, "medya": media_id, "aciklama": caption, "anahtar": ", ".join(kelimeler),
+        "baslik": kayit.get("baslik", ""), "icerik": kayit.get("icerik", ""), "takip_sart": kayit.get("takip_sart", takip),
+    }
+    try:
+        r = requests.post(f"{DM_WORKER_URL}/api/disari/kural", json=govde,
+                          headers={"Authorization": f"Bearer {anahtar}"}, timeout=30)
+        v = r.json() if r.content else {}
+        if r.ok:
+            print(f"  DM kuralı: {v.get('durum')}" + (" (kelime var, link yok → panelden içerik girin)" if v.get("durum") == "pasif" else ""))
+        else:
+            print(f"  UYARI DM kuralı kurulamadı: {v.get('hata', r.status_code)}")
+    except (requests.RequestException, ValueError) as exc:
+        print(f"  UYARI DM kuralı kurulamadı: {exc}")
+
+
 def caption_for(video: Path):
     sidecar = video.with_suffix(".txt")
     if sidecar.exists():
@@ -269,6 +324,7 @@ def main():
         api.wait_until_ready(container_id, interval_s=5)
         media_id, permalink = api.publish(container_id)
         print(f"Paylaşıldı: {permalink or media_id}")
+        dm_kurali_kur(media_id, rel, caption, api.cfg.user_id if hasattr(api, "cfg") else "")
         posted.append({"file": rel, "media_id": media_id, "permalink": permalink,
                        "posted_at": datetime.now(timezone.utc).isoformat(timespec="seconds")})
         save_posted(posted)
@@ -321,6 +377,7 @@ def main():
     api.wait_until_ready(container_id)
     media_id, permalink = api.publish(container_id)
     print(f"Paylaşıldı: {permalink or media_id}")
+    dm_kurali_kur(media_id, rel, caption, cfg.user_id)
 
     posted.append({
         "file": rel,
