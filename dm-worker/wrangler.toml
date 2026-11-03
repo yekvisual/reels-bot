@@ -24,7 +24,7 @@ LINK_KOK = "https://yeklab.com.tr/l"
 SITE_KOK = "https://yeklab.com.tr"
 # Panelden "Instagram ile bağla": Meta → uygulama → Instagram → API setup with Instagram login → Instagram app ID.
 # Aynı sayfada Business login settings → OAuth redirect URIs'e https://yeklab-dm.yeklab.workers.dev/oauth eklenmeli.
-INSTAGRAM_APP_ID = ""
+INSTAGRAM_APP_ID = "4525985417675883"
 
 # Gizli değerler (wrangler secret put …): APP_SECRET, VERIFY_TOKEN, PANEL_SIFRE, OTOMASYON_ANAHTARI (publish.py),
 # TELEGRAM_TOKEN + TELEGRAM_CHAT (hata bildirimi), HEALTHCHECK_URL (isteğe bağlı: her dakika ping)
