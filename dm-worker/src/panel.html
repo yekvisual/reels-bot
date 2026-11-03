@@ -371,6 +371,7 @@ async function yukle() {
     history.replaceState(null, "", location.pathname + location.hash);
   }
   const hesaplar = durum.veri.hesaplar;
+  if (!durum.hesap) { try { durum.hesap = localStorage.getItem("hesap"); } catch {} } // son bakılan hesap yenilemede korunsun
   if (!durum.hesap || !hesaplar.some((h) => h.id === durum.hesap)) durum.hesap = hesaplar[0]?.id ?? null;
   kabukCiz();
   if (durum.hesap) hesapVerisi();
@@ -414,7 +415,7 @@ function kabukCiz() {
       el("div", { class: "logo" }, el("i", {}, "YL"), "YEK Lab DM"),
       hesap ? el("label", { class: "hesapSec", title: "Hesap" },
         el("span", { class: "avatar" }, hesap.kullanici.slice(0, 1).toUpperCase()),
-        el("select", { onchange: (e) => { durum.hesap = e.target.value; hesapVerisi(); } },
+        el("select", { onchange: (e) => { durum.hesap = e.target.value; try { localStorage.setItem("hesap", durum.hesap); } catch {} hesapVerisi(); } },
           v.hesaplar.map((h) => el("option", { value: h.id, selected: h.id === durum.hesap }, "@" + h.kullanici + (h.aktif ? "" : " (durdu)")))))
         : null,
       el("nav", {}, GORUNUMLER.map(([g, ad]) => el("button", {
