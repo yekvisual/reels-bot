@@ -100,3 +100,19 @@ Eski sistemde "tamam yaz" mesajını almış, yarım kalmış konuşmalar da tan
 printf 'PANEL_SIFRE=yerel\nAPP_SECRET=yerel\nVERIFY_TOKEN=yerel\nDENEME=1\n' > .dev.vars
 npm run db:yerel && npm run dev       # http://localhost:8787, dakikalık iş: curl "localhost:8787/__scheduled?cron=*+*+*+*+*"
 ```
+
+## Claude ile konuşarak yönetme (MCP)
+
+Worker'ın `/mcp` ucu bir MCP sunucusudur; Claude Code, Claude Desktop ya da claude.ai "özel bağlayıcı" olarak eklenebilir. Araçlar: `durum`, `paylasimlar`, `kurallar`, `kural_kaydet`, `kural_sil`, `ozet`, `kisiler`, `hikayeler`, `hazir_sorular_yaz`, `sablonlar_yaz`, `simdi_tara`.
+
+Kimlik: publish.py ile aynı `OTOMASYON_ANAHTARI`.
+
+- Claude Code (bu Mac'te kurulu, kullanıcı kapsamı):
+  ```sh
+  claude mcp add --transport http --scope user yeklab-dm https://yeklab-dm.yeklab.workers.dev/mcp \
+    --header "Authorization: Bearer $(security find-generic-password -a yekvisual/reels-bot -s reels-bot-dm -w)"
+  ```
+- Başlık koyamayan istemciler (claude.ai Ayarlar > Bağlayıcılar > Özel bağlayıcı): adres olarak
+  `https://yeklab-dm.yeklab.workers.dev/mcp/<anahtar>` verin; kimlik doğrulama "yok" seçilir.
+
+Örnek istekler: "yekvisual'in son paylaşımlarında hangi kural kaç teslim yapmış?", "004 videosu için flux kelimesiyle kural aç", "son 30 günün özetini çıkar".

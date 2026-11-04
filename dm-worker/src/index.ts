@@ -4,6 +4,7 @@ import {
   ozet, sahiplen, temizle, tiklamaSay, trGun, uyarilar, VARSAYILAN_AYAR,
 } from "./db";
 import { IG } from "./ig";
+import { mcp } from "./mcp";
 import PANEL from "./panel.html";
 
 const ABONELIK = "messages,messaging_postbacks";
@@ -501,6 +502,19 @@ export default {
     }
     if (url.pathname.startsWith("/api/")) {
       return (await oturumVar(req, env)) ? api(req, env, url) : json({ hata: "Giriş gerekli" }, 401);
+    }
+    // Claude için MCP ucu: /mcp (Bearer) ya da /mcp/<anahtar>
+    const mc = url.pathname.match(/^\/mcp(?:\/([A-Za-z0-9]{16,}))?\/?$/);
+    if (mc) {
+      const yetkili = mc[1]
+        ? !!env.OTOMASYON_ANAHTARI && esit(await hmac("dis", mc[1]), await hmac("dis", env.OTOMASYON_ANAHTARI))
+        : await disAnahtarVar(req, env);
+      if (!yetkili) return json({ hata: "Anahtar geçersiz" }, 401);
+      return mcp(req, (yontem, yol, govde) => {
+        const u = new URL(yol, url.origin);
+        const r = new Request(u, { method: yontem, headers: { "Content-Type": "application/json" }, body: govde === undefined ? null : JSON.stringify(govde) });
+        return api(r, env, u).then((c) => c.json());
+      });
     }
     if (url.pathname === "/") {
       return new Response(PANEL, {
