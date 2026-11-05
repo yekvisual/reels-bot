@@ -1,4 +1,4 @@
-# Yorum → DM yanıtlayıcı (dm.py'nin Cloudflare Worker hali). Kurulum: README.md
+# Instagram planlı paylaşım + yorum→DM otomasyonu (çok kullanıcılı). Kurulum: README.md, ürünleştirme: BASVURU.md
 name = "yeklab-dm"
 main = "src/index.ts"
 compatibility_date = "2026-09-01"
@@ -10,24 +10,31 @@ binding = "DB"
 database_name = "yeklab-dm"
 database_id = "997f4f7a-3137-42e0-8369-54013d7f242f"
 
+# Planlı gönderilerin videoları. Cloudflare panelinde R2 etkinleştirilip `npx wrangler r2 bucket create yeklab-dm-video`
+# çalıştırıldıktan sonra aşağıdaki iki satırın başındaki # kaldırılır ve `npm run deploy` yapılır. Bağlı değilken panel
+# "video depolama kapalı" der, diğer her şey çalışır.
+#[[r2_buckets]]
+#binding = "VIDEO"
+#bucket_name = "yeklab-dm-video"
+
 [triggers]
-# Her dakika: yorumlar (webhook'u App Review istiyor) ve webhook gelmiyorsa DM'ler
-# Pazartesi 07:00 TR: token yenileme
+# Her dakika: yorum taraması (sırayla 12 hesap), gönderi kuyruğu, webhook gelmiyorsa DM yoklama. Pazartesi 07:00 TR: token yenileme
 crons = ["* * * * *", "0 4 * * 1"]
 
 [vars]
-# "1" = hiçbir şey göndermez, yalnızca olay günlüğüne yazar
-DENEME = "0" # "1" yapılırsa yalnızca olay günlüğüne yazar (README: Eski sistemden geçiş)
-# Teslim edilen linkler bu adresin altında kısa kodla gider; site 404 sayfası Worker'daki /l/<kod>'a sorar
-LINK_KOK = "https://yeklab.com.tr/l"
-# Tıklama sayacına JSON ile sorabilen site
-SITE_KOK = "https://yeklab.com.tr"
-# Panelden "Instagram ile bağla": Meta → uygulama → Instagram → API setup with Instagram login → Instagram app ID.
-# Aynı sayfada Business login settings → OAuth redirect URIs'e https://yeklab-dm.yeklab.workers.dev/oauth eklenmeli.
+DENEME = "0"                      # "1": Instagram'a hiçbir şey gönderilmez, yalnız günlüğe yazılır
+URUN_ADI = "YEK Lab DM"           # panelde, giriş sayfasında ve bildirimlerde görünen ad
+ILETISIM = "iletisim@yeklab.com.tr" # gizlilik/koşullar sayfalarındaki destek adresi
+KAPALI_BETA = "1"                 # "1": giriş sayfası "davetli hesaplar" rozeti gösterir (Meta App Review'dan önce)
+KOK = "https://yeklab-dm.yeklab.workers.dev" # Worker'ın adresi; cron'daki video adresleri ve MCP komutları bununla üretilir
+LINK_KOK = "https://yeklab.com.tr/l" # teslim edilen linkler bu kökün altında kısa kodla gider; site 404 sayfası Worker'a sorar
+SITE_KOK = "https://yeklab.com.tr"   # tıklama sayacına JSON ile sorabilen site (CORS)
+# Meta → uygulama → Instagram → API setup with Instagram login → Instagram app ID. Aynı sayfada Business login settings →
+# OAuth redirect URIs'e https://yeklab-dm.yeklab.workers.dev/oauth eklenmeli.
 INSTAGRAM_APP_ID = "4525985417675883"
 
-# Gizli değerler (wrangler secret put …): APP_SECRET, VERIFY_TOKEN, PANEL_SIFRE, OTOMASYON_ANAHTARI (publish.py),
-# TELEGRAM_TOKEN + TELEGRAM_CHAT (hata bildirimi), HEALTHCHECK_URL (isteğe bağlı: her dakika ping)
+# Gizli değerler (npx wrangler secret put …): APP_SECRET, VERIFY_TOKEN, PANEL_SIFRE (yönetici), OTURUM_GIZLI (isteğe bağlı; yoksa PANEL_SIFRE),
+# OTOMASYON_ANAHTARI (eski publish.py anahtarı → 1 numaralı atölye), TELEGRAM_TOKEN + TELEGRAM_CHAT (yöneticiye bildirim), HEALTHCHECK_URL
 
 [[rules]]
 type = "Text"

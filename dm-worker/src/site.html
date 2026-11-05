@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{URUN_ADI}} · Instagram için planlı paylaşım ve yorumdan DM'e link</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%23feda75%27/%3E%3Cstop offset=%27.55%27 stop-color=%27%23d62976%27/%3E%3Cstop offset=%271%27 stop-color=%27%234f5bd5%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2724%27 height=%2724%27 rx=%277%27 fill=%27url(%23g)%27/%3E%3Cpath d=%27M13 4 6 14h5l-1 6 8-11h-5z%27 fill=%27%23fff%27/%3E%3C/svg%3E">
+<meta name="description" content="Videonu yükle, zamanını seç; yayınlanınca yorumlara anahtar kelime yazanlara linki DM'den otomatik gönder.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  color-scheme: light dark;
+  --zemin: #fbfaf8; --yuzey: #ffffff; --murekkep: #16181d; --soluk: #5f6470; --cizgi: #e7e5e0;
+  --mavi: #2f6bff; --mavi-koyu: #1f54d9; --mavi-acik: #eef3ff; --ig1: #feda75; --ig2: #d62976; --ig3: #4f5bd5;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --zemin: #0f1013; --yuzey: #17191e; --murekkep: #ecebe8; --soluk: #a3a6ad; --cizgi: #272a31; --mavi: #6f95ff; --mavi-koyu: #8aa9ff; --mavi-acik: #1a2440; }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--zemin); color: var(--murekkep); font: 16px/1.6 Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+.sarmal { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+header { display: flex; align-items: center; justify-content: space-between; padding: 22px 0; gap: 16px; }
+.logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; }
+.logo i { width: 30px; height: 30px; border-radius: 9px; background: linear-gradient(135deg, var(--ig1), var(--ig2) 55%, var(--ig3)); display: grid; place-items: center; }
+.logo i svg { width: 18px; height: 18px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.d { font: inherit; font-weight: 600; border: 1px solid var(--cizgi); background: var(--yuzey); color: var(--murekkep); padding: 10px 18px; border-radius: 10px;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: transform .08s, box-shadow .15s; }
+.d:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgb(0 0 0 / .08); }
+.d.ig { background: linear-gradient(135deg, #f58529, #dd2a7b 50%, #8134af); color: #fff; border: 0; }
+.d.buyuk { padding: 14px 24px; font-size: 17px; border-radius: 12px; }
+.d svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.hero { padding: 56px 0 40px; display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items: center; }
+.hero h1 { font-size: clamp(34px, 5vw, 52px); line-height: 1.08; letter-spacing: -.03em; margin: 0 0 16px; font-weight: 800; }
+.hero h1 em { font-style: normal; background: linear-gradient(90deg, #dd2a7b, #8134af); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero p { font-size: 18px; color: var(--soluk); margin: 0 0 26px; max-width: 520px; }
+.beta { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--mavi); background: var(--mavi-acik); border-radius: 99px; padding: 5px 12px; margin-bottom: 18px; }
+.beta::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--mavi); }
+.not { font-size: 13px; color: var(--soluk); margin-top: 12px; }
+
+/* Telefon önizlemesi: akışın animasyonu */
+.telefon { justify-self: center; width: 300px; background: #0b0c10; border-radius: 36px; padding: 14px; box-shadow: 0 30px 80px rgb(0 0 0 / .25), inset 0 0 0 2px #2a2d36; }
+.ekran { background: #000; border-radius: 26px; overflow: hidden; height: 520px; position: relative; color: #fff; font-size: 13px; }
+.video { position: absolute; inset: 0; background: linear-gradient(160deg, #1d2a4b, #3a1d4b 60%, #4b1d2e); }
+.video::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 30% 30%, rgb(255 255 255 / .12), transparent 50%); }
+.altyazi { position: absolute; left: 16px; right: 60px; bottom: 90px; font-weight: 600; font-size: 15px; line-height: 1.35; text-shadow: 0 1px 2px rgb(0 0 0 / .6); }
+.yorum { position: absolute; left: 14px; right: 14px; bottom: 14px; background: rgb(255 255 255 / .12); backdrop-filter: blur(10px); border-radius: 14px; padding: 10px 12px; display: flex; gap: 10px; align-items: center;
+  animation: kay 7s infinite; }
+.yorum b { display: block; font-size: 12px; } .yorum span { opacity: .85; }
+.avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--ig1), var(--ig2) 55%, var(--ig3)); flex: none; }
+.dm { position: absolute; left: 14px; right: 14px; top: 16px; background: #fff; color: #111; border-radius: 14px; padding: 10px 12px; display: flex; gap: 10px; align-items: flex-start;
+  box-shadow: 0 8px 30px rgb(0 0 0 / .35); animation: gel 7s infinite; }
+.dm small { display: block; color: #666; font-size: 11px; } .dm span { font-size: 12px; line-height: 1.35; }
+.dm .link { color: #2f6bff; font-weight: 600; }
+@keyframes kay { 0%, 10% { transform: translateY(80px); opacity: 0; } 20%, 100% { transform: none; opacity: 1; } }
+@keyframes gel { 0%, 45% { transform: translateY(-120px); opacity: 0; } 55%, 100% { transform: none; opacity: 1; } }
+
+.adimlar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 24px 0 8px; }
+.adim { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 16px; padding: 22px; }
+.adim i { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: var(--mavi-acik); color: var(--mavi); font-style: normal; font-weight: 700; margin-bottom: 12px; }
+.adim h3 { margin: 0 0 6px; font-size: 17px; letter-spacing: -.01em; }
+.adim p { margin: 0; color: var(--soluk); font-size: 15px; }
+
+.ozellikler { padding: 40px 0 16px; }
+.ozellikler h2 { font-size: 28px; letter-spacing: -.02em; margin: 0 0 20px; }
+.izgara { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 14px; }
+.oz { padding: 18px; border: 1px solid var(--cizgi); border-radius: 14px; background: var(--yuzey); }
+.oz svg { width: 22px; height: 22px; fill: none; stroke: var(--mavi); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 10px; }
+.oz b { display: block; margin-bottom: 4px; }
+.oz span { color: var(--soluk); font-size: 14px; }
+
+.sss { padding: 40px 0; max-width: 720px; }
+.sss h2 { font-size: 28px; letter-spacing: -.02em; margin: 0 0 12px; }
+details { border-top: 1px solid var(--cizgi); padding: 14px 0; }
+details:last-of-type { border-bottom: 1px solid var(--cizgi); }
+summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; }
+summary::after { content: "+"; color: var(--soluk); } details[open] summary::after { content: "–"; }
+details p { margin: 10px 0 0; color: var(--soluk); }
+
+.son { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 20px; padding: 40px; text-align: center; margin: 24px 0 40px; }
+.son h2 { margin: 0 0 8px; font-size: 26px; letter-spacing: -.02em; } .son p { margin: 0 0 20px; color: var(--soluk); }
+footer { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 24px 0 48px; color: var(--soluk); font-size: 14px; border-top: 1px solid var(--cizgi); }
+footer nav { display: flex; gap: 18px; } footer a:hover { color: var(--murekkep); }
+
+dialog { border: 0; border-radius: 16px; padding: 0; width: min(380px, calc(100vw - 32px)); background: var(--yuzey); color: var(--murekkep); box-shadow: 0 24px 70px rgb(0 0 0 / .3); }
+dialog::backdrop { background: rgb(10 12 20 / .5); backdrop-filter: blur(3px); }
+dialog form { padding: 26px; display: grid; gap: 12px; }
+dialog h3 { margin: 0; font-size: 20px; }
+dialog input { font: inherit; padding: 11px 13px; border: 1px solid var(--cizgi); border-radius: 10px; background: var(--zemin); color: var(--murekkep); width: 100%; }
+dialog input:focus { outline: none; border-color: var(--mavi); box-shadow: 0 0 0 3px var(--mavi-acik); }
+.hata { color: #c62828; font-size: 14px; margin: 0; }
+.mesaj { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); background: var(--murekkep); color: var(--zemin); padding: 11px 18px; border-radius: 10px; font-size: 14px; z-index: 20; box-shadow: 0 10px 30px rgb(0 0 0 / .2); }
+
+@media (max-width: 820px) {
+  .hero { grid-template-columns: 1fr; padding-top: 24px; } .telefon { width: 260px; } .ekran { height: 440px; }
+  .adimlar { grid-template-columns: 1fr; } .son { padding: 28px 20px; }
+}
+</style>
+</head>
+<body>
+<div class="sarmal">
+<header>
+  <a class="logo" href="/"><i><svg viewBox="0 0 24 24"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></svg></i>{{URUN_ADI}}</a>
+  <a class="d ig" href="/giris/instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8"/></svg>Instagram ile giriş</a>
+</header>
+
+<section class="hero">
+  <div>
+    <span class="beta" id="beta" hidden>Kapalı beta · davetli hesaplar</span>
+    <h1>Videonu yükle, zamanını seç.<br>Yorumlara yazana <em>linki DM'den biz gönderelim.</em></h1>
+    <p>Reels'ini planla; yayınlanınca "link" yazan herkese istediğin bağlantı saniyeler içinde özel mesajla gitsin. Takip şartı, tıklama sayacı, kişi listesi dahil.</p>
+    <a class="d ig buyuk" href="/giris/instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8"/></svg>Instagram ile başla</a>
+    <p class="not">İşletme ya da içerik üreticisi hesabı gerekir. Kurulum iki dakika; kart istemiyoruz.</p>
+  </div>
+  <div class="telefon" aria-hidden="true">
+    <div class="ekran">
+      <div class="video"></div>
+      <div class="dm"><div class="avatar"></div><div><small>{{URUN_ADI}} · şimdi</small><span>Merhaba! Liste için link: <span class="link">yeklab.com.tr/l/a1b2c3</span> 🙌</span></div></div>
+      <div class="altyazi">1 yılda neler oldu? Tam liste için yorumlara <b>LİSTE</b> yaz 👇</div>
+      <div class="yorum"><div class="avatar"></div><div><b>ayse.k</b><span>liste 🙏</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="adimlar">
+  <div class="adim"><i>1</i><h3>Bağla</h3><p>Instagram ile giriş yap. Hesabın anında bağlanır; şifre, token, ayar yok.</p></div>
+  <div class="adim"><i>2</i><h3>Yükle ve planla</h3><p>Videoyu bırak, açıklamayı ve saati yaz. Bilgisayarın kapalı olsa da zamanında yayınlanır.</p></div>
+  <div class="adim"><i>3</i><h3>Linki biz gönderelim</h3><p>Yorumlara anahtar kelimeyi yazanlara linki DM'den otomatik gönderelim, istersen önce takip isteyelim.</p></div>
+</section>
+
+<section class="ozellikler">
+  <h2>İçerik üreticisinin ihtiyacı kadar, fazlası değil</h2>
+  <div class="izgara">
+    <div class="oz"><svg viewBox="0 0 24 24"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></svg><b>Saniyeler içinde DM</b><span>Yorum gelir gelmez özel yanıt, ardından linkler. Harf hatası ve ekli yazımlar da tanınır (liste → listeyi).</span></div>
+    <div class="oz"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4.5 20c1.4-3.6 4.4-5 7.5-5s6.1 1.4 7.5 5"/></svg><b>Takip şartı</b><span>Takip etmeyene önce "takip et" butonu; takip edince link. İstemezsen kapat.</span></div>
+    <div class="oz"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM4 15l4.5-4.5 4 4 3-3L20 16"/></svg><b>Planlı Reels</b><span>Video depoda bekler, saati gelince yayınlanır, kural kendiliğinden açılır.</span></div>
+    <div class="oz"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4zM14 20h6v-9h-6zM14 4v3h6V4zM4 20h6v-3H4z"/></svg><b>Ölçüm</b><span>Yorum → DM → teslim → tıklama hunisi; hangi video kaç link gönderdi, kaç kişi tıkladı.</span></div>
+    <div class="oz"><svg viewBox="0 0 24 24"><path d="M12 21a9 9 0 1 0-9-9M3 12h.01M4.2 7.5h.01M7.5 4.2h.01M10 15l5-3-5-3z"/></svg><b>Hikâye yanıtları</b><span>Hikâyeye yanıt verene ya da seni hikâyede anana da otomatik mesaj.</span></div>
+    <div class="oz"><svg viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg><b>Claude ile yönet</b><span>MCP bağlantısıyla "bu videoyu cumartesi 19:00'a koy, yorumlara flux yazana şu linki gönder" demen yeter.</span></div>
+  </div>
+</section>
+
+<section class="sss">
+  <h2>Sık sorulanlar</h2>
+  <details><summary>Hangi hesaplar bağlanabilir?</summary><p>Instagram İşletme ya da İçerik Üreticisi (profesyonel) hesaplar. Kişisel hesabı ayarlardan bir dakikada profesyonele çevirebilirsin.</p></details>
+  <details><summary>Instagram hesabım risk altında mı?</summary><p>Hayır. Sistem Meta'nın resmi Instagram API'siyle çalışır, şifreni görmez, Instagram'ın izin verdiği hız sınırları içinde kalır.</p></details>
+  <details><summary>Mesajlar ne kadar sürede gider?</summary><p>DM'ler ve buton tıklamaları anında; yorumlar en geç bir dakika içinde işlenir.</p></details>
+  <details><summary>Takipçilerimin verisi ne olur?</summary><p>Yalnızca link isteyenlerin kullanıcı adı ve ne zaman ne aldığı tutulur; 12 ay sonra silinir, kimseyle paylaşılmaz. Ayrıntı: <a href="/gizlilik" style="color:var(--mavi)">gizlilik</a>.</p></details>
+  <details><summary>Ücretli mi?</summary><p>Şu an davetli kullanıcılara ücretsiz. Ücretli plan açıldığında önceden haber veririz.</p></details>
+</section>
+
+<section class="son">
+  <h2>İki dakikada kur, bir daha elle link gönderme</h2>
+  <p>Instagram ile giriş yap; ilk otomasyonunu hemen aç.</p>
+  <a class="d ig buyuk" href="/giris/instagram">Instagram ile başla</a>
+</section>
+
+<footer>
+  <span>© {{URUN_ADI}} · <a href="mailto:{{ILETISIM}}" id="iletisim">{{ILETISIM}}</a></span>
+  <nav><a href="/gizlilik">Gizlilik</a><a href="/kosullar">Koşullar</a><a href="/veri-silme">Veri silme</a><a href="#" id="yoneticiAc">Yönetici</a></nav>
+</footer>
+</div>
+
+<dialog id="yoneticiPencere">
+  <form method="post" action="/giris">
+    <h3>Yönetici girişi</h3>
+    <p class="hata" id="girisHata" hidden></p>
+    <input type="password" name="sifre" placeholder="Şifre" required autocomplete="current-password">
+    <button class="d ig" type="submit" style="justify-content:center">Giriş</button>
+    <button class="d" type="button" onclick="this.closest('dialog').close()" style="justify-content:center">Vazgeç</button>
+  </form>
+</dialog>
+
+<script>
+(function () {
+  if ("{{BETA}}" === "1") document.getElementById("beta").hidden = false;
+  if (!"{{ILETISIM}}") document.getElementById("iletisim").parentElement.textContent = "© {{URUN_ADI}}";
+  const qs = new URLSearchParams(location.search);
+  const p = document.getElementById("yoneticiPencere");
+  document.getElementById("yoneticiAc").addEventListener("click", (e) => { e.preventDefault(); p.showModal(); });
+  const hata = qs.get("hata"), mesaj = qs.get("mesaj");
+  if (hata === "1" || hata === "2") {
+    const h = document.getElementById("girisHata");
+    h.textContent = hata === "2" ? "Çok fazla yanlış deneme; 15 dakika sonra tekrar deneyin." : "Şifre yanlış.";
+    h.hidden = false; p.showModal();
+  } else if (hata || mesaj) {
+    const m = document.createElement("div"); m.className = "mesaj"; m.textContent = hata || mesaj; document.body.append(m);
+    setTimeout(() => m.remove(), 6000);
+  }
+  if (hata || mesaj) history.replaceState(null, "", "/");
+})();
+</script>
+</body>
+</html>

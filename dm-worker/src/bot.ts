@@ -58,7 +58,7 @@ export class Bot {
   }
 
   private kaydet(metin: string) {
-    return kaydet(this.env, this.hesap.id, (this.deneme ? "[deneme] " : "") + metin);
+    return kaydet(this.env, this.hesap.atolye, this.hesap.id, (this.deneme ? "[deneme] " : "") + metin);
   }
 
   private async gonder(alici: object, mesaj: Mesaj, etiket: string): Promise<boolean> {
@@ -180,7 +180,7 @@ export class Bot {
         `özel yanıt, butonlu (${kural.baslik})`);
       if (!ok && !this.deneme) {
         // Buton reddedildiyse bir daha denenmez, metinli sürüme geçilir
-        await ayarYaz(this.env, "ozel_yanit_buton", "0");
+        await ayarYaz(this.env, this.hesap.atolye, "ozel_yanit_buton", "0");
         this.ayar.ozel_yanit_buton = "0";
       }
     }

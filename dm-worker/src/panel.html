@@ -2,218 +2,308 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>YEK Lab DM</title>
+<meta name="theme-color" content="#fbfaf8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1013" media="(prefers-color-scheme: dark)">
+<title>{{URUN_ADI}}</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%23feda75%27/%3E%3Cstop offset=%27.55%27 stop-color=%27%23d62976%27/%3E%3Cstop offset=%271%27 stop-color=%27%234f5bd5%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2724%27 height=%2724%27 rx=%277%27 fill=%27url(%23g)%27/%3E%3Cpath d=%27M13 4 6 14h5l-1 6 8-11h-5z%27 fill=%27%23fff%27/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  color-scheme: light;
-  --zemin: #f5f6f8; --yuzey: #ffffff; --murekkep: #1f2430; --soluk: #6b7280; --silik: #9aa1ad; --cizgi: #e6e8ec;
-  --mavi: #2f6bff; --mavi-koyu: #1f54d9; --mavi-acik: #eef3ff; --iyi: #15803d; --iyi-acik: #e8f6ee;
-  --kotu: #c62828; --kotu-acik: #fdecec; --uyari: #b45309; --uyari-acik: #fff4e0;
+  color-scheme: light dark;
+  --zemin: #f6f5f2; --yuzey: #ffffff; --yuzey2: #faf9f7; --murekkep: #16181d; --soluk: #646a76; --silik: #9aa0ab; --cizgi: #e8e6e1; --cizgi2: #f0eeea;
+  --mavi: #2f6bff; --mavi-koyu: #1f54d9; --mavi-acik: #eaf0ff; --iyi: #15803d; --iyi-acik: #e6f5ec; --kotu: #c62828; --kotu-acik: #fdecec;
+  --uyari: #b45309; --uyari-acik: #fff3df; --mor: #7c3aed; --mor-acik: #f1eafe; --golge: 0 1px 2px rgb(16 18 24 / .04), 0 8px 24px rgb(16 18 24 / .05);
+  --ig1: #feda75; --ig2: #d62976; --ig3: #4f5bd5;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --zemin: #0f1013; --yuzey: #17191e; --yuzey2: #1c1f25; --murekkep: #ecebe8; --soluk: #a3a6ad; --silik: #6f737b; --cizgi: #262930; --cizgi2: #20232a;
+    --mavi: #6f95ff; --mavi-koyu: #8aa9ff; --mavi-acik: #1b2540; --iyi: #4ade80; --iyi-acik: #12301d; --kotu: #f87171; --kotu-acik: #3a1a1a;
+    --uyari: #fbbf24; --uyari-acik: #3a2a0d; --mor: #a78bfa; --mor-acik: #261a40; --golge: 0 1px 2px rgb(0 0 0 / .3), 0 8px 24px rgb(0 0 0 / .3); }
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-body { margin: 0; background: var(--zemin); color: var(--murekkep); font: 14px/1.5 Inter, system-ui, sans-serif; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--zemin); color: var(--murekkep); font: 14px/1.5 Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
 a { color: var(--mavi); text-decoration: none; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--mavi); outline-offset: 2px; border-radius: 6px; }
 svg.ik { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
-/* Kabuk: sol menü + içerik */
-.kabuk { display: grid; grid-template-columns: 236px 1fr; min-height: 100vh; }
-.yan { background: var(--yuzey); border-right: 1px solid var(--cizgi); padding: 18px 12px; display: flex; flex-direction: column; gap: 14px;
-  position: sticky; top: 0; height: 100vh; }
-.logo { font-weight: 700; font-size: 17px; padding: 0 8px; display: flex; align-items: center; gap: 8px; }
-.logo i { width: 26px; height: 26px; border-radius: 8px; background: var(--mavi); color: #fff; display: grid; place-items: center; font-style: normal; font-size: 13px; }
-.hesapSec { display: flex; align-items: center; gap: 10px; border: 1px solid var(--cizgi); border-radius: 10px; padding: 8px 10px; position: relative; }
-.avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #feda75, #d62976 55%, #4f5bd5); color: #fff;
-  display: grid; place-items: center; font-weight: 600; font-size: 12px; flex: none; }
+/* Kabuk */
+.kabuk { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+.yan { background: var(--yuzey); border-right: 1px solid var(--cizgi); padding: 18px 12px 14px; display: flex; flex-direction: column; gap: 14px; position: sticky; top: 0; height: 100vh; }
+.logo { font-weight: 700; font-size: 16px; padding: 0 8px; display: flex; align-items: center; gap: 9px; letter-spacing: -.01em; }
+.logo i { width: 28px; height: 28px; border-radius: 9px; background: linear-gradient(135deg, var(--ig1), var(--ig2) 55%, var(--ig3)); display: grid; place-items: center; flex: none; }
+.logo i svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.logo small { display: block; font-weight: 500; font-size: 11px; color: var(--soluk); letter-spacing: 0; }
+.hesapSec { display: flex; align-items: center; gap: 10px; border: 1px solid var(--cizgi); border-radius: 12px; padding: 8px 10px; position: relative; background: var(--yuzey2); }
+.avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--ig1), var(--ig2) 55%, var(--ig3)); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 12px; flex: none; }
 .hesapSec select { appearance: none; border: 0; background: transparent; font: inherit; font-weight: 600; color: inherit; flex: 1; min-width: 0; cursor: pointer; padding-right: 14px; }
 .hesapSec::after { content: "▾"; position: absolute; right: 10px; color: var(--soluk); pointer-events: none; }
-nav { display: grid; gap: 2px; }
-nav button { display: flex; align-items: center; gap: 10px; border: 0; background: none; font: inherit; font-weight: 500; color: var(--soluk);
-  padding: 9px 10px; border-radius: 8px; cursor: pointer; text-align: left; white-space: nowrap; }
-nav button:hover { background: var(--zemin); color: var(--murekkep); }
-nav button.secili { background: var(--mavi-acik); color: var(--mavi); }
-nav .sayac { margin-left: auto; font-size: 12px; color: var(--soluk); font-weight: 500; }
-.yanAlt { margin-top: auto; display: grid; gap: 6px; padding: 0 4px; font-size: 12px; color: var(--soluk); }
-.nokta { display: inline-flex; align-items: center; gap: 6px; }
-.nokta::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--silik); }
+nav.menu { display: grid; gap: 2px; }
+nav.menu button { display: flex; align-items: center; gap: 10px; border: 0; background: none; font-weight: 500; color: var(--soluk); padding: 9px 10px; border-radius: 9px; cursor: pointer; text-align: left; white-space: nowrap; transition: background .12s, color .12s; }
+nav.menu button:hover { background: var(--zemin); color: var(--murekkep); }
+nav.menu button.secili { background: var(--mavi-acik); color: var(--mavi); font-weight: 600; }
+nav.menu .sayac { margin-left: auto; font-size: 11px; font-weight: 600; color: var(--soluk); background: var(--zemin); border-radius: 99px; padding: 1px 7px; }
+nav.menu button.secili .sayac { background: var(--yuzey); color: var(--mavi); }
+.yanAlt { margin-top: auto; display: grid; gap: 7px; padding: 0 6px; font-size: 12px; color: var(--soluk); }
+.nokta { display: inline-flex; align-items: center; gap: 7px; }
+.nokta::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--silik); flex: none; }
 .nokta.iyi::before { background: #22c55e; box-shadow: 0 0 0 3px #22c55e33; }
 .nokta.uyari { color: var(--uyari); } .nokta.uyari::before { background: #f59e0b; }
+.cikis { border: 0; background: none; color: var(--soluk); cursor: pointer; padding: 6px 0 0; text-align: left; font-size: 12px; display: inline-flex; gap: 6px; align-items: center; }
+.cikis:hover { color: var(--murekkep); }
 
-.ana { min-width: 0; }
-.ustCubuk { position: sticky; top: 0; z-index: 4; background: color-mix(in srgb, var(--zemin) 90%, transparent); backdrop-filter: blur(8px);
-  display: flex; align-items: center; gap: 10px; padding: 16px 28px; }
-.ustCubuk h1 { font-size: 22px; font-weight: 700; margin: 0; letter-spacing: -.01em; white-space: nowrap; }
+.anaAlan { min-width: 0; display: flex; flex-direction: column; }
+.yoneticiSerit { background: var(--mor-acik); color: var(--mor); padding: 8px 24px; font-size: 13px; display: flex; gap: 10px; align-items: center; }
+.yoneticiSerit button { border: 1px solid currentColor; background: none; color: inherit; border-radius: 8px; padding: 3px 10px; cursor: pointer; font-size: 12px; font-weight: 600; margin-left: auto; }
+.serit { background: var(--uyari-acik); color: var(--uyari); border-bottom: 1px solid color-mix(in srgb, var(--uyari) 25%, transparent); padding: 10px 24px; display: flex; gap: 10px; align-items: flex-start; font-size: 13px; }
+.serit.kotu { background: var(--kotu-acik); color: var(--kotu); }
+.serit > div { flex: 1; display: grid; gap: 4px; }
+.serit span { display: flex; gap: 8px; align-items: baseline; } .serit b { font-weight: 600; white-space: nowrap; }
+.serit button { border: 0; background: none; color: inherit; cursor: pointer; opacity: .7; padding: 0 2px; font-size: 16px; line-height: 1; }
+.serit button:hover { opacity: 1; }
+.ustCubuk { position: sticky; top: 0; z-index: 4; background: color-mix(in srgb, var(--zemin) 88%, transparent); backdrop-filter: blur(10px); display: flex; align-items: center; gap: 10px; padding: 18px 28px 12px; }
+.ustCubuk > * { flex: none; } .ustCubuk > div:first-child { flex: 0 1 auto; min-width: 0; }
+.ustCubuk h1 { font-size: 22px; font-weight: 700; margin: 0; letter-spacing: -.02em; white-space: nowrap; }
+.ustCubuk .alt { font-size: 13px; color: var(--soluk); margin-top: 1px; }
 .bosluk { flex: 1; }
-main { padding: 4px 28px 48px; max-width: 1180px; }
+main { padding: 4px 28px 56px; max-width: 1180px; width: 100%; }
 
-button.d, .d { font: inherit; font-weight: 500; border: 1px solid var(--cizgi); background: var(--yuzey); color: var(--murekkep);
-  padding: 8px 14px; border-radius: 8px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
-button.d:hover { border-color: var(--silik); }
-button.ana { background: var(--mavi); border-color: var(--mavi); color: #fff; }
-button.ana:hover { background: var(--mavi-koyu); }
-button.sil { color: var(--kotu); }
-button:disabled { opacity: .5; cursor: default; }
+/* Düğmeler */
+button.d, a.d { font: inherit; font-weight: 500; border: 1px solid var(--cizgi); background: var(--yuzey); color: var(--murekkep); padding: 8px 14px; border-radius: 9px; cursor: pointer;
+  white-space: nowrap; display: inline-flex; align-items: center; gap: 7px; transition: border-color .12s, background .12s, transform .08s; }
+button.d:hover, a.d:hover { border-color: var(--silik); }
+button.d:active { transform: translateY(1px); }
+.d.ana { background: var(--mavi); border-color: var(--mavi); color: #fff; font-weight: 600; }
+.d.ana:hover { background: var(--mavi-koyu); border-color: var(--mavi-koyu); }
+.d.ig { background: linear-gradient(135deg, #f58529, #dd2a7b 50%, #8134af); border: 0; color: #fff; font-weight: 600; }
+.d.sil { color: var(--kotu); }
+.d.ince { border: 0; background: none; padding: 6px 8px; color: var(--soluk); } .d.ince:hover { color: var(--murekkep); background: var(--zemin); }
+.d.kucuk { padding: 5px 10px; font-size: 13px; border-radius: 8px; }
+button:disabled, a.d.pasif { opacity: .5; cursor: default; pointer-events: none; }
 
-.kutu { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 12px; }
-.kutuBaslik { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--cizgi); }
+/* Kutular */
+.kutu { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 14px; box-shadow: var(--golge); }
+.kutuBaslik { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--cizgi2); }
 .kutuBaslik h2 { font-size: 15px; font-weight: 600; margin: 0; }
-.kutuIc { padding: 16px 18px; }
+.kutuIc { padding: 16px 18px; } .kutuIc > * { min-width: 0; }
+.kutuAlt { padding: 10px 18px; border-top: 1px solid var(--cizgi2); color: var(--soluk); font-size: 12px; }
 .ikili { display: grid; grid-template-columns: 1.7fr 1fr; gap: 16px; margin-top: 16px; }
 .not { color: var(--soluk); font-size: 13px; }
+.bos { color: var(--soluk); padding: 36px 18px; text-align: center; display: grid; gap: 10px; justify-items: center; }
+.bos svg { width: 44px; height: 44px; stroke: var(--silik); stroke-width: 1.4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.bos b { color: var(--murekkep); font-size: 15px; }
+.iskelet { background: linear-gradient(90deg, var(--cizgi2), var(--zemin), var(--cizgi2)); background-size: 200% 100%; animation: parla 1.2s infinite; border-radius: 8px; min-height: 14px; }
+@keyframes parla { to { background-position: -200% 0; } }
 
-/* İstatistik kutucukları */
-.donem { display: inline-flex; background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 8px; padding: 2px; }
-.donem button { white-space: nowrap; border: 0; background: none; font: inherit; font-weight: 500; color: var(--soluk); padding: 5px 12px; border-radius: 6px; cursor: pointer; }
-.donem button.secili { background: var(--mavi-acik); color: var(--mavi); }
-.kartlar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
-.sayiKart { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 12px; padding: 14px 16px; }
-.sayiKart.one { border-color: var(--mavi); box-shadow: inset 0 0 0 1px var(--mavi); }
-.sayiKart span { color: var(--soluk); font-size: 13px; font-weight: 500; }
-.sayiKart b { display: block; font-size: 28px; font-weight: 700; letter-spacing: -.02em; margin: 2px 0; font-variant-numeric: tabular-nums; }
+/* Genel bakış */
+.donem { display: inline-flex; background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 9px; padding: 2px; }
+.donem button { white-space: nowrap; border: 0; background: none; font-weight: 500; color: var(--soluk); padding: 5px 12px; border-radius: 7px; cursor: pointer; }
+.donem button.secili { background: var(--mavi-acik); color: var(--mavi); font-weight: 600; }
+.kartlar { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+.sayiKart { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 14px; padding: 14px 16px; box-shadow: var(--golge); }
+.sayiKart.one { border-color: var(--mavi); box-shadow: inset 0 0 0 1px var(--mavi), var(--golge); }
+.sayiKart span { color: var(--soluk); font-size: 12.5px; font-weight: 500; }
+.sayiKart b { display: block; font-size: 26px; font-weight: 700; letter-spacing: -.02em; margin: 2px 0; font-variant-numeric: tabular-nums; }
 .sayiKart small { color: var(--silik); font-size: 12px; }
-
-/* Grafik: tek seri, tabana oturan ince sütunlar */
 .grafik { padding-left: 30px; }
 .cizim { position: relative; height: 200px; }
-.izgaraCizgi { position: absolute; left: 0; right: 0; border-top: 1px solid var(--cizgi); }
+.izgaraCizgi { position: absolute; left: 0; right: 0; border-top: 1px solid var(--cizgi2); }
 .izgaraCizgi span { position: absolute; right: calc(100% + 8px); top: -8px; font-size: 11px; color: var(--silik); font-variant-numeric: tabular-nums; }
 .sutunlar { position: absolute; inset: 0; display: flex; gap: 2px; }
 .gunSutun { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; outline: none; }
-.cubuk { width: min(70%, 22px); background: var(--mavi); border-radius: 4px 4px 0 0; }
+.cubuk { width: min(70%, 22px); background: var(--mavi); border-radius: 4px 4px 0 0; transition: height .3s; }
 .cubuk.bugun { background: var(--mavi-koyu); }
 .gunSutun:hover .cubuk, .gunSutun:focus-visible .cubuk { background: var(--mavi-koyu); box-shadow: 0 0 0 2px var(--mavi-acik); }
 .xEtiket { display: flex; gap: 2px; margin-top: 6px; }
 .xEtiket span { flex: 1; text-align: center; font-size: 11px; color: var(--silik); white-space: nowrap; overflow: visible; width: 0; }
-.ipucu { position: absolute; pointer-events: none; background: var(--murekkep); color: #fff; font-size: 12px; padding: 7px 10px; border-radius: 8px;
-  transform: translate(-50%, calc(-100% - 8px)); white-space: nowrap; opacity: 0; transition: opacity .1s; }
-.ipucu.gorunur { opacity: 1; }
-.ipucu b { font-weight: 600; }
-
-/* Huni */
+.ipucu { position: absolute; pointer-events: none; background: var(--murekkep); color: var(--zemin); font-size: 12px; padding: 7px 10px; border-radius: 8px; transform: translate(-50%, calc(-100% - 8px)); white-space: nowrap; opacity: 0; transition: opacity .1s; }
+.ipucu.gorunur { opacity: 1; } .ipucu b { font-weight: 600; }
 .huni { display: grid; gap: 14px; }
-.huni .ust { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
-.huni .ust b { font-variant-numeric: tabular-nums; }
+.huni .ust { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; } .huni .ust b { font-variant-numeric: tabular-nums; }
 .huni .ray { height: 10px; background: var(--zemin); border-radius: 99px; overflow: hidden; }
-.huni .dolu { height: 100%; background: var(--mavi); border-radius: 99px; min-width: 2px; }
+.huni .dolu { height: 100%; background: linear-gradient(90deg, var(--mavi), var(--mor)); border-radius: 99px; min-width: 2px; transition: width .4s; }
+.baslangic { display: grid; gap: 0; }
+.baslangic .adim { display: flex; gap: 12px; align-items: flex-start; padding: 12px 18px; border-bottom: 1px solid var(--cizgi2); }
+.baslangic .adim:last-child { border-bottom: 0; }
+.baslangic i { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--cizgi); display: grid; place-items: center; font-style: normal; font-size: 12px; font-weight: 700; color: var(--soluk); flex: none; margin-top: 1px; }
+.baslangic .tamam i { background: var(--iyi); border-color: var(--iyi); color: #fff; }
+.baslangic .tamam b { text-decoration: line-through; color: var(--soluk); font-weight: 500; }
+.baslangic b { display: block; } .baslangic p { margin: 2px 0 0; color: var(--soluk); font-size: 13px; }
+.siradaki { display: flex; gap: 14px; align-items: center; padding: 14px 18px; }
+.siradaki .kapakVideo { width: 44px; height: 56px; }
 
-/* Otomasyon tablosu */
+/* Tablolar */
 table { width: 100%; border-collapse: collapse; }
-th { text-align: left; font-size: 12px; font-weight: 500; color: var(--soluk); padding: 10px 18px; border-bottom: 1px solid var(--cizgi); white-space: nowrap; }
-td { padding: 12px 18px; border-bottom: 1px solid var(--cizgi); vertical-align: middle; }
+th { text-align: left; font-size: 12px; font-weight: 500; color: var(--soluk); padding: 10px 18px; border-bottom: 1px solid var(--cizgi2); white-space: nowrap; }
+td { padding: 12px 18px; border-bottom: 1px solid var(--cizgi2); vertical-align: middle; }
 tr:last-child td { border-bottom: 0; }
-tbody tr { cursor: pointer; }
-tbody tr:hover { background: #fafbfc; }
+tbody tr.tik { cursor: pointer; } tbody tr.tik:hover { background: var(--yuzey2); }
 td.s, th.s { text-align: right; font-variant-numeric: tabular-nums; }
 .otoAd { display: flex; align-items: center; gap: 12px; min-width: 0; }
-.kucukKapak { width: 40px; height: 50px; border-radius: 6px; background: var(--zemin) center / cover no-repeat; flex: none; display: grid; place-items: center; color: var(--silik); }
+.kucukKapak { width: 40px; height: 50px; border-radius: 8px; background: var(--zemin) center / cover no-repeat; flex: none; display: grid; place-items: center; color: var(--silik); }
 .otoAd b { display: block; font-weight: 600; }
 .etiketler { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px; }
 .etiket { font-size: 12px; background: var(--zemin); border: 1px solid var(--cizgi); border-radius: 6px; padding: 0 7px; color: var(--murekkep); }
-.rozet { font-size: 12px; font-weight: 500; border-radius: 99px; padding: 2px 9px; white-space: nowrap; }
-.rozet.iyi { background: var(--iyi-acik); color: var(--iyi); }
-.rozet.uyari { background: var(--uyari-acik); color: var(--uyari); }
-.rozet.pasif { background: var(--zemin); color: var(--soluk); }
+.rozet { font-size: 12px; font-weight: 600; border-radius: 99px; padding: 2px 9px; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; }
+.rozet.iyi { background: var(--iyi-acik); color: var(--iyi); } .rozet.uyari { background: var(--uyari-acik); color: var(--uyari); }
+.rozet.kotu { background: var(--kotu-acik); color: var(--kotu); } .rozet.pasif { background: var(--zemin); color: var(--soluk); }
+.rozet.mavi { background: var(--mavi-acik); color: var(--mavi); } .rozet.mor { background: var(--mor-acik); color: var(--mor); }
+.rozet.canli::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: nabiz 1.4s infinite; }
+@keyframes nabiz { 50% { opacity: .3; } }
 
-/* Aç/kapa anahtarı */
+/* Anahtar */
 .anahtar { position: relative; display: inline-block; width: 36px; height: 20px; flex: none; }
 .anahtar input { opacity: 0; width: 0; height: 0; position: absolute; }
-.anahtar i { position: absolute; inset: 0; background: #cfd4dc; border-radius: 99px; transition: background .15s; cursor: pointer; }
-.anahtar i::after { content: ""; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform .15s;
-  box-shadow: 0 1px 2px rgb(0 0 0 / .2); }
-.anahtar input:checked + i { background: var(--mavi); }
-.anahtar input:checked + i::after { transform: translateX(16px); }
+.anahtar i { position: absolute; inset: 0; background: var(--silik); border-radius: 99px; transition: background .15s; cursor: pointer; }
+.anahtar i::after { content: ""; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform .15s; box-shadow: 0 1px 2px rgb(0 0 0 / .25); }
+.anahtar input:checked + i { background: var(--mavi); } .anahtar input:checked + i::after { transform: translateX(16px); }
 .anahtar input:focus-visible + i { outline: 2px solid var(--mavi); outline-offset: 2px; }
 .secim { display: flex; align-items: center; gap: 10px; font-size: 14px; cursor: pointer; }
+.secim small { color: var(--soluk); display: block; font-weight: 400; }
 
 /* Paylaşım ızgarası */
 .izgara { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 14px; }
-.kart { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 12px; overflow: hidden; cursor: pointer; text-align: left; padding: 0;
-  display: flex; flex-direction: column; font: inherit; color: inherit; }
-.kart:hover { border-color: var(--silik); }
+.kart { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 14px; overflow: hidden; cursor: pointer; text-align: left; padding: 0; display: flex; flex-direction: column; font: inherit; color: inherit; transition: transform .12s, box-shadow .12s; }
+.kart:hover { transform: translateY(-2px); box-shadow: var(--golge); }
 .kart.kurali { border-color: var(--mavi); box-shadow: inset 0 0 0 1px var(--mavi); }
 .kapak { aspect-ratio: 4 / 5; background: var(--zemin) center / cover no-repeat; position: relative; }
-.kapak .rozet { position: absolute; left: 8px; top: 8px; background: var(--mavi); color: #fff; }
+.kapak .rozet { position: absolute; left: 8px; top: 8px; background: var(--mavi); color: #fff; max-width: calc(100% - 16px); overflow: hidden; text-overflow: ellipsis; display: block; }
 .kapak .rozet.pasif { background: var(--soluk); color: #fff; }
 .kart .alt { padding: 9px 11px 11px; font-size: 13px; }
 .kart .aciklama { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .kart .ekle { color: var(--mavi); font-weight: 500; margin-top: 4px; font-size: 12px; }
 
+/* Gönderiler */
+.gonderiListe { display: grid; gap: 0; }
+.gonderi { display: grid; grid-template-columns: 56px 1fr auto; gap: 14px; padding: 14px 18px; border-bottom: 1px solid var(--cizgi2); align-items: center; }
+.gonderi:last-child { border-bottom: 0; }
+.kapakVideo { width: 56px; height: 70px; border-radius: 10px; background: linear-gradient(160deg, #1d2a4b, #3a1d4b 60%, #4b1d2e); display: grid; place-items: center; color: #fff; position: relative; overflow: hidden; flex: none; }
+.kapakVideo svg { width: 22px; height: 22px; fill: #fff; stroke: none; opacity: .9; }
+.kapakVideo video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.gonderi .orta { min-width: 0; display: grid; gap: 3px; }
+.gonderi .zaman { font-weight: 600; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.gonderi .aciklama { color: var(--soluk); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gonderi .meta { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 12px; color: var(--soluk); }
+.gonderi .eylem { display: flex; gap: 4px; }
+.gonderi .hataMetin { color: var(--kotu); font-size: 12.5px; }
+.bolumBaslik { display: flex; align-items: center; gap: 10px; margin: 20px 0 10px; font-size: 13px; font-weight: 600; color: var(--soluk); text-transform: uppercase; letter-spacing: .04em; }
+.bolumBaslik:first-child { margin-top: 0; }
+
 /* Olaylar */
 .olaylar { list-style: none; margin: 0; padding: 0; }
-.olaylar li { padding: 10px 18px; border-bottom: 1px solid var(--cizgi); display: flex; gap: 12px; align-items: baseline; }
+.olaylar li { padding: 10px 18px; border-bottom: 1px solid var(--cizgi2); display: flex; gap: 12px; align-items: baseline; }
 .olaylar li:last-child { border-bottom: 0; }
 .olaylar time { color: var(--silik); white-space: nowrap; font-size: 12px; font-variant-numeric: tabular-nums; min-width: 88px; }
 .olaylar .hata { color: var(--kotu); }
-.bos { color: var(--soluk); padding: 32px 18px; text-align: center; }
 
 /* Formlar ve pencereler */
-dialog { border: 0; border-radius: 14px; padding: 0; width: min(560px, calc(100vw - 32px)); background: var(--yuzey); color: var(--murekkep);
-  box-shadow: 0 20px 60px rgb(15 23 42 / .25); }
-dialog.genis { width: min(760px, calc(100vw - 32px)); }
-dialog::backdrop { background: rgb(15 23 42 / .4); }
-dialog form { padding: 22px; display: grid; gap: 14px; }
-dialog h3 { margin: 0; font-size: 18px; font-weight: 700; }
+dialog { border: 0; border-radius: 16px; padding: 0; width: min(560px, calc(100vw - 32px)); background: var(--yuzey); color: var(--murekkep); box-shadow: 0 24px 70px rgb(10 12 20 / .3); max-height: calc(100vh - 32px); }
+dialog.genis { width: min(780px, calc(100vw - 32px)); }
+dialog::backdrop { background: rgb(10 12 20 / .45); backdrop-filter: blur(3px); }
+dialog form, dialog .govde { padding: 22px; display: grid; gap: 14px; }
+dialog h3 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -.01em; }
 label.alan { display: grid; gap: 5px; font-size: 13px; font-weight: 600; }
 label.alan small, .alanNot { color: var(--soluk); font-weight: 400; font-size: 12px; }
-input[type=text], input[type=password], textarea { font: inherit; font-weight: 400; padding: 9px 11px; border: 1px solid var(--cizgi); border-radius: 8px;
-  background: var(--yuzey); color: var(--murekkep); width: 100%; }
-input:focus, textarea:focus { outline: none; border-color: var(--mavi); box-shadow: 0 0 0 3px var(--mavi-acik); }
+input[type=text], input[type=search], input[type=password], input[type=datetime-local], input[type=number], textarea, select.alanSec { font: inherit; font-weight: 400; padding: 9px 11px; border: 1px solid var(--cizgi); border-radius: 9px; background: var(--yuzey); color: var(--murekkep); width: 100%; }
+input:focus, textarea:focus, select:focus { outline: none; border-color: var(--mavi); box-shadow: 0 0 0 3px var(--mavi-acik); }
 textarea { min-height: 90px; resize: vertical; }
 .satir { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; align-items: center; }
+.sayacMetin { font-size: 12px; color: var(--silik); text-align: right; font-variant-numeric: tabular-nums; }
 .istat { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.istat div { background: var(--zemin); border-radius: 8px; padding: 8px; text-align: center; }
-.istat b { display: block; font-size: 20px; font-weight: 700; }
-.istat span { font-size: 11px; color: var(--soluk); }
+.istat div { background: var(--zemin); border-radius: 9px; padding: 8px; text-align: center; }
+.istat b { display: block; font-size: 20px; font-weight: 700; } .istat span { font-size: 11px; color: var(--soluk); }
 .secIzgara { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; max-height: 52vh; overflow: auto; }
 .secIzgara .kart .alt { padding: 6px 8px; font-size: 12px; }
 .sablonlar { display: grid; gap: 16px; }
-
-.giris { max-width: 360px; margin: 16vh auto; padding: 28px; display: grid; gap: 12px; }
-.mesaj { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); background: var(--murekkep); color: #fff;
-  padding: 9px 16px; border-radius: 8px; font-size: 14px; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 20; }
-.mesaj.gorunur { opacity: 1; }
-
-@media (max-width: 1100px) { .kartlar { grid-template-columns: repeat(3, 1fr); } .ikili { grid-template-columns: 1fr; } }
-@media (max-width: 820px) {
-  .kabuk { display: block; }
-  .yan { position: static; height: auto; flex-direction: row; flex-wrap: wrap; align-items: center; padding: 12px 16px 0; gap: 10px; border-right: 0; border-bottom: 1px solid var(--cizgi); }
-  .logo { padding: 0; }
-  .hesapSec { margin-left: auto; padding: 5px 8px; }
-  .hesapSec .avatar { width: 22px; height: 22px; font-size: 10px; }
-  nav { display: flex; overflow-x: auto; width: 100%; gap: 2px; margin: 0 -4px; padding-bottom: 6px; }
-  nav button { padding: 7px 10px; }
-  nav .sayac, .yanAlt { display: none; }
-  .ustCubuk { padding: 14px 16px; gap: 8px; } .ustCubuk h1 { font-size: 19px; }
-  .donem button { padding: 5px 9px; }
-  main { padding: 4px 16px 40px; }
-  .kartlar { grid-template-columns: repeat(2, 1fr); }
-  .kartlar .sayiKart:first-child { grid-column: 1 / -1; }
-  .gizleDar { display: none; }
-  th, td { padding: 10px 12px; }
-  .istat { grid-template-columns: repeat(2, 1fr); }
-}
-a.d.pasif { pointer-events: none; opacity: .5; }
-.serit { background: var(--kotu-acik); color: var(--kotu); border-bottom: 1px solid #f3c2c2; padding: 10px 24px; display: flex; gap: 10px; align-items: flex-start; font-size: 13px; }
-.serit b { font-weight: 600; }
-.serit span { display: block; }
-.arama { display: flex; gap: 8px; align-items: center; padding: 12px 18px; border-bottom: 1px solid var(--cizgi); flex-wrap: wrap; }
-.arama input, .arama select { padding: 7px 10px; border: 1px solid var(--cizgi); border-radius: 8px; font: inherit; background: var(--yuzey); }
+.arama { display: flex; gap: 8px; align-items: center; padding: 12px 18px; border-bottom: 1px solid var(--cizgi2); flex-wrap: wrap; }
+.arama input, .arama select { padding: 7px 10px; border: 1px solid var(--cizgi); border-radius: 9px; font: inherit; background: var(--yuzey); color: inherit; width: auto; }
 .linkListe { list-style: none; margin: 0; padding: 0; font-size: 12px; }
 .linkListe li { display: flex; gap: 8px; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed var(--cizgi); }
 .linkListe li span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--soluk); }
 .sorular { display: grid; gap: 10px; }
-.soru { display: grid; grid-template-columns: 1fr 140px; gap: 8px; align-items: start; padding: 10px; border: 1px solid var(--cizgi); border-radius: 10px; }
+.soru { display: grid; grid-template-columns: 1fr 160px; gap: 8px; align-items: start; padding: 10px; border: 1px solid var(--cizgi); border-radius: 10px; }
 .soru textarea { grid-column: 1 / -1; }
-.soru input, .soru select, .soru textarea { padding: 7px 10px; border: 1px solid var(--cizgi); border-radius: 8px; font: inherit; width: 100%; }
+.soru input, .soru select, .soru textarea { padding: 7px 10px; border: 1px solid var(--cizgi); border-radius: 8px; font: inherit; width: 100%; background: var(--yuzey); color: inherit; }
+.kod { font: 12.5px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--zemin); border: 1px solid var(--cizgi); border-radius: 9px; padding: 10px 100px 10px 12px; white-space: pre-wrap; word-break: break-all; position: relative; }
+.kod button { position: absolute; right: 6px; top: 6px; }
+.anahtarKutu { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.anahtarKutu code { font: 13px ui-monospace, Menlo, monospace; background: var(--zemin); border: 1px solid var(--cizgi); border-radius: 8px; padding: 6px 10px; letter-spacing: .02em; }
+.liste { list-style: none; margin: 0; padding: 0; }
+.liste li { display: flex; align-items: center; gap: 12px; padding: 12px 18px; border-bottom: 1px solid var(--cizgi2); flex-wrap: wrap; }
+.liste li:last-child { border-bottom: 0; }
+.liste .icerik { flex: 1 1 220px; min-width: 0; } .liste b { display: block; }
+.ipucuKutu { background: var(--mavi-acik); color: var(--murekkep); border-radius: 10px; padding: 10px 12px; font-size: 13px; display: flex; gap: 10px; align-items: flex-start; }
+.ipucuKutu svg { color: var(--mavi); margin-top: 1px; }
+.ipucuKutu ol { margin: 4px 0 0; padding-left: 18px; }
+
+/* Video yükleme */
+.birak { border: 2px dashed var(--cizgi); border-radius: 14px; padding: 22px; text-align: center; display: grid; gap: 6px; justify-items: center; cursor: pointer; transition: border-color .12s, background .12s; }
+.birak:hover, .birak.ustunde { border-color: var(--mavi); background: var(--mavi-acik); }
+.birak svg { width: 30px; height: 30px; stroke: var(--mavi); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.birak b { font-size: 14px; } .birak span { color: var(--soluk); font-size: 12px; }
+.onizleme { display: grid; grid-template-columns: 96px 1fr; gap: 14px; align-items: center; padding: 10px; border: 1px solid var(--cizgi); border-radius: 12px; }
+.onizleme video { width: 96px; height: 120px; object-fit: cover; border-radius: 9px; background: #000; }
+.onizleme .bilgi { display: grid; gap: 4px; font-size: 13px; min-width: 0; } .onizleme b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ilerleme { height: 6px; background: var(--zemin); border-radius: 99px; overflow: hidden; }
+.ilerleme div { height: 100%; background: var(--mavi); transition: width .2s; }
+.cipler { display: flex; gap: 6px; flex-wrap: wrap; }
+.cip { border: 1px solid var(--cizgi); background: var(--yuzey); border-radius: 99px; padding: 4px 10px; font-size: 12px; cursor: pointer; }
+.cip:hover { border-color: var(--mavi); color: var(--mavi); }
+details.katlanir { border: 1px solid var(--cizgi); border-radius: 12px; padding: 0; }
+details.katlanir summary { cursor: pointer; padding: 12px 14px; font-weight: 600; list-style: none; display: flex; align-items: center; gap: 8px; }
+details.katlanir summary::after { content: "+"; margin-left: auto; color: var(--soluk); font-size: 16px; } details.katlanir[open] summary::after { content: "–"; }
+details.katlanir .ic { padding: 0 14px 14px; display: grid; gap: 12px; }
+
+/* Yönetici */
+.yonKartlar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+.planSec { padding: 4px 8px; border: 1px solid var(--cizgi); border-radius: 7px; background: var(--yuzey); color: inherit; font: inherit; font-size: 12px; }
+
+/* Mesaj (toast) ve onay */
+.mesaj { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(10px); background: var(--murekkep); color: var(--zemin); padding: 10px 16px; border-radius: 10px; font-size: 14px; opacity: 0; transition: opacity .2s, transform .2s; pointer-events: none; z-index: 30; max-width: calc(100vw - 32px); box-shadow: 0 10px 30px rgb(0 0 0 / .25); display: flex; gap: 8px; align-items: center; }
+.mesaj.gorunur { opacity: 1; transform: translateX(-50%); }
+.mesaj.kotu { background: var(--kotu); color: #fff; } .mesaj.iyi { background: var(--iyi); color: #fff; }
+
+/* Mobil */
+@media (max-width: 1100px) { .kartlar { grid-template-columns: repeat(3, 1fr); } .ikili { grid-template-columns: 1fr; } .yonKartlar { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 820px) {
+  .kabuk { display: block; padding-bottom: 72px; }
+  .yan { position: sticky; top: 0; z-index: 5; height: auto; flex-direction: row; align-items: center; padding: 10px 14px; gap: 10px; border-right: 0; border-bottom: 1px solid var(--cizgi); }
+  .logo { padding: 0; } .logo span { display: none; }
+  .hesapSec { margin-left: auto; padding: 5px 8px; } .hesapSec .avatar { width: 22px; height: 22px; font-size: 10px; }
+  nav.menu { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; background: var(--yuzey); border-top: 1px solid var(--cizgi); display: flex; overflow-x: auto; gap: 0; padding: 6px 4px calc(6px + env(safe-area-inset-bottom)); scrollbar-width: none; }
+  nav.menu::-webkit-scrollbar { display: none; }
+  nav.menu button { flex: 1 0 58px; flex-direction: column; gap: 3px; font-size: 10px; padding: 6px 4px; border-radius: 8px; justify-content: center; }
+  nav.menu .sayac { display: none; }
+  .yanAlt, .cikis { display: none; }
+  .ustCubuk { padding: 14px 16px 10px; gap: 8px; } .ustCubuk h1 { font-size: 19px; } .ustCubuk .alt { display: none; }
+  main { padding: 4px 16px 40px; }
+  .kartlar { grid-template-columns: repeat(2, 1fr); } .kartlar .sayiKart:first-child { grid-column: 1 / -1; }
+  .gizleDar { display: none !important; }
+  th, td { padding: 10px 12px; } .istat { grid-template-columns: repeat(2, 1fr); }
+  .gonderi { grid-template-columns: 48px 1fr; } .gonderi .eylem { grid-column: 1 / -1; justify-content: flex-end; }
+  .onizleme { grid-template-columns: 72px 1fr; } .onizleme video { width: 72px; height: 90px; }
+  .soru { grid-template-columns: 1fr; }
+  dialog { max-height: calc(100vh - 16px); width: calc(100vw - 16px); }
+}
 </style>
 </head>
 <body>
 <div id="uygulama"></div>
-<div class="mesaj" id="mesaj"></div>
+<div class="mesaj" id="mesaj" role="status" aria-live="polite"></div>
+
+<dialog id="onayPencere">
+  <form method="dialog">
+    <h3 id="onayBaslik">Emin misiniz?</h3>
+    <p class="not" id="onayMetin" style="margin:0"></p>
+    <div class="satir"><button class="d" value="iptal">Vazgeç</button><button class="d sil" value="tamam" id="onayDugme">Sil</button></div>
+  </form>
+</dialog>
 
 <dialog id="kuralPencere">
   <form method="dialog" id="kuralForm">
@@ -222,7 +312,7 @@ a.d.pasif { pointer-events: none; opacity: .5; }
       <a id="kuralLink" class="not" target="_blank" rel="noopener">Paylaşımı aç ↗</a>
     </div>
     <label class="alan" id="hikayeAlan" hidden>Hangi hikâye <small>Yanıt gelince linkler gider. Kelime boş bırakılırsa her yanıt sayılır.</small>
-      <select name="hikaye"><option value="*">Tüm hikâyeler</option></select></label>
+      <select name="hikaye" class="alanSec"><option value="*">Tüm hikâyeler</option></select></label>
     <label class="alan" id="aciklamaAlan">Açıklamada geçen metin <small>Paylaşım yayınlanınca açıklamasında bu metin geçen ilk paylaşıma bağlanır. Açıklamanın ilk satırı iyi bir seçim.</small>
       <input type="text" name="aciklama" placeholder="Kling 4.0 çıktı 🎬"></label>
     <div class="istat" id="kuralIstat" title="Son 30 gün"></div>
@@ -230,9 +320,9 @@ a.d.pasif { pointer-events: none; opacity: .5; }
     <label class="alan">Tetikleyen kelimeler <small>Yorumda geçerse çalışır (harf hatası ve ekli hali de: liste → listeyi, lste). DM'de yalnızca kelimenin kendisi ya da en çok 3 kelimelik mesaj. Virgülle ayırın.</small>
       <input type="text" name="anahtar" placeholder="liste" required></label>
     <label class="alan">Başlık <small>Mesajlarda geçer: "{baslik} için linkler"</small>
-      <input type="text" name="baslik" placeholder="FLUX 3 Klein" required></label>
-    <label class="alan">Gönderilecek içerik <small>Metin ve linkler, en çok 1000 karakter.</small>
-      <textarea name="icerik" rows="6" required></textarea></label>
+      <input type="text" name="baslik" placeholder="FLUX 3 Klein" required maxlength="80"></label>
+    <label class="alan">Gönderilecek içerik <small>Metin ve linkler, en çok 1000 karakter. Linkler tıklama sayaçlı kısa linke çevrilir.</small>
+      <textarea name="icerik" rows="6" required maxlength="1000"></textarea></label>
     <label class="secim"><span class="anahtar"><input type="checkbox" name="takip_sart"><i></i></span> Linkten önce takip etmesini iste</label>
     <label class="secim"><span class="anahtar"><input type="checkbox" name="yorum_yaniti"><i></i></span> Yoruma herkese açık "DM'den gönderdim" yaz</label>
     <label class="secim"><span class="anahtar"><input type="checkbox" name="aktif"><i></i></span> Etkin</label>
@@ -259,26 +349,55 @@ a.d.pasif { pointer-events: none; opacity: .5; }
   </form>
 </dialog>
 
-<dialog id="hesapPencere">
-  <form method="dialog" id="hesapForm">
-    <h3>Hesap ekle</h3>
-    <div id="baglanKutu">
-      <p class="not" style="margin:0 0 10px">Bağlanacak hesabın Instagram'da açık olması gerekmez; Instagram size hangi hesapla gireceğinizi sorar.
-        Hesabın Meta panelinde <b>Instagram tester</b> olarak eklenmiş ve daveti Instagram'da kabul etmiş olması gerekir.</p>
-      <a class="d ana" id="baglanDugme" href="/baglan" style="display:inline-flex;justify-content:center;width:100%">Instagram ile bağla</a>
-      <p class="not" id="baglanYok" hidden style="margin:10px 0 0;color:var(--uyari)">Instagram girişi için wrangler.toml'da INSTAGRAM_APP_ID boş; şimdilik anahtar yapıştırın.</p>
-      <p class="not" style="margin:14px 0 4px;text-align:center">— ya da anahtarı elle yapıştırın —</p>
+<dialog id="gonderiPencere" class="genis">
+  <form method="dialog" id="gonderiForm">
+    <h3 id="gonderiBaslik">Yeni gönderi</h3>
+    <div id="videoAlan">
+      <label class="birak" id="birak" tabindex="0">
+        <svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 17v3h16v-3"/></svg>
+        <b>Videoyu buraya bırak ya da seç</b>
+        <span>MP4 ya da MOV · dikey 9:16 önerilir · en çok 100 MB</span>
+        <input type="file" accept="video/mp4,video/quicktime,.mp4,.mov" hidden id="videoDosya">
+      </label>
+      <div class="onizleme" id="onizleme" hidden>
+        <video muted playsinline preload="metadata" id="onizlemeVideo"></video>
+        <div class="bilgi">
+          <b id="videoAd"></b>
+          <span class="not" id="videoBilgi"></span>
+          <div class="ilerleme" id="yuklemeCubugu" hidden><div style="width:0"></div></div>
+          <span class="not" id="yuklemeDurum"></span>
+          <div><button type="button" class="d kucuk" id="videoDegistir">Başka video seç</button></div>
+        </div>
+      </div>
     </div>
-    <label class="alan">Instagram anahtarı <small>Meta paneli → Instagram → API setup with Instagram login → hesabın yanında <b>Generate token</b>.</small>
-      <textarea name="token" rows="3" placeholder="IGAA…"></textarea></label>
+    <label class="alan" id="gonderiHesapAlan" hidden>Hesap <select name="hesap" class="alanSec"></select></label>
+    <label class="alan">Açıklama <small>Instagram'da görünecek metin. "yorumlara X yaz" türünden bir çağrı yazarsanız kelimeyi aşağıya biz taşırız.</small>
+      <textarea name="aciklama" rows="5" maxlength="2200" placeholder="Bu videoda… Linkler için yorumlara LİSTE yaz 👇"></textarea>
+      <span class="sayacMetin" id="aciklamaSayac">0 / 2200</span></label>
+    <label class="alan">Yayın zamanı <small>Cihazınızın saatine göre.</small>
+      <input type="datetime-local" name="zaman" required>
+      <div class="cipler" id="zamanCipler"></div></label>
+    <label class="secim"><span class="anahtar"><input type="checkbox" name="feed" checked><i></i></span> <span>Akışta da görünsün <small>Kapalıysa yalnızca Reels sekmesinde çıkar.</small></span></label>
+    <details class="katlanir" id="kuralKatlanir">
+      <summary><svg class="ik" viewBox="0 0 24 24"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></svg> Yorumlara kelime yazana link gönder</summary>
+      <div class="ic">
+        <label class="alan">Tetikleyen kelimeler <small>Virgülle ayırın. Boş bırakılırsa otomasyon açılmaz.</small><input type="text" name="kural_anahtar" placeholder="liste"></label>
+        <label class="alan">Başlık <small>Mesajlarda geçer: "{baslik} için linkler"</small><input type="text" name="kural_baslik" placeholder="1 yılın araç listesi" maxlength="80"></label>
+        <label class="alan">Gönderilecek içerik <small>Metin ve linkler, en çok 1000 karakter. Boşsa otomasyon pasif açılır, sonra doldurursunuz.</small><textarea name="kural_icerik" rows="4" maxlength="1000"></textarea></label>
+        <label class="secim"><span class="anahtar"><input type="checkbox" name="kural_takip" checked><i></i></span> Linkten önce takip etmesini iste</label>
+      </div>
+    </details>
     <div class="satir">
+      <span class="not" id="gonderiNot"></span>
+      <span class="bosluk"></span>
       <button class="d" value="iptal" formnovalidate>Vazgeç</button>
-      <button class="d ana" value="ekle">Ekle</button>
+      <button class="d ana" value="kaydet" id="gonderiKaydet">Planla</button>
     </div>
   </form>
 </dialog>
 
 <script>
+// --- Temel yardımcılar ----------------------------------------------------------------
 const $ = (s, k = document) => k.querySelector(s);
 const el = (etiket, ozellik = {}, ...cocuk) => {
   const e = document.createElement(etiket);
@@ -287,6 +406,7 @@ const el = (etiket, ozellik = {}, ...cocuk) => {
     if (k === "class") e.className = v;
     else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
     else if (k === "style") e.style.cssText = v;
+    else if (k === "value" && "value" in e) e.value = v;
     else e.setAttribute(k, v === true ? "" : v);
   }
   for (const c of cocuk.flat()) if (c != null && c !== false) e.append(c);
@@ -294,46 +414,69 @@ const el = (etiket, ozellik = {}, ...cocuk) => {
 };
 const IKON = {
   genel: "M4 13h6V4H4zM14 20h6v-9h-6zM14 4v3h6V4zM4 20h6v-3H4z",
+  gonderi: "M4 6h16v12H4zM4 10h16M8 6V4M16 6V4M10 13l4 2-4 2z",
   oto: "M13 3 5 14h6l-1 7 8-11h-6z",
   paylasim: "M4 5h16v14H4zM4 15l4.5-4.5 4 4 3-3L20 16",
   sablon: "M4 5h16v11H9l-5 4z",
   olay: "M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01",
+  ayar: "M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z",
   hesap: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4.5 20c1.4-3.6 4.4-5 7.5-5s6.1 1.4 7.5 5",
   yenile: "M20 11a8 8 0 0 0-14.6-4.5M4 4v3h3M4 13a8 8 0 0 0 14.6 4.5M20 20v-3h-3",
   arti: "M12 5v14M5 12h14",
   kisi: "M16 20c0-2.5-2-4-4.5-4S7 17.5 7 20M11.5 12a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM17 11a3 3 0 1 0 0-6M21 20c0-2.2-1.5-3.6-3.5-4",
   uyari: "M12 3 2 21h20zM12 10v5M12 18h.01",
   hikaye: "M12 21a9 9 0 1 0-9-9M3 12h.01M4.2 7.5h.01M7.5 4.2h.01M10 15l5-3-5-3z",
+  cikis: "M10 4H5v16h5M14 8l4 4-4 4M18 12H9",
+  kopyala: "M9 9h10v11H9zM5 15V4h10",
+  bilgi: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 11v5M12 8h.01",
+  video: "M4 6h12v12H4zM16 10l4-2v8l-4-2",
+  tik: "M5 12l4 4L19 6",
+  disari: "M14 4h6v6M20 4l-9 9M19 14v6H5V6h6",
+  atolye: "M3 10l9-6 9 6v10H3zM9 20v-6h6v6",
 };
-const ikon = (ad) => {
+const ikon = (ad, sinif = "ik") => {
   const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  s.setAttribute("viewBox", "0 0 24 24"); s.setAttribute("class", "ik"); s.setAttribute("aria-hidden", "true");
+  s.setAttribute("viewBox", "0 0 24 24"); s.setAttribute("class", sinif); s.setAttribute("aria-hidden", "true");
   const p = document.createElementNS("http://www.w3.org/2000/svg", "path"); p.setAttribute("d", IKON[ad]); s.append(p);
   return s;
 };
+const oynat = () => { const s = ikon("video"); s.innerHTML = '<path d="M8 5v14l11-7z"/>'; return s; };
 
 const GORUNUMLER = [
-  ["genel", "Genel bakış"], ["oto", "Otomasyonlar"], ["paylasim", "Paylaşımlar"],
-  ["kisi", "Kişiler"], ["sablon", "Mesaj şablonları"], ["olay", "Olay günlüğü"], ["hesap", "Hesaplar"],
+  ["genel", "Genel bakış"], ["gonderi", "Gönderiler"], ["oto", "Otomasyonlar"], ["paylasim", "Paylaşımlar"],
+  ["kisi", "Kişiler"], ["sablon", "Mesajlar"], ["olay", "Olaylar"], ["ayar", "Ayarlar"],
 ];
 const BAGSIZ = "aciklama:";
 const HIKAYE = "hikaye:";
 const paylasimKurali = (k) => !k.medya.startsWith(BAGSIZ) && !k.medya.startsWith(HIKAYE);
 const durum = {
-  veri: null, hesap: null, paylasim: null, ozet: null, kural: null, kisiler: null, kisiSorgu: { q: "", kural: 0 },
+  veri: null, hesap: null, paylasim: null, ozet: null, kural: null, kisiler: null, kisiSorgu: { q: "", kural: 0 }, gonderiler: null, yonetim: null,
   gorunum: GORUNUMLER.some(([g]) => g === location.hash.slice(1)) ? location.hash.slice(1) : "genel",
-  donem: 7,
+  donem: 7, gonderiTaslak: null,
 };
 
-function bildir(metin) {
-  const m = $("#mesaj"); m.textContent = metin; m.classList.add("gorunur");
-  clearTimeout(bildir.z); bildir.z = setTimeout(() => m.classList.remove("gorunur"), 2600);
+let bildirZ;
+function bildir(metin, tur = "") {
+  const m = $("#mesaj"); m.replaceChildren(tur === "iyi" ? ikon("tik") : tur === "kotu" ? ikon("uyari") : "", metin);
+  m.className = "mesaj gorunur " + tur;
+  clearTimeout(bildirZ); bildirZ = setTimeout(() => m.classList.remove("gorunur"), tur === "kotu" ? 5000 : 2800);
+}
+const hataGoster = (e) => bildir(e?.message || String(e), "kotu");
+
+function onayla(baslik, metin, dugme = "Sil", tehlikeli = true) {
+  return new Promise((coz) => {
+    const p = $("#onayPencere");
+    $("#onayBaslik").textContent = baslik; $("#onayMetin").textContent = metin;
+    const d = $("#onayDugme"); d.textContent = dugme; d.className = "d " + (tehlikeli ? "sil" : "ana");
+    p.returnValue = ""; p.showModal();
+    p.addEventListener("close", () => coz(p.returnValue === "tamam"), { once: true });
+  });
 }
 
 async function istek(yol, secenek = {}) {
   const r = await fetch(yol, { headers: { "Content-Type": "application/json" }, ...secenek });
   const v = await r.json().catch(() => ({}));
-  if (r.status === 401) { girisGoster(); throw new Error("giriş"); }
+  if (r.status === 401) { location.href = "/"; throw new Error("giriş"); }
   if (!r.ok) throw new Error(v.hata || r.statusText);
   return v;
 }
@@ -346,35 +489,37 @@ function onceki(ms) {
   if (s < 86400) return Math.round(s / 3600) + " sa önce";
   return Math.round(s / 86400) + " gün önce";
 }
-const saat = (ms) => new Date(ms).toLocaleString("tr-TR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
-const bin = (n) => n.toLocaleString("tr-TR");
-const yuzde = (a, b) => (b ? Math.round((a / b) * 100) : 0) + "%";
-
-function girisGoster() {
-  const hata = new URLSearchParams(location.search).get("hata");
-  const hataMetin = hata === "2" ? "Çok fazla yanlış deneme. 15 dakika sonra tekrar deneyin." : hata === "1" ? "Şifre yanlış." : hata ? hata : null;
-  $("#uygulama").replaceChildren(el("form", { class: "giris kutu", method: "post", action: "/giris" },
-    el("div", { class: "logo" }, el("i", {}, "YL"), "YEK Lab DM"),
-    hataMetin ? el("p", { class: "not", style: "color:var(--kotu);margin:0" }, hataMetin) : null,
-    el("input", { type: "password", name: "sifre", placeholder: "Şifre", autofocus: true, required: true }),
-    el("button", { class: "d ana", style: "justify-content:center" }, "Giriş")));
+function sonra(ms) {
+  const s = (ms - Date.now()) / 1000;
+  if (s < 60) return "birazdan";
+  if (s < 3600) return Math.round(s / 60) + " dk sonra";
+  if (s < 86400) return Math.round(s / 3600) + " saat sonra";
+  return Math.round(s / 86400) + " gün sonra";
 }
+const saat = (ms) => new Date(ms).toLocaleString("tr-TR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+const tamTarih = (ms) => new Date(ms).toLocaleString("tr-TR", { weekday: "short", day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" });
+const bin = (n) => Number(n || 0).toLocaleString("tr-TR");
+const yuzde = (a, b) => (b ? Math.round((a / b) * 100) : 0) + "%";
+const mb = (b) => (b / 1048576).toFixed(1).replace(".", ",") + " MB";
+const hesapAdi = (id) => { const h = durum.veri?.hesaplar.find((x) => x.id === id); return h ? "@" + h.kullanici : "hesap"; };
+const yerel = { oku: (k) => { try { return localStorage.getItem(k); } catch { return null; } }, yaz: (k, v) => { try { localStorage.setItem(k, v); } catch {} } };
 
 // --- Veri -------------------------------------------------------------------------------
 async function yukle() {
   durum.veri = await istek("/api/durum");
-  $("#baglanYok").hidden = durum.veri.oauth;
-  $("#baglanDugme").classList.toggle("pasif", !durum.veri.oauth);
+  document.title = durum.veri.urun_adi;
   const qs = new URLSearchParams(location.search);
-  if (qs.has("mesaj") || (qs.has("hata") && !/^\d$/.test(qs.get("hata")))) {
-    setTimeout(() => bildir(qs.get("mesaj") || qs.get("hata")), 300);
+  if (qs.has("mesaj") || qs.has("hata")) {
+    setTimeout(() => bildir(qs.get("mesaj") || qs.get("hata"), qs.has("hata") ? "kotu" : "iyi"), 300);
     history.replaceState(null, "", location.pathname + location.hash);
   }
+  if (durum.veri.yonetici && !durum.veri.atolye) { durum.gorunum = "yonetim"; kabukCiz(); yonetimYukle(); return; }
   const hesaplar = durum.veri.hesaplar;
-  if (!durum.hesap) { try { durum.hesap = localStorage.getItem("hesap"); } catch {} } // son bakılan hesap yenilemede korunsun
+  if (!durum.hesap) durum.hesap = yerel.oku("hesap:" + durum.veri.atolye.id);
   if (!durum.hesap || !hesaplar.some((h) => h.id === durum.hesap)) durum.hesap = hesaplar[0]?.id ?? null;
   kabukCiz();
   if (durum.hesap) hesapVerisi();
+  gonderileriYukle();
 }
 
 async function hesapVerisi() {
@@ -384,16 +529,20 @@ async function hesapVerisi() {
   const [ozet, paylasim] = await Promise.allSettled([istek("/api/hesap/" + id + "/ozet"), istek("/api/hesap/" + id + "/paylasimlar")]);
   if (id !== durum.hesap) return;
   durum.ozet = ozet.status === "fulfilled" ? ozet.value : { bugun: "", gunler: [], hata: ozet.reason.message };
-  durum.paylasim = paylasim.status === "fulfilled" ? paylasim.value : { medya: [], kurallar: [], sayilar: [], hata: paylasim.reason.message };
+  durum.paylasim = paylasim.status === "fulfilled" ? paylasim.value : { medya: [], kurallar: [], sayilar: [], linkler: [], hata: paylasim.reason.message };
   kabukCiz();
+}
+
+async function gonderileriYukle() {
+  try { durum.gonderiler = await istek("/api/gonderiler"); } catch (e) { durum.gonderiler = { gonderiler: [], video: false, hata: e.message }; }
+  if (["gonderi", "genel"].includes(durum.gorunum)) icerikCiz();
+  kabukSayac();
 }
 
 function sayi(kural, tur) {
   const s = durum.paylasim?.sayilar.find((x) => x.kural === kural && x.tur === tur);
   return s ? s.adet : 0;
 }
-
-/** Son n günün tarihleri, eskiden yeniye (bugün dahil, Türkiye günü) */
 function gunler(n) {
   const bugun = new Date(durum.ozet.bugun + "T12:00:00Z");
   return Array.from({ length: n }, (_, i) => new Date(bugun - (n - 1 - i) * 864e5).toISOString().slice(0, 10));
@@ -405,78 +554,142 @@ const GIDEN = ["ozel_yanit", "takip_istendi", "teslim"];
 const gidenMesaj = (gun) => GIDEN.reduce((t, tur) => t + gunluk(gun, tur), 0);
 
 // --- Kabuk ------------------------------------------------------------------------------
+function git(g) { durum.gorunum = g; history.replaceState(null, "", "#" + g); kabukCiz(); }
+
+function kabukSayac() {
+  const n = (durum.gonderiler?.gonderiler ?? []).filter((g) => ["bekliyor", "isleniyor", "yayinlaniyor"].includes(g.durum)).length;
+  const b = $("#sayacGonderi"); if (b) { b.textContent = n; b.hidden = !n; }
+}
+
 function kabukCiz() {
   const v = durum.veri;
+  const yonetim = durum.gorunum === "yonetim";
   const webhook = Date.now() - v.son_webhook < 6 * 36e5;
   const hesap = v.hesaplar.find((h) => h.id === durum.hesap);
-  const otoSayi = durum.paylasim ? durum.paylasim.kurallar.length : null;
+  const otoSayi = durum.paylasim ? durum.paylasim.kurallar.filter((k) => k.aktif).length : null;
+  const baslik = yonetim ? ["Yönetim", "Tüm atölyeler"] : {
+    genel: ["Genel bakış", hesap ? "@" + hesap.kullanici : ""], gonderi: ["Gönderiler", "Planlı Reels paylaşımları"], oto: ["Otomasyonlar", "Yorum ve DM'ye otomatik link"],
+    paylasim: ["Paylaşımlar", "Instagram'daki son 30 paylaşım"], kisi: ["Kişiler", "Link isteyen ya da mesaj yazanlar"], sablon: ["Mesajlar", "Şablonlar ve hazır sorular"],
+    olay: ["Olaylar", "Son 80 olay"], ayar: ["Ayarlar", v.atolye?.ad ?? ""],
+  }[durum.gorunum];
+  const menu = yonetim ? [] : GORUNUMLER;
   $("#uygulama").replaceChildren(el("div", { class: "kabuk" },
     el("aside", { class: "yan" },
-      el("div", { class: "logo" }, el("i", {}, "YL"), "YEK Lab DM"),
+      el("div", { class: "logo" }, el("i", {}, ikon("oto")), el("span", {}, v.urun_adi, v.atolye ? el("small", {}, v.atolye.ad) : el("small", {}, "Yönetici"))),
       hesap ? el("label", { class: "hesapSec", title: "Hesap" },
         el("span", { class: "avatar" }, hesap.kullanici.slice(0, 1).toUpperCase()),
-        el("select", { onchange: (e) => { durum.hesap = e.target.value; try { localStorage.setItem("hesap", durum.hesap); } catch {} hesapVerisi(); } },
+        el("select", { onchange: (e) => { durum.hesap = e.target.value; yerel.yaz("hesap:" + v.atolye.id, durum.hesap); hesapVerisi(); } },
           v.hesaplar.map((h) => el("option", { value: h.id, selected: h.id === durum.hesap }, "@" + h.kullanici + (h.aktif ? "" : " (durdu)")))))
         : null,
-      el("nav", {}, GORUNUMLER.map(([g, ad]) => el("button", {
-        class: g === durum.gorunum ? "secili" : "",
-        onclick: () => { durum.gorunum = g; history.replaceState(null, "", "#" + g); kabukCiz(); },
-      }, ikon(g), ad, g === "oto" && otoSayi != null ? el("span", { class: "sayac" }, String(otoSayi)) : null))),
+      el("nav", { class: "menu" }, menu.map(([g, ad]) => el("button", { class: g === durum.gorunum ? "secili" : "", onclick: () => git(g) },
+        ikon(g), ad,
+        g === "oto" && otoSayi ? el("span", { class: "sayac" }, String(otoSayi)) : null,
+        g === "gonderi" ? el("span", { class: "sayac", id: "sayacGonderi", hidden: true }) : null))),
       el("div", { class: "yanAlt" },
         v.deneme ? el("span", { class: "nokta uyari" }, "Deneme modu: gönderim yok") : null,
-        el("span", { class: "nokta" + (webhook ? " iyi" : ""), title: "Son webhook: " + onceki(v.son_webhook) },
-          webhook ? "Canlı · DM'ler anlık" : "DM'ler dakikada bir"),
+        v.atolye && !v.atolye.aktif ? el("span", { class: "nokta uyari" }, "Atölye durdurulmuş") : null,
+        el("span", { class: "nokta" + (webhook ? " iyi" : ""), title: "Son webhook: " + onceki(v.son_webhook) }, webhook ? "Canlı · DM'ler anlık" : "DM'ler dakikada bir"),
         el("span", {}, "Yorumlar her dakika kontrol edilir"),
-        el("span", { class: "nokta" + (v.bildirim ? " iyi" : " uyari") }, v.bildirim ? "Hata bildirimi: Telegram" : "Hata bildirimi kapalı"))),
-    el("div", { class: "ana" },
-      v.uyarilar?.length ? el("div", { class: "serit" }, ikon("uyari"),
-        el("div", {}, v.uyarilar.map((u) => el("span", {}, el("b", {}, saat(u.zaman) + " · "), u.metin)))) : null,
+        el("button", { class: "cikis", onclick: cikis }, ikon("cikis"), "Çıkış"))),
+    el("div", { class: "anaAlan" },
+      v.yonetici && v.atolye ? el("div", { class: "yoneticiSerit" }, ikon("atolye"), el("span", {}, "Yönetici olarak ", el("b", {}, v.atolye.ad), " atölyesindesiniz"),
+        el("button", { onclick: async () => { await istek("/api/yonetici/don", { method: "POST" }); location.hash = ""; location.reload(); } }, "Yönetim paneline dön")) : null,
+      v.uyarilar?.length ? el("div", { class: "serit" + (v.uyarilar.some((u) => /yayınlanamadı|yenilenemedi|tutmadı/.test(u.metin)) ? " kotu" : "") }, ikon("uyari"),
+        el("div", {}, v.uyarilar.map((u) => el("span", {}, el("b", {}, saat(u.zaman)), u.metin,
+          el("button", { title: "Kapat", onclick: async () => { await istek("/api/uyari/" + encodeURIComponent(u.tur), { method: "DELETE" }); yukle(); } }, "×"))))) : null,
       el("div", { class: "ustCubuk" },
-        el("h1", {}, GORUNUMLER.find(([g]) => g === durum.gorunum)[1]),
+        el("div", {}, el("h1", {}, baslik[0]), baslik[1] ? el("div", { class: "alt" }, baslik[1]) : null),
         el("span", { class: "bosluk" }),
         durum.gorunum === "genel" ? donemSecici() : null,
+        durum.gorunum === "gonderi" ? el("button", { class: "d ana", onclick: () => gonderiAc(null), disabled: !v.hesaplar.length }, ikon("arti"), el("span", { class: "gizleDar" }, "Yeni gönderi")) : null,
         durum.gorunum === "oto" || durum.gorunum === "paylasim"
-          ? el("button", { class: "d ana", onclick: yeniOtomasyon, disabled: !durum.paylasim }, ikon("arti"), el("span", { class: "gizleDar" }, "Yeni otomasyon"))
-          : null,
-        durum.gorunum === "hesap" ? el("button", { class: "d ana", onclick: () => $("#hesapPencere").showModal() }, ikon("arti"), "Hesap ekle") : null,
-        el("button", { class: "d", onclick: simdi, id: "simdiDugme", title: "Yorumları ve DM'leri şimdi kontrol et" },
-          ikon("yenile"), el("span", { class: "gizleDar" }, "Şimdi kontrol et"))),
+          ? el("button", { class: "d ana", onclick: yeniOtomasyon, disabled: !durum.paylasim }, ikon("arti"), el("span", { class: "gizleDar" }, "Yeni otomasyon")) : null,
+        !yonetim ? el("button", { class: "d", onclick: simdi, id: "simdiDugme", title: "Yorumları, DM'leri ve gönderi kuyruğunu şimdi kontrol et" },
+          ikon("yenile"), el("span", { class: "gizleDar" }, "Şimdi kontrol et")) : null,
+        yonetim ? el("button", { class: "d", onclick: yonetimYukle }, ikon("yenile"), el("span", { class: "gizleDar" }, "Yenile")) : null),
       el("main", { id: "icerik" }))));
-  icerikCiz();
+  icerikCiz(); kabukSayac();
 }
 
 function icerikCiz() {
   const icerik = $("#icerik");
   if (!icerik) return;
-  if (!durum.hesap && !["hesap", "olay", "sablon"].includes(durum.gorunum)) {
-    return icerik.replaceChildren(el("div", { class: "kutu bos" }, "Henüz hesap yok. ",
-      el("a", { href: "#hesap", onclick: () => { durum.gorunum = "hesap"; kabukCiz(); } }, "Hesaplar"), " bölümünden ekleyin."));
-  }
-  const ciz = { genel: genelCiz, oto: otomasyonCiz, paylasim: paylasimCiz, kisi: kisiCiz, sablon: sablonCiz, olay: () => olayCiz(60), hesap: hesapCiz }[durum.gorunum];
+  if (durum.gorunum === "yonetim") return icerik.replaceChildren(yonetimCiz());
+  if (!durum.hesap && !["ayar", "olay", "sablon", "gonderi"].includes(durum.gorunum)) return icerik.replaceChildren(hesapYokCiz());
+  const ciz = { genel: genelCiz, gonderi: gonderiCiz, oto: otomasyonCiz, paylasim: paylasimCiz, kisi: kisiCiz, sablon: sablonCiz, olay: () => olayCiz(80), ayar: ayarCiz }[durum.gorunum];
   icerik.replaceChildren(ciz());
 }
 
-const yukleniyor = (metin = "Yükleniyor…") => el("div", { class: "kutu bos" }, metin);
+const yukleniyor = (satir = 3) => el("div", { class: "kutu kutuIc", style: "display:grid;gap:12px" }, Array.from({ length: satir }, (_, i) => el("div", { class: "iskelet", style: "width:" + (90 - i * 18) + "%;height:" + (i ? 14 : 22) + "px" })));
+const bosDurum = (ikonAd, baslik, metin, dugme) => el("div", { class: "kutu bos" }, ikon(ikonAd, ""), el("b", {}, baslik), el("span", {}, metin), dugme);
+
+function hesapYokCiz() {
+  const v = durum.veri;
+  return el("div", { class: "kutu" }, el("div", { class: "bos", style: "padding:48px 18px" }, ikon("hesap", ""),
+    el("b", {}, "Önce bir Instagram hesabı bağlayın"),
+    el("span", { style: "max-width:460px" }, "İşletme ya da içerik üreticisi hesabınızla giriş yapmanız yeterli; anahtar, ayar, kopyalama yok. ",
+      v.kapali_beta ? "Kapalı beta sürecinde hesabın Meta uygulamasında tester olarak eklenmiş olması gerekir." : ""),
+    el("a", { class: "d ig" + (v.oauth ? "" : " pasif"), href: "/baglan" }, "Instagram ile bağla")));
+}
+
+async function cikis() { await istek("/api/cikis", { method: "POST" }); location.href = "/"; }
+
+async function simdi() {
+  const d = $("#simdiDugme"); d.disabled = true;
+  try { await istek("/api/simdi", { method: "POST" }); bildir("Kontrol edildi", "iyi"); await yukle(); }
+  catch (e) { hataGoster(e); d.disabled = false; }
+}
 
 // --- Genel bakış ------------------------------------------------------------------------
 function donemSecici() {
   return el("div", { class: "donem", role: "group", "aria-label": "Dönem" },
-    [[1, "Bugün"], [7, "7 gün"], [30, "30 gün"]].map(([n, ad]) => el("button", {
-      class: durum.donem === n ? "secili" : "",
-      onclick: () => { durum.donem = n; kabukCiz(); },
-    }, ad)));
+    [[1, "Bugün"], [7, "7 gün"], [30, "30 gün"]].map(([n, ad]) => el("button", { class: durum.donem === n ? "secili" : "", onclick: () => { durum.donem = n; kabukCiz(); } }, ad)));
+}
+
+function baslangicCiz() {
+  const v = durum.veri;
+  const hesap = v.hesaplar.find((h) => h.id === durum.hesap);
+  const kurallar = durum.paylasim?.kurallar ?? [];
+  const gonderiler = durum.gonderiler?.gonderiler ?? [];
+  const mesajOk = yerel.oku("mesajErisim:" + hesap?.id) === "1";
+  const adimlar = [
+    [true, "Instagram hesabı bağlandı", hesap ? "@" + hesap.kullanici + " bağlı; DM'ler ve yorumlar izleniyor." : ""],
+    [mesajOk, "Instagram'da mesaj erişimini açın", "Instagram uygulaması → Ayarlar → Mesajlar ve hikâye yanıtları → Mesaj denetimleri → Bağlı araçlar → \"Mesajlara erişime izin ver\". Açık değilse DM gönderilemez.",
+      el("button", { class: "d kucuk", onclick: () => { yerel.yaz("mesajErisim:" + hesap?.id, "1"); icerikCiz(); } }, "Açtım")],
+    [kurallar.length > 0, "İlk otomasyonu açın", "Bir paylaşım seçin, tetikleyen kelimeyi ve gönderilecek linkleri yazın.", el("button", { class: "d kucuk", onclick: yeniOtomasyon, disabled: !durum.paylasim }, "Otomasyon ekle")],
+    [gonderiler.length > 0, "İlk Reels'i planlayın", v.video ? "Videoyu yükleyin, saati seçin; yayınlanınca otomasyon kendiliğinden açılır." : "Video depolama açıldığında burada görünecek.",
+      v.video ? el("button", { class: "d kucuk", onclick: () => gonderiAc(null) }, "Gönderi planla") : null],
+  ];
+  if (adimlar.every(([ok]) => ok)) return null;
+  return el("div", { class: "kutu", style: "margin-bottom:16px" },
+    el("div", { class: "kutuBaslik" }, el("h2", {}, "Başlangıç"), el("span", { class: "bosluk" }), el("span", { class: "not" }, adimlar.filter(([ok]) => ok).length + " / " + adimlar.length)),
+    el("div", { class: "baslangic" }, adimlar.map(([ok, b, p, dugme], i) => el("div", { class: "adim" + (ok ? " tamam" : "") }, el("i", {}, ok ? ikon("tik") : String(i + 1)),
+      el("div", { style: "flex:1" }, el("b", {}, b), el("p", {}, p)), !ok ? dugme : null))));
+}
+
+function siradakiCiz() {
+  const sira = (durum.gonderiler?.gonderiler ?? []).filter((g) => ["bekliyor", "isleniyor", "yayinlaniyor"].includes(g.durum)).sort((a, b) => a.zaman - b.zaman);
+  if (!sira.length) return null;
+  const g = sira[0];
+  return el("div", { class: "kutu", style: "margin-bottom:16px" },
+    el("div", { class: "kutuBaslik" }, el("h2", {}, "Sıradaki gönderi"), el("span", { class: "bosluk" }), el("a", { href: "#gonderi", onclick: (e) => { e.preventDefault(); git("gonderi"); } }, sira.length > 1 ? sira.length + " gönderi sırada →" : "Tümü →")),
+    el("div", { class: "siradaki" }, el("div", { class: "kapakVideo" }, oynat()),
+      el("div", { style: "flex:1;min-width:0" }, el("b", {}, g.durum === "isleniyor" ? "Instagram işliyor" : tamTarih(g.zaman) + " · " + sonra(g.zaman)),
+        el("div", { class: "not", style: "overflow:hidden;text-overflow:ellipsis;white-space:nowrap" }, g.aciklama.split("\n")[0] || "(açıklama yok)")),
+      g.kural_anahtar ? el("span", { class: "rozet mavi" }, "⚡ " + g.kural_anahtar) : null));
 }
 
 function genelCiz() {
   if (!durum.ozet) return yukleniyor();
+  if (durum.ozet.hata) return bosDurum("uyari", "İstatistik okunamadı", durum.ozet.hata);
   const g = gunler(durum.donem);
   const top = (tur) => g.reduce((t, gun) => t + gunluk(gun, tur), 0);
   const yorum = top("yorum"), dm = top("ozel_yanit"), takip = top("takip_istendi"), teslim = top("teslim"), tik = top("tiklama");
   const giden = dm + takip + teslim;
   const donemAd = durum.donem === 1 ? "bugün" : "son " + durum.donem + " gün";
-  const kart = (baslik, deger, alt, one) => el("div", { class: "sayiKart" + (one ? " one" : "") },
-    el("span", {}, baslik), el("b", {}, deger), el("small", {}, alt));
+  const kart = (baslik, deger, alt, one) => el("div", { class: "sayiKart" + (one ? " one" : "") }, el("span", {}, baslik), el("b", {}, deger), el("small", {}, alt));
   return el("div", {},
+    baslangicCiz(), siradakiCiz(),
     el("div", { class: "kartlar" },
       kart("Gönderilen mesaj", bin(giden), donemAd + " · tüm DM'ler", true),
       kart("Link teslim edildi", bin(teslim), "linki alan kişi"),
@@ -486,8 +699,7 @@ function genelCiz() {
       kart("Dönüşüm", yuzde(teslim, yorum || dm), "yorumdan linke")),
     el("div", { class: "ikili" },
       el("div", { class: "kutu" },
-        el("div", { class: "kutuBaslik" }, el("h2", {}, "Günlük gönderilen mesaj"), el("span", { class: "bosluk" }),
-          el("span", { class: "not" }, durum.donem < 14 ? "son 14 gün" : "son 30 gün")),
+        el("div", { class: "kutuBaslik" }, el("h2", {}, "Günlük gönderilen mesaj"), el("span", { class: "bosluk" }), el("span", { class: "not" }, durum.donem < 14 ? "son 14 gün" : "son 30 gün")),
         el("div", { class: "kutuIc" }, grafikCiz(gunler(durum.donem < 14 ? 14 : 30)))),
       el("div", { class: "kutu" },
         el("div", { class: "kutuBaslik" }, el("h2", {}, "Huni"), el("span", { class: "bosluk" }), el("span", { class: "not" }, donemAd)),
@@ -497,8 +709,7 @@ function genelCiz() {
             el("div", { class: "ray" }, el("div", { class: "dolu", style: "width:" + (d[0][1] ? (n / d[0][1]) * 100 : 0) + "%" })))),
           el("p", { class: "not", style: "margin:0" }, "Doğrudan DM'den kelime yazanlar yorum adımını atlar; o yüzden teslim yorumdan fazla olabilir.")))),
     el("div", { class: "kutu", style: "margin-top:16px" },
-      el("div", { class: "kutuBaslik" }, el("h2", {}, "Son olaylar"), el("span", { class: "bosluk" }),
-        el("a", { href: "#olay", onclick: (e) => { e.preventDefault(); durum.gorunum = "olay"; history.replaceState(null, "", "#olay"); kabukCiz(); } }, "Tümü →")),
+      el("div", { class: "kutuBaslik" }, el("h2", {}, "Son olaylar"), el("span", { class: "bosluk" }), el("a", { href: "#olay", onclick: (e) => { e.preventDefault(); git("olay"); } }, "Tümü →")),
       olayListesi(6)));
 }
 
@@ -514,8 +725,7 @@ function grafikCiz(g) {
       el("div", { class: "cubuk" + (i === g.length - 1 ? " bugun" : ""), style: `height:${(n / ust) * 100}%;${n ? "min-height:3px" : ""}` }));
     const goster = () => {
       const tarih = new Date(gun + "T12:00:00Z").toLocaleDateString("tr-TR", { day: "numeric", month: "long", weekday: "short" });
-      ipucu.replaceChildren(el("b", {}, tarih), el("br"),
-        bin(n) + " mesaj · " + bin(gunluk(gun, "teslim")) + " teslim · " + bin(gunluk(gun, "yorum")) + " yorum");
+      ipucu.replaceChildren(el("b", {}, tarih), el("br"), bin(n) + " mesaj · " + bin(gunluk(gun, "teslim")) + " teslim · " + bin(gunluk(gun, "yorum")) + " yorum");
       const kutu = sutunlar.getBoundingClientRect(), r = sutun.getBoundingClientRect();
       ipucu.style.left = Math.min(Math.max(r.left - kutu.left + r.width / 2, 100), kutu.width - 100) + "px";
       ipucu.style.top = (1 - n / ust) * kutu.height + "px";
@@ -526,12 +736,157 @@ function grafikCiz(g) {
     return sutun;
   }));
   return el("div", { class: "grafik", role: "img", "aria-label": "Günlük gönderilen mesaj sayısı" },
-    el("div", { class: "cizim" },
-      [4, 3, 2, 1, 0].map((i) => el("div", { class: "izgaraCizgi", style: `top:${(1 - i / 4) * 100}%` }, el("span", {}, String(adim * i)))),
-      sutunlar, ipucu),
-    el("div", { class: "xEtiket" }, g.map((gun, i) => el("span", {},
-      (g.length - 1 - i) % etiketAra === 0 ? new Date(gun + "T12:00:00Z").toLocaleDateString("tr-TR", { day: "numeric", month: "short" }) : ""))));
+    el("div", { class: "cizim" }, [4, 3, 2, 1, 0].map((i) => el("div", { class: "izgaraCizgi", style: `top:${(1 - i / 4) * 100}%` }, el("span", {}, String(adim * i)))), sutunlar, ipucu),
+    el("div", { class: "xEtiket" }, g.map((gun, i) => el("span", {}, (g.length - 1 - i) % etiketAra === 0 ? new Date(gun + "T12:00:00Z").toLocaleDateString("tr-TR", { day: "numeric", month: "short" }) : ""))));
 }
+
+// --- Gönderiler -------------------------------------------------------------------------
+const DURUM_ROZET = { bekliyor: ["mavi", "Planlandı"], isleniyor: ["mor canli", "Instagram işliyor"], yayinlaniyor: ["mor canli", "Yayınlanıyor"], yayinda: ["iyi", "Yayında"], hata: ["kotu", "Başarısız"], iptal: ["pasif", "İptal"] };
+
+function gonderiSatir(g) {
+  const [sinif, ad] = DURUM_ROZET[g.durum];
+  const duzenlenir = ["bekliyor", "hata"].includes(g.durum);
+  return el("div", { class: "gonderi" },
+    el("div", { class: "kapakVideo" }, oynat()),
+    el("div", { class: "orta" },
+      el("div", { class: "zaman" }, g.durum === "yayinda" && g.yayin ? tamTarih(g.yayin) : tamTarih(g.zaman),
+        el("span", { class: "rozet " + sinif }, ad), g.durum === "bekliyor" ? el("span", { class: "not" }, sonra(g.zaman)) : null),
+      el("div", { class: "aciklama", title: g.aciklama }, g.aciklama.split("\n")[0] || "(açıklama yok)"),
+      el("div", { class: "meta" }, durum.veri.hesaplar.length > 1 ? el("span", {}, hesapAdi(g.hesap)) : null, el("span", {}, g.ad + " · " + mb(g.boyut)),
+        g.feed ? null : el("span", { class: "rozet pasif" }, "yalnız Reels"),
+        g.kural_anahtar ? el("span", { class: "rozet mavi", title: g.kural_icerik ? "Yayınlanınca otomasyon açılır" : "İçerik boş: otomasyon pasif açılır" }, "⚡ " + g.kural_anahtar + (g.kural_icerik ? "" : " · içerik yok")) : null,
+        g.kalici ? el("a", { href: g.kalici, target: "_blank", rel: "noopener" }, "Instagram'da aç ↗") : null),
+      g.hata && g.durum !== "yayinda" ? el("div", { class: "hataMetin" }, g.hata) : null),
+    el("div", { class: "eylem" },
+      duzenlenir ? el("button", { class: "d kucuk", onclick: () => gonderiAc(g) }, "Düzenle") : null,
+      g.durum === "hata" ? el("button", { class: "d kucuk ana", onclick: async () => { try { await istek("/api/gonderi/" + g.id + "/yeniden", { method: "POST" }); bildir("Yeniden kuyruğa alındı", "iyi"); gonderileriYukle(); } catch (e) { hataGoster(e); } } }, "Yeniden dene") : null,
+      g.durum === "yayinda" && g.kural ? el("button", { class: "d kucuk", onclick: () => { git("oto"); } }, "Otomasyon") : null,
+      ["bekliyor", "hata"].includes(g.durum) ? el("button", { class: "d kucuk ince sil", title: "İptal et", onclick: async () => {
+        if (!(await onayla("Gönderi iptal edilsin mi?", "Video depodan silinir; yeniden planlamak için tekrar yüklemeniz gerekir.", "İptal et"))) return;
+        try { await istek("/api/gonderi/" + g.id, { method: "DELETE" }); bildir("İptal edildi"); gonderileriYukle(); } catch (e) { hataGoster(e); }
+      } }, "İptal") : null));
+}
+
+function gonderiCiz() {
+  if (!durum.gonderiler) return yukleniyor();
+  const { gonderiler, video, hata } = durum.gonderiler;
+  if (hata) return bosDurum("uyari", "Gönderiler okunamadı", hata);
+  const parcalar = [];
+  if (!video) parcalar.push(el("div", { class: "ipucuKutu", style: "margin-bottom:16px" }, ikon("bilgi"), el("span", {}, el("b", {}, "Video depolama henüz açık değil."), " Planlı gönderi için yöneticinin Cloudflare'de R2 depolamayı etkinleştirmesi gerekiyor; otomasyonlar bundan bağımsız çalışır.")));
+  if (!gonderiler.length) {
+    parcalar.push(bosDurum("gonderi", "Henüz planlı gönderi yok", "Videoyu yükleyin, saati seçin; bilgisayarınız kapalı olsa da zamanında yayınlanır ve otomasyon kendiliğinden açılır.",
+      el("button", { class: "d ana", onclick: () => gonderiAc(null), disabled: !video || !durum.veri.hesaplar.length }, ikon("arti"), "Yeni gönderi")));
+    return el("div", {}, parcalar);
+  }
+  const grup = (ad, liste) => liste.length ? [el("div", { class: "bolumBaslik" }, ad, el("span", { class: "rozet pasif" }, String(liste.length))), el("div", { class: "kutu gonderiListe" }, liste.map(gonderiSatir))] : [];
+  const sira = gonderiler.filter((g) => ["bekliyor", "isleniyor", "yayinlaniyor"].includes(g.durum)).sort((a, b) => a.zaman - b.zaman);
+  const basarisiz = gonderiler.filter((g) => g.durum === "hata");
+  const yayinda = gonderiler.filter((g) => g.durum === "yayinda").sort((a, b) => (b.yayin ?? b.zaman) - (a.yayin ?? a.zaman));
+  const iptal = gonderiler.filter((g) => g.durum === "iptal");
+  parcalar.push(...grup("Sırada", sira), ...grup("Başarısız", basarisiz), ...grup("Yayınlandı", yayinda));
+  if (iptal.length) parcalar.push(el("details", { style: "margin-top:16px" }, el("summary", { class: "not", style: "cursor:pointer" }, iptal.length + " iptal edilmiş gönderi"), el("div", { class: "kutu gonderiListe", style: "margin-top:10px" }, iptal.map(gonderiSatir))));
+  return el("div", {}, parcalar);
+}
+
+const CAGRI = /yorum(?:lar)?[ae]\s+[“"']?([\p{L}\p{N}]{2,20})[”"']?\s+yaz/iu;
+
+function gonderiAc(g) {
+  const f = $("#gonderiForm"), v = durum.veri;
+  durum.gonderiTaslak = { id: g?.id ?? null, dosya: g?.dosya ?? null, dosyaNesnesi: null, yukleniyor: false };
+  $("#gonderiBaslik").textContent = g ? "Gönderiyi düzenle" : "Yeni gönderi";
+  $("#videoAlan").hidden = !!g;
+  $("#birak").hidden = false; $("#onizleme").hidden = true; $("#yuklemeCubugu").hidden = true; $("#yuklemeDurum").textContent = "";
+  $("#videoDosya").value = ""; $("#onizlemeVideo").removeAttribute("src");
+  const hesapSec = f.hesap; hesapSec.replaceChildren(...v.hesaplar.filter((h) => h.aktif).map((h) => el("option", { value: h.id, selected: (g?.hesap ?? durum.hesap) === h.id }, "@" + h.kullanici + (h.paylasim_izni ? "" : " (paylaşım izni yok)"))));
+  $("#gonderiHesapAlan").hidden = v.hesaplar.length <= 1;
+  f.aciklama.value = g?.aciklama ?? "";
+  const yerelZaman = (ms) => { const d = new Date(ms); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); };
+  const varsayilan = new Date(); varsayilan.setHours(varsayilan.getHours() + 1, 0, 0, 0);
+  f.zaman.value = yerelZaman(g?.zaman ?? varsayilan.getTime());
+  f.zaman.min = yerelZaman(Date.now());
+  f.feed.checked = g ? !!g.feed : true;
+  f.kural_anahtar.value = g?.kural_anahtar ?? ""; f.kural_baslik.value = g?.kural_baslik ?? ""; f.kural_icerik.value = g?.kural_icerik ?? "";
+  f.kural_takip.checked = g ? !!g.kural_takip : true;
+  $("#kuralKatlanir").open = !!(g?.kural_anahtar);
+  $("#gonderiKaydet").textContent = g ? "Kaydet" : "Planla";
+  $("#gonderiNot").textContent = "";
+  aciklamaSayaci();
+  const cipler = $("#zamanCipler"); cipler.replaceChildren();
+  const simdiD = new Date();
+  const aday = [["Bugün 19:00", new Date(simdiD.getFullYear(), simdiD.getMonth(), simdiD.getDate(), 19)], ["Yarın 12:00", new Date(simdiD.getFullYear(), simdiD.getMonth(), simdiD.getDate() + 1, 12)],
+    ["Yarın 19:00", new Date(simdiD.getFullYear(), simdiD.getMonth(), simdiD.getDate() + 1, 19)], ["Cumartesi 19:00", (() => { const d = new Date(simdiD); d.setDate(d.getDate() + ((6 - d.getDay() + 7) % 7 || 7)); d.setHours(19, 0, 0, 0); return d; })()]];
+  for (const [ad, d] of aday) if (d > simdiD) cipler.append(el("button", { type: "button", class: "cip", onclick: () => { f.zaman.value = yerelZaman(d.getTime()); } }, ad));
+  $("#gonderiPencere").returnValue = ""; $("#gonderiPencere").showModal();
+}
+
+function aciklamaSayaci() {
+  const f = $("#gonderiForm");
+  $("#aciklamaSayac").textContent = f.aciklama.value.length + " / 2200";
+  const m = f.aciklama.value.match(CAGRI);
+  if (m && !f.kural_anahtar.value) { f.kural_anahtar.value = m[1].toLocaleLowerCase("tr"); $("#kuralKatlanir").open = true; }
+}
+$("#gonderiForm").aciklama.addEventListener("input", aciklamaSayaci);
+
+function videoSec(dosya) {
+  if (!dosya) return;
+  if (!/\.(mp4|mov|m4v)$/i.test(dosya.name)) return bildir("Yalnızca MP4 ya da MOV", "kotu");
+  if (dosya.size > 100 * 1048576) return bildir("Video 100 MB'tan büyük olamaz", "kotu");
+  const t = durum.gonderiTaslak; t.dosyaNesnesi = dosya; t.dosya = null;
+  $("#birak").hidden = true; $("#onizleme").hidden = false;
+  $("#videoAd").textContent = dosya.name; $("#videoBilgi").textContent = mb(dosya.size);
+  const v = $("#onizlemeVideo"); v.src = URL.createObjectURL(dosya);
+  v.onloadedmetadata = () => {
+    const sn = Math.round(v.duration), oran = v.videoWidth / v.videoHeight;
+    const uyari = sn < 3 ? " · 3 saniyeden kısa, Instagram kabul etmez" : sn > 900 ? " · 15 dakikadan uzun, Instagram kabul etmez" : oran > 0.6 ? " · dikey (9:16) değil, Reels'te kırpılabilir" : "";
+    $("#videoBilgi").textContent = mb(dosya.size) + " · " + Math.floor(sn / 60) + ":" + String(sn % 60).padStart(2, "0") + " · " + v.videoWidth + "×" + v.videoHeight + uyari;
+  };
+  videoYukle();
+}
+
+function videoYukle() {
+  const t = durum.gonderiTaslak; if (!t.dosyaNesnesi) return;
+  t.yukleniyor = true; $("#yuklemeCubugu").hidden = false; $("#yuklemeDurum").textContent = "Yükleniyor…"; $("#gonderiKaydet").disabled = true;
+  const x = new XMLHttpRequest();
+  x.open("PUT", "/api/video?ad=" + encodeURIComponent(t.dosyaNesnesi.name));
+  x.upload.onprogress = (e) => { if (e.lengthComputable) $("#yuklemeCubugu div").style.width = Math.round((e.loaded / e.total) * 100) + "%"; };
+  x.onload = () => {
+    t.yukleniyor = false; $("#gonderiKaydet").disabled = false;
+    let v = {}; try { v = JSON.parse(x.responseText); } catch {}
+    if (x.status >= 200 && x.status < 300 && v.dosya) { t.dosya = v.dosya; $("#yuklemeDurum").textContent = "Yüklendi ✓"; $("#yuklemeCubugu").hidden = true; }
+    else { $("#yuklemeDurum").textContent = "Yüklenemedi: " + (v.hata || x.statusText); $("#yuklemeCubugu").hidden = true; }
+  };
+  x.onerror = () => { t.yukleniyor = false; $("#gonderiKaydet").disabled = false; $("#yuklemeDurum").textContent = "Yüklenemedi: bağlantı hatası"; };
+  x.send(t.dosyaNesnesi);
+}
+
+$("#videoDosya").addEventListener("change", (e) => videoSec(e.target.files[0]));
+$("#videoDegistir").addEventListener("click", () => $("#videoDosya").click());
+{
+  const b = $("#birak");
+  b.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); $("#videoDosya").click(); } });
+  for (const o of ["dragenter", "dragover"]) b.addEventListener(o, (e) => { e.preventDefault(); b.classList.add("ustunde"); });
+  for (const o of ["dragleave", "drop"]) b.addEventListener(o, (e) => { e.preventDefault(); b.classList.remove("ustunde"); });
+  b.addEventListener("drop", (e) => videoSec(e.dataTransfer.files[0]));
+}
+
+$("#gonderiForm").addEventListener("submit", (e) => {
+  const f = e.target, t = durum.gonderiTaslak;
+  if (e.submitter?.value !== "kaydet") return;
+  if (!t.id && !t.dosya) { e.preventDefault(); bildir(t.yukleniyor ? "Video hâlâ yükleniyor" : "Önce video seçin", "kotu"); }
+});
+$("#gonderiPencere").addEventListener("close", async () => {
+  if ($("#gonderiPencere").returnValue !== "kaydet") return;
+  const f = $("#gonderiForm"), t = durum.gonderiTaslak;
+  const zaman = new Date(f.zaman.value).getTime();
+  try {
+    await istek("/api/gonderi", { method: "POST", body: JSON.stringify({
+      id: t.id, hesap: f.hesap.value || durum.hesap, dosya: t.dosya, aciklama: f.aciklama.value, zaman, feed: f.feed.checked,
+      kural_anahtar: f.kural_anahtar.value, kural_baslik: f.kural_baslik.value, kural_icerik: f.kural_icerik.value, kural_takip: f.kural_takip.checked }) });
+    bildir(t.id ? "Kaydedildi" : "Planlandı: " + tamTarih(zaman), "iyi");
+    if (durum.gorunum !== "gonderi") git("gonderi");
+    gonderileriYukle();
+  } catch (e) { hataGoster(e); }
+});
 
 // --- Otomasyonlar -----------------------------------------------------------------------
 function kapakUrl(k) {
@@ -542,49 +897,41 @@ function kapakUrl(k) {
 function otomasyonCiz() {
   if (!durum.paylasim) return yukleniyor();
   const { kurallar, hata } = durum.paylasim;
-  if (!kurallar.length) {
-    return el("div", { class: "kutu bos" }, "Henüz otomasyon yok. ",
-      el("button", { class: "d ana", onclick: yeniOtomasyon, style: "margin-left:8px" }, ikon("arti"), "Yeni otomasyon"));
-  }
-  // Önce çalışanlar, sonra paylaşılmayı bekleyenler, en sonda durdurulanlar
+  if (!kurallar.length) return bosDurum("oto", "Henüz otomasyon yok", "Bir paylaşım seçin, tetikleyen kelimeyi ve gönderilecek linkleri yazın; gerisini biz yaparız.",
+    el("button", { class: "d ana", onclick: yeniOtomasyon }, ikon("arti"), "Yeni otomasyon"));
   const sira = (k) => (!k.aktif ? 2 : k.medya.startsWith(BAGSIZ) ? 1 : 0);
   const sirali = [...kurallar].sort((a, b) => sira(a) - sira(b) || b.olusturma - a.olusturma);
   return el("div", { class: "kutu" },
     hata ? el("p", { class: "not", style: "padding:12px 18px 0;color:var(--kotu)" }, "Instagram'dan paylaşımlar okunamadı: " + hata) : null,
     el("table", {},
-      el("thead", {}, el("tr", {},
-        el("th", {}, "Otomasyon"), el("th", { class: "gizleDar" }, "Durum"),
-        el("th", { class: "s" }, "Yorum"), el("th", { class: "s gizleDar" }, "DM"), el("th", { class: "s" }, "Teslim"),
-        el("th", { class: "s" }, "Tıklama"), el("th", { class: "s gizleDar" }, "Dönüşüm"), el("th", {}, "Etkin"))),
+      el("thead", {}, el("tr", {}, el("th", {}, "Otomasyon"), el("th", { class: "gizleDar" }, "Durum"), el("th", { class: "s" }, "Yorum"), el("th", { class: "s gizleDar" }, "DM"),
+        el("th", { class: "s" }, "Teslim"), el("th", { class: "s" }, "Tıklama"), el("th", { class: "s gizleDar" }, "Dönüşüm"), el("th", {}, "Etkin"))),
       el("tbody", {}, sirali.map((k) => {
         const bagsiz = k.medya.startsWith(BAGSIZ), hikaye = k.medya.startsWith(HIKAYE);
         const gorsel = paylasimKurali(k) ? kapakUrl(k) : null;
         const yorum = sayi(k.id, "yorum"), teslim = sayi(k.id, "teslim");
-        return el("tr", { onclick: () => kuralAc(paylasimKurali(k) ? durum.paylasim.medya.find((m) => m.id === k.medya) ?? { id: k.medya } : null, k, hikaye ? "hikaye" : null) },
+        return el("tr", { class: "tik", onclick: () => kuralAc(paylasimKurali(k) ? durum.paylasim.medya.find((m) => m.id === k.medya) ?? { id: k.medya } : null, k, hikaye ? "hikaye" : null) },
           el("td", {}, el("div", { class: "otoAd" },
             el("div", { class: "kucukKapak", style: gorsel ? `background-image:url("${gorsel}")` : "" }, gorsel ? null : ikon(hikaye ? "hikaye" : bagsiz ? "paylasim" : "oto")),
             el("div", { style: "min-width:0" }, el("b", {}, k.baslik),
               el("div", { class: "etiketler" }, el("span", { class: "not gizleDar" }, hikaye ? "Hikâye yanıtı:" : "Yorum veya DM:"),
                 k.anahtar ? k.anahtar.split(",").map((a) => el("span", { class: "etiket" }, a.trim())) : el("span", { class: "etiket" }, "her yanıt"))))),
-          el("td", { class: "gizleDar" }, !k.aktif ? el("span", { class: "rozet pasif" }, k.icerik ? "Durduruldu" : "İçerik bekliyor")
+          el("td", { class: "gizleDar" }, !k.aktif ? el("span", { class: "rozet " + (k.icerik ? "pasif" : "uyari") }, k.icerik ? "Durduruldu" : "İçerik bekliyor")
             : bagsiz ? el("span", { class: "rozet uyari", title: "“" + k.medya.slice(BAGSIZ.length) + "” geçen paylaşım" }, "Paylaşım bekleniyor")
-            : hikaye ? el("span", { class: "rozet iyi" }, k.medya === HIKAYE + "*" ? "Tüm hikâyeler" : "Hikâye")
-            : el("span", { class: "rozet iyi" }, "Çalışıyor")),
+            : hikaye ? el("span", { class: "rozet iyi" }, k.medya === HIKAYE + "*" ? "Tüm hikâyeler" : "Hikâye") : el("span", { class: "rozet iyi" }, "Çalışıyor")),
           el("td", { class: "s" }, bin(yorum)), el("td", { class: "s gizleDar" }, bin(sayi(k.id, "ozel_yanit"))),
           el("td", { class: "s" }, bin(teslim)), el("td", { class: "s" }, bin(sayi(k.id, "tiklama"))), el("td", { class: "s gizleDar" }, yuzde(teslim, yorum)),
           el("td", { onclick: (e) => e.stopPropagation() }, el("label", { class: "anahtar", title: k.aktif ? "Durdur" : "Etkinleştir" },
             el("input", { type: "checkbox", checked: !!k.aktif, onchange: (e) => kuralDurum(k, e.target.checked) }), el("i"))));
       }))),
-    el("p", { class: "not", style: "margin:0;padding:10px 18px;border-top:1px solid var(--cizgi)" }, "Sayılar son 30 gün."));
+    el("div", { class: "kutuAlt" }, "Sayılar son 30 gün. Satıra dokunarak düzenleyin."));
 }
 
 async function kuralDurum(k, aktif) {
   try {
     await istek("/api/kural", { method: "POST", body: JSON.stringify({ ...k, aktif }) });
-    k.aktif = aktif ? 1 : 0;
-    bildir(aktif ? "Etkinleştirildi" : "Durduruldu");
-    icerikCiz();
-  } catch (e) { bildir("Kaydedilemedi: " + e.message); icerikCiz(); }
+    k.aktif = aktif ? 1 : 0; bildir(aktif ? "Etkinleştirildi" : "Durduruldu", "iyi"); icerikCiz();
+  } catch (e) { hataGoster(e); icerikCiz(); }
 }
 
 function yeniOtomasyon() {
@@ -603,22 +950,20 @@ $("#yeniHikaye").addEventListener("click", () => { $("#yeniPencere").close(); ku
 
 // --- Paylaşımlar ------------------------------------------------------------------------
 function paylasimCiz() {
-  if (!durum.paylasim) return yukleniyor("Paylaşımlar yükleniyor…");
+  if (!durum.paylasim) return yukleniyor();
   const { medya, kurallar, hata } = durum.paylasim;
-  if (hata) return el("div", { class: "kutu bos" }, "Instagram'dan okunamadı: " + hata);
-  if (!medya.length) return el("div", { class: "kutu bos" }, "Paylaşım yok.");
+  if (hata) return bosDurum("uyari", "Instagram'dan okunamadı", hata + ". Bağlantı kopmuş olabilir; Ayarlar → Hesaplar'dan yeniden bağlayın.");
+  if (!medya.length) return bosDurum("paylasim", "Paylaşım yok", "Instagram'da paylaşım yapınca burada görünür.");
   return el("div", {},
     el("p", { class: "not", style: "margin:0 0 12px" }, "Otomasyon eklemek ya da düzenlemek için paylaşıma dokunun."),
     el("div", { class: "izgara" }, medya.map((m) => {
       const k = kurallar.find((x) => x.medya === m.id);
       const gorsel = m.thumbnail_url || m.media_url;
       return el("button", { class: "kart" + (k && k.aktif ? " kurali" : ""), onclick: () => kuralAc(m, k, null) },
-        el("div", { class: "kapak", style: gorsel ? `background-image:url("${gorsel}")` : "" },
-          k ? el("span", { class: "rozet" + (k.aktif ? "" : " pasif") }, "⚡ " + k.anahtar) : null),
+        el("div", { class: "kapak", style: gorsel ? `background-image:url("${gorsel}")` : "" }, k ? el("span", { class: "rozet" + (k.aktif ? "" : " pasif") }, "⚡ " + k.anahtar) : null),
         el("div", { class: "alt" },
           el("div", { class: "aciklama" }, (m.caption || "(açıklama yok)").split("\n")[0]),
-          k ? el("div", { class: "not", style: "color:var(--murekkep);margin-top:4px" }, bin(sayi(k.id, "yorum")) + " yorum · " + bin(sayi(k.id, "teslim")) + " teslim")
-            : el("div", { class: "ekle" }, "+ Otomasyon ekle"),
+          k ? el("div", { class: "not", style: "color:var(--murekkep);margin-top:4px" }, bin(sayi(k.id, "yorum")) + " yorum · " + bin(sayi(k.id, "teslim")) + " teslim") : el("div", { class: "ekle" }, "+ Otomasyon ekle"),
           el("div", { class: "not", style: "font-size:12px" }, new Date(m.timestamp).toLocaleDateString("tr-TR") + " · 💬 " + (m.comments_count ?? 0))));
     })));
 }
@@ -632,10 +977,8 @@ async function kuralAc(m, k, mod) {
   $("#kuralBaslik").textContent = k ? "Otomasyonu düzenle" : hikaye ? "Hikâye otomasyonu" : "Yeni otomasyon";
   $("#kuralLink").hidden = !m?.permalink;
   if (m?.permalink) $("#kuralLink").href = m.permalink;
-  $("#aciklamaAlan").hidden = !bagsiz;
-  $("#hikayeAlan").hidden = !hikaye;
-  f.aciklama.required = bagsiz;
-  f.anahtar.required = !hikaye;
+  $("#aciklamaAlan").hidden = !bagsiz; $("#hikayeAlan").hidden = !hikaye;
+  f.aciklama.required = bagsiz; f.anahtar.required = !hikaye;
   f.anahtar.placeholder = hikaye ? "boş = her yanıt" : "liste";
   f.aciklama.value = k && bagsiz ? k.medya.slice(BAGSIZ.length) : "";
   if (hikaye) {
@@ -644,25 +987,19 @@ async function kuralAc(m, k, mod) {
     if (secili !== "*") f.hikaye.append(el("option", { value: secili, selected: true }, "Hikâye " + secili));
     istek("/api/hesap/" + durum.hesap + "/hikayeler").then((v) => {
       for (const h of v.hikayeler) if (h.id !== secili) f.hikaye.append(el("option", { value: h.id }, "Hikâye · " + saat(new Date(h.timestamp).getTime()) + (h.media_type === "VIDEO" ? " (video)" : "")));
-      if (v.hata) bildir("Hikâyeler okunamadı: " + v.hata);
+      if (v.hata) bildir("Hikâyeler okunamadı: " + v.hata, "kotu");
     }).catch(() => {});
   }
-  f.anahtar.value = k?.anahtar ?? "";
-  f.baslik.value = k?.baslik ?? "";
-  f.icerik.value = k?.icerik ?? "";
-  f.takip_sart.checked = k ? !!k.takip_sart : true;
-  f.yorum_yaniti.checked = k ? !!k.yorum_yaniti : true;
-  f.aktif.checked = k ? !!k.aktif : true;
+  f.anahtar.value = k?.anahtar ?? ""; f.baslik.value = k?.baslik ?? ""; f.icerik.value = k?.icerik ?? "";
+  f.takip_sart.checked = k ? !!k.takip_sart : true; f.yorum_yaniti.checked = k ? !!k.yorum_yaniti : true; f.aktif.checked = k ? !!k.aktif : true;
   $("#kuralSil").hidden = !k;
-  const istat = $("#kuralIstat");
-  istat.hidden = !k;
+  const istat = $("#kuralIstat"); istat.hidden = !k;
   if (k) istat.replaceChildren(...[["yorum", hikaye ? "hikâye yanıtı" : "eşleşen yorum"], ["ozel_yanit", "DM gönderildi"], ["teslim", "teslim"], ["tiklama", "tıklama"]]
     .map(([t, ad]) => el("div", {}, el("b", {}, bin(sayi(k.id, t))), el("span", {}, ad))));
   const linkler = k ? (durum.paylasim?.linkler ?? []).filter((l) => l.kural === k.id) : [];
   $("#kuralLinkler").hidden = !linkler.length;
-  $("#kuralLinkler").replaceChildren(...linkler.sort((a, b) => b.adet - a.adet).map((l) =>
-    el("li", {}, el("span", { title: l.url }, l.url.replace(/^https?:\/\//, "")), el("b", {}, bin(l.adet) + " tıklama"))));
-  $("#kuralPencere").showModal();
+  $("#kuralLinkler").replaceChildren(...linkler.sort((a, b) => b.adet - a.adet).map((l) => el("li", {}, el("span", { title: l.url }, l.url.replace(/^https?:\/\//, "")), el("b", {}, bin(l.adet) + " tıklama"))));
+  $("#kuralPencere").returnValue = ""; $("#kuralPencere").showModal();
 }
 
 $("#kuralPencere").addEventListener("close", async () => {
@@ -673,38 +1010,17 @@ $("#kuralPencere").addEventListener("close", async () => {
       id: durum.kural.id, medya: durum.kural.medya ?? (durum.kural.hikaye ? HIKAYE + f.hikaye.value : BAGSIZ + f.aciklama.value.trim()),
       hesap: durum.hesap, anahtar: f.anahtar.value, baslik: f.baslik.value, icerik: f.icerik.value,
       takip_sart: f.takip_sart.checked, yorum_yaniti: f.yorum_yaniti.checked, aktif: f.aktif.checked }) });
-    bildir("Kaydedildi");
-    hesapVerisi();
-  } catch (e) { bildir("Kaydedilemedi: " + e.message); }
+    bildir("Kaydedildi", "iyi"); hesapVerisi();
+  } catch (e) { hataGoster(e); }
 });
 
 $("#kuralSil").addEventListener("click", async () => {
-  if (!confirm("Bu otomasyon silinsin mi? İstatistikleri de kaybolur.")) return;
+  if (!(await onayla("Otomasyon silinsin mi?", "İstatistikleri de kaybolur; yarım kalan konuşmalar tamamlanmaz."))) return;
   $("#kuralPencere").close();
-  await istek("/api/kural/" + durum.kural.id, { method: "DELETE" });
-  bildir("Silindi");
-  hesapVerisi();
+  try { await istek("/api/kural/" + durum.kural.id, { method: "DELETE" }); bildir("Silindi"); hesapVerisi(); } catch (e) { hataGoster(e); }
 });
 
-$("#hesapPencere").addEventListener("close", async () => {
-  const f = $("#hesapForm");
-  if ($("#hesapPencere").returnValue !== "ekle") return;
-  if (!f.token.value.trim()) return bildir("Anahtar boş; 'Instagram ile bağla' düğmesini kullanın ya da anahtar yapıştırın.");
-  try {
-    const v = await istek("/api/hesap", { method: "POST", body: JSON.stringify({ token: f.token.value }) });
-    f.reset();
-    bildir("@" + v.kullanici + " eklendi; " + v.abonelik);
-    yukle();
-  } catch (e) { bildir(e.message); }
-});
-
-async function simdi() {
-  const d = $("#simdiDugme"); d.disabled = true;
-  try { await istek("/api/simdi", { method: "POST" }); bildir("Kontrol edildi"); await yukle(); }
-  catch (e) { bildir(e.message); d.disabled = false; }
-}
-
-// --- Şablonlar, olaylar, hesaplar -------------------------------------------------------
+// --- Mesajlar (şablonlar, hazır sorular) ------------------------------------------------
 const SABLON_ADLARI = {
   ilk_buton: ["Yoruma özel yanıt (butonlu)", "Yorum yapan kişiye giden ilk DM."],
   ilk_metin: ["Yoruma özel yanıt (butonsuz)", "Instagram butonu kabul etmezse bu gider."],
@@ -724,8 +1040,7 @@ function hazirSorularCiz() {
   const kutu = el("div", { class: "sorular" });
   const satir = (s, i) => {
     const soru = el("input", { type: "text", placeholder: "Soru " + (i + 1) + " (boş = yok)", maxlength: "80", value: s?.soru ?? "" });
-    const tur = el("select", {}, el("option", { value: "son", selected: (s?.tur ?? "son") === "son" }, "Son paylaşımın linkleri"),
-      el("option", { value: "metin", selected: s?.tur === "metin" }, "Metin yanıtı"));
+    const tur = el("select", {}, el("option", { value: "son", selected: (s?.tur ?? "son") === "son" }, "Son paylaşımın linkleri"), el("option", { value: "metin", selected: s?.tur === "metin" }, "Metin yanıtı"));
     const cevap = el("textarea", { rows: "2", placeholder: "Metin yanıtı", hidden: (s?.tur ?? "son") !== "metin" }); cevap.value = s?.cevap ?? "";
     tur.addEventListener("change", () => { cevap.hidden = tur.value !== "metin"; });
     const d = el("div", { class: "soru" }, soru, tur, cevap);
@@ -735,49 +1050,23 @@ function hazirSorularCiz() {
   kutu.append(...liste.map(satir));
   const kaydet = el("button", { type: "button", class: "d ana", onclick: async () => {
     kaydet.disabled = true;
-    try {
-      const v = await istek("/api/hazir-sorular", { method: "POST", body: JSON.stringify({ liste: [...kutu.children].map((d) => d.deger()).filter((x) => x.soru) }) });
-      bildir(v.sonuc.join("; ")); yukle();
-    } catch (e) { bildir(e.message); kaydet.disabled = false; }
+    try { const v = await istek("/api/hazir-sorular", { method: "POST", body: JSON.stringify({ liste: [...kutu.children].map((d) => d.deger()).filter((x) => x.soru) }) }); bildir(v.sonuc.join("; "), "iyi"); yukle(); }
+    catch (e) { hataGoster(e); kaydet.disabled = false; }
   } }, "Soruları Instagram'a yaz");
   return el("div", { class: "kutu", style: "margin-top:16px" },
-    el("div", { class: "kutuBaslik" }, el("h2", {}, "Hazır sorular (DM açılışında)"), el("span", { class: "bosluk" }),
-      el("span", { class: "not gizleDar" }, "En çok 4; yalnız telefonda görünür")),
+    el("div", { class: "kutuBaslik" }, el("h2", {}, "Hazır sorular (DM açılışında)"), el("span", { class: "bosluk" }), el("span", { class: "not gizleDar" }, "En çok 4; yalnız telefonda görünür")),
     el("div", { class: "kutuIc" }, kutu, el("div", { class: "satir", style: "margin-top:12px" }, kaydet)));
 }
 
-function bildirimKutusu() {
-  const v = durum.veri;
-  const dene = el("button", { type: "button", class: "d", onclick: async () => {
-    dene.disabled = true;
-    try { const r = await istek("/api/bildirim-dene", { method: "POST" }); bildir(r.bildirim ? "Telegram'a deneme mesajı gönderildi" : "Telegram ayarlı değil; yalnızca olay günlüğüne yazıldı"); }
-    catch (e) { bildir(e.message); } finally { dene.disabled = false; }
-  } }, "Deneme bildirimi gönder");
-  return el("div", { class: "kutu", style: "margin-top:16px" },
-    el("div", { class: "kutuBaslik" }, el("h2", {}, "Hata bildirimi"), el("span", { class: "bosluk" }),
-      el("span", { class: "rozet " + (v.bildirim ? "iyi" : "uyari") }, v.bildirim ? "Telegram bağlı" : "Kapalı")),
-    el("div", { class: "kutuIc" },
-      el("p", { class: "not", style: "margin:0 0 10px" }, v.bildirim
-        ? "Token yenilenemezse, 15 dakikada 5+ mesaj gönderilemezse, webhook imzası tutmazsa ya da paylaşımda link eksikse Telegram'a yazar (aynı tür 6 saatte bir)."
-        : "Telegram'da @BotFather ile bot açın, anahtarı TELEGRAM_TOKEN, sohbet kimliğinizi TELEGRAM_CHAT olarak Worker'a secret yazın (README)."),
-      el("div", { class: "satir" }, dene,
-        el("span", { class: "not" }, "publish.py bağlantısı: " + (v.otomasyon ? "anahtar tanımlı" : "OTOMASYON_ANAHTARI yok")))));
-}
-
-function sablonCiz() {
-  const s = durum.veri.sablonlar;
-  return el("div", {}, sablonFormu(s), hazirSorularCiz(), bildirimKutusu());
-}
+function sablonCiz() { return el("div", {}, sablonFormu(durum.veri.sablonlar), hazirSorularCiz()); }
 
 function sablonFormu(s) {
   return el("form", { class: "kutu", onsubmit: async (e) => {
     e.preventDefault();
     const veri = Object.fromEntries(new FormData(e.target));
-    try { await istek("/api/sablonlar", { method: "POST", body: JSON.stringify(veri) }); bildir("Şablonlar kaydedildi"); durum.veri.sablonlar = veri; }
-    catch (er) { bildir(er.message); }
+    try { await istek("/api/sablonlar", { method: "POST", body: JSON.stringify(veri) }); bildir("Şablonlar kaydedildi", "iyi"); durum.veri.sablonlar = veri; } catch (er) { hataGoster(er); }
   } },
-    el("div", { class: "kutuBaslik" }, el("h2", {}, "Tüm hesaplarda ortak"), el("span", { class: "bosluk" }),
-      el("span", { class: "not gizleDar" }, "Değişkenler: {baslik}, {icerik}, {kullanici}")),
+    el("div", { class: "kutuBaslik" }, el("h2", {}, "Mesaj şablonları"), el("span", { class: "bosluk" }), el("span", { class: "not gizleDar" }, "Atölyedeki tüm hesaplarda ortak · {baslik}, {icerik}, {kullanici}")),
     el("div", { class: "kutuIc sablonlar" },
       Object.entries(SABLON_ADLARI).map(([ad, [baslik, not]]) => {
         const kisa = ad.startsWith("buton_");
@@ -788,85 +1077,169 @@ function sablonFormu(s) {
       el("div", { class: "satir" }, el("button", { class: "d ana" }, "Şablonları kaydet"))));
 }
 
-const HATA = /gönderilemedi|alınamadı|okunamadı|tutmadı|yenilenemedi|işlenemedi|açılamadı|: .*\(kod/;
+// --- Olaylar ------------------------------------------------------------------------------
+const HATA = /gönderilemedi|alınamadı|okunamadı|tutmadı|yenilenemedi|işlenemedi|açılamadı|yayınlanamadı|başarısız|: .*\(kod/;
 
-function olayListesi(n) {
-  const v = durum.veri;
-  const ad = Object.fromEntries(v.hesaplar.map((h) => [h.id, "@" + h.kullanici]));
-  const liste = v.kayit.slice(0, n);
-  return liste.length ? el("ul", { class: "olaylar" }, liste.map((k) => el("li", {},
-    el("time", {}, saat(k.zaman)),
-    el("span", { class: HATA.test(k.metin) ? "hata" : "" },
-      (k.hesap && v.hesaplar.length > 1 ? (ad[k.hesap] || "") + " · " : "") + k.metin))))
+function olayListesi(n, liste = durum.veri.kayit, hesaplar = durum.veri.hesaplar) {
+  const ad = Object.fromEntries(hesaplar.map((h) => [h.id, "@" + h.kullanici]));
+  const l = liste.slice(0, n);
+  return l.length ? el("ul", { class: "olaylar" }, l.map((k) => el("li", {}, el("time", {}, saat(k.zaman)),
+    el("span", { class: HATA.test(k.metin) ? "hata" : "" }, (k.hesap && hesaplar.length > 1 ? (ad[k.hesap] || "") + " · " : "") + k.metin))))
     : el("p", { class: "bos" }, "Henüz olay yok.");
 }
 
 function olayCiz(n) {
-  return el("div", { class: "kutu" },
-    el("div", { class: "kutuBaslik" }, el("h2", {}, "Son " + n + " olay"), el("span", { class: "bosluk" }),
-      el("span", { class: "not" }, "Hatalar kırmızı")),
-    olayListesi(n));
+  return el("div", { class: "kutu" }, el("div", { class: "kutuBaslik" }, el("h2", {}, "Son olaylar"), el("span", { class: "bosluk" }), el("span", { class: "not" }, "Hatalar kırmızı · 90 gün tutulur")), olayListesi(n));
 }
 
+// --- Kişiler ------------------------------------------------------------------------------
 async function kisileriYukle() {
   const { q, kural } = durum.kisiSorgu;
-  durum.kisiler = null; icerikCiz();
+  durum.kisiler = null; durum.kisiYukleniyor = true; icerikCiz();
   try { durum.kisiler = await istek("/api/hesap/" + durum.hesap + "/kisiler?q=" + encodeURIComponent(q) + "&kural=" + kural); }
   catch (e) { durum.kisiler = { kisiler: [], toplam: 0, hata: e.message }; }
-  icerikCiz();
+  durum.kisiYukleniyor = false; icerikCiz();
 }
 
 function kisiCiz() {
-  if (!durum.kisiler) { kisileriYukle(); return yukleniyor("Kişiler yükleniyor…"); }
+  if (!durum.kisiler) { if (!durum.kisiYukleniyor) kisileriYukle(); return yukleniyor(5); }
   const { kisiler, toplam, hata } = durum.kisiler;
   const kurallar = durum.paylasim?.kurallar ?? [];
   const arama = el("input", { type: "search", placeholder: "Kullanıcı adı ya da ad", value: durum.kisiSorgu.q });
   const sec = el("select", { onchange: (e) => { durum.kisiSorgu.kural = Number(e.target.value); kisileriYukle(); } },
-    el("option", { value: "0" }, "Tüm otomasyonlar"),
-    kurallar.map((k) => el("option", { value: String(k.id), selected: k.id === durum.kisiSorgu.kural }, k.baslik)));
+    el("option", { value: "0" }, "Tüm otomasyonlar"), kurallar.map((k) => el("option", { value: String(k.id), selected: k.id === durum.kisiSorgu.kural }, k.baslik)));
   arama.addEventListener("change", () => { durum.kisiSorgu.q = arama.value; kisileriYukle(); });
   const csv = () => {
     const satir = (d) => d.map((x) => '"' + String(x ?? "").replaceAll('"', '""') + '"').join(";");
     const metin = [satir(["kullanici", "ad", "ilk", "son", "takipci", "kaynak", "teslim", "basliklar"]),
       ...kisiler.map((k) => satir([k.kullanici, k.ad, new Date(k.ilk).toISOString(), new Date(k.son).toISOString(), k.takipci == null ? "" : k.takipci ? "evet" : "hayır", k.kaynak, k.teslim, k.basliklar]))].join("\n");
-    const a = el("a", { href: URL.createObjectURL(new Blob(["\ufeff" + metin], { type: "text/csv;charset=utf-8" })), download: "kisiler.csv" });
+    const a = el("a", { href: URL.createObjectURL(new Blob(["﻿" + metin], { type: "text/csv;charset=utf-8" })), download: "kisiler.csv" });
     document.body.append(a); a.click(); a.remove();
   };
   return el("div", { class: "kutu" },
-    el("div", { class: "arama" }, arama, sec, el("span", { class: "bosluk" }),
-      el("span", { class: "not" }, bin(kisiler.length) + " / " + bin(toplam) + " kişi"),
+    el("div", { class: "arama" }, arama, sec, el("span", { class: "bosluk" }), el("span", { class: "not" }, bin(kisiler.length) + " / " + bin(toplam) + " kişi"),
       el("button", { class: "d", onclick: csv, disabled: !kisiler.length }, "CSV indir")),
-    hata ? el("p", { class: "bos" }, hata) : !kisiler.length ? el("p", { class: "bos" }, "Henüz kişi yok. Linki isteyen ya da DM yazan herkes burada birikir.")
+    hata ? el("p", { class: "bos" }, hata) : !kisiler.length ? bosDurum("kisi", "Henüz kişi yok", "Linki isteyen ya da DM yazan herkes burada birikir.")
     : el("table", {},
-      el("thead", {}, el("tr", {}, el("th", {}, "Kişi"), el("th", { class: "gizleDar" }, "Kaynak"), el("th", {}, "Takip"),
-        el("th", { class: "s" }, "Teslim"), el("th", { class: "gizleDar" }, "Aldığı linkler"), el("th", {}, "Son"))),
+      el("thead", {}, el("tr", {}, el("th", {}, "Kişi"), el("th", { class: "gizleDar" }, "Kaynak"), el("th", {}, "Takip"), el("th", { class: "s" }, "Teslim"), el("th", { class: "gizleDar" }, "Aldığı linkler"), el("th", {}, "Son"))),
       el("tbody", {}, kisiler.map((k) => el("tr", {},
         el("td", {}, k.kullanici ? el("a", { href: "https://instagram.com/" + k.kullanici, target: "_blank", rel: "noopener" }, "@" + k.kullanici) : el("span", { class: "not" }, "kimlik " + k.igsid.slice(-6)),
           k.ad ? el("div", { class: "not", style: "font-size:12px" }, k.ad) : null),
         el("td", { class: "gizleDar" }, k.kaynak ?? "-"),
         el("td", {}, k.takipci == null ? el("span", { class: "not" }, "?") : k.takipci ? el("span", { class: "rozet iyi" }, "Takipçi") : el("span", { class: "rozet pasif" }, "Değil")),
-        el("td", { class: "s" }, bin(k.teslim)),
-        el("td", { class: "gizleDar not" }, k.basliklar ?? ""),
-        el("td", { title: saat(k.son) }, onceki(k.son)))))),
-    el("p", { class: "not", style: "margin:0;padding:10px 18px;border-top:1px solid var(--cizgi)" },
-      "Meta, kişinin son mesajından sonraki 24 saat dışında mesaj göndermeye izin vermez; liste kitleyi tanımak ve elle yanıt içindir. Kayıtlar 12 ay sonra silinir."));
+        el("td", { class: "s" }, bin(k.teslim)), el("td", { class: "gizleDar not" }, k.basliklar ?? ""), el("td", { title: saat(k.son) }, onceki(k.son)))))),
+    el("div", { class: "kutuAlt" }, "Meta, kişinin son mesajından sonraki 24 saat dışında mesaj göndermeye izin vermez; liste kitleyi tanımak ve elle yanıt içindir. Kayıtlar 12 ay sonra silinir."));
 }
 
-function hesapCiz() {
+// --- Ayarlar ------------------------------------------------------------------------------
+function kopyala(metin, ad = "Kopyalandı") {
+  navigator.clipboard?.writeText(metin).then(() => bildir(ad, "iyi"), () => bildir("Kopyalanamadı", "kotu"));
+}
+const kodKutusu = (metin) => el("div", { class: "kod" }, metin, el("button", { type: "button", class: "d kucuk", onclick: () => kopyala(metin) }, ikon("kopyala"), "Kopyala"));
+
+function hesaplarKutusu() {
   const v = durum.veri;
-  if (!v.hesaplar.length) return el("div", { class: "kutu bos" }, "Henüz hesap yok.");
   return el("div", { class: "kutu" },
-    el("ul", { class: "olaylar" }, v.hesaplar.map((h) => el("li", { style: "align-items:center" },
+    el("div", { class: "kutuBaslik" }, el("h2", {}, "Instagram hesapları"), el("span", { class: "bosluk" }), el("a", { class: "d kucuk ig" + (v.oauth ? "" : " pasif"), href: "/baglan" }, ikon("arti"), "Hesap bağla")),
+    v.hesaplar.length ? el("ul", { class: "liste" }, v.hesaplar.map((h) => el("li", {},
       el("span", { class: "avatar" }, h.kullanici.slice(0, 1).toUpperCase()),
-      el("span", { style: "flex:1" }, el("b", {}, "@" + h.kullanici), el("br"),
-        el("span", { class: "not" }, "Anahtar " + onceki(h.token_yenilendi) + " yenilendi (her pazartesi kendiliğinden)")),
-      el("label", { class: "secim" }, el("span", { class: "anahtar" },
-        el("input", { type: "checkbox", checked: !!h.aktif, onchange: async (e) => {
-          await istek("/api/hesap/" + h.id, { method: "POST", body: JSON.stringify({ aktif: e.target.checked }) });
-          bildir(e.target.checked ? "Etkinleştirildi" : "Durduruldu"); yukle();
-        } }), el("i")), el("span", { class: "gizleDar" }, "Etkin"))))),
-    el("p", { class: "not", style: "margin:0;padding:10px 18px;border-top:1px solid var(--cizgi)" },
-      "Anahtarı yenilemek için “Hesap ekle” ile yenisini yapıştırın."));
+      el("div", { class: "icerik" }, el("b", {}, "@" + h.kullanici, " ", h.aktif ? el("span", { class: "rozet iyi" }, "Etkin") : el("span", { class: "rozet pasif" }, "Durduruldu"),
+          " ", h.paylasim_izni ? null : el("span", { class: "rozet uyari", title: "Planlı gönderi için Instagram'ın paylaşım izni gerekiyor" }, "Paylaşım izni yok")),
+        el("span", { class: "not" }, "Bağlantı " + onceki(h.token_yenilendi) + " yenilendi · her pazartesi kendiliğinden")),
+      el("a", { class: "d kucuk", href: "/baglan", title: "Aynı hesapla yeniden giriş yapın; izinler ve bağlantı tazelenir" }, "Yeniden bağla"),
+      el("label", { class: "anahtar", title: h.aktif ? "Durdur" : "Etkinleştir" }, el("input", { type: "checkbox", checked: !!h.aktif, onchange: async (e) => {
+        try { await istek("/api/hesap/" + h.id, { method: "POST", body: JSON.stringify({ aktif: e.target.checked }) }); bildir(e.target.checked ? "Etkinleştirildi" : "Durduruldu", "iyi"); yukle(); } catch (er) { hataGoster(er); }
+      } }), el("i")),
+      el("button", { class: "d kucuk ince sil", onclick: async () => {
+        if (!(await onayla("@" + h.kullanici + " kaldırılsın mı?", "Hesabın otomasyonları, kişileri, istatistikleri ve bekleyen gönderileri silinir. Bu geri alınamaz.", "Kaldır"))) return;
+        try { await istek("/api/hesap/" + h.id, { method: "DELETE" }); bildir("Kaldırıldı"); durum.hesap = null; yukle(); } catch (er) { hataGoster(er); }
+      } }, "Kaldır"))))
+    : el("p", { class: "bos" }, "Henüz hesap yok."),
+    el("div", { class: "kutuAlt" }, v.kapali_beta ? "Kapalı beta: bağlanacak hesabın Meta uygulamasında Instagram tester olarak eklenmiş ve daveti Instagram'da kabul etmiş olması gerekir." : "İşletme ya da içerik üreticisi hesapları bağlanabilir."));
+}
+
+function mesajErisimKutusu() {
+  return el("div", { class: "ipucuKutu", style: "margin-top:16px" }, ikon("bilgi"),
+    el("div", {}, el("b", {}, "DM gönderebilmemiz için Instagram'da bir ayar açık olmalı: "),
+      el("ol", {}, el("li", {}, "Instagram uygulaması → Ayarlar → Mesajlar ve hikâye yanıtları"), el("li", {}, "Mesaj denetimleri → Bağlı araçlar"), el("li", {}, "\"Mesajlara erişime izin ver\" açık olsun")),
+      el("span", { class: "not" }, "Kapalıysa yorumlar yakalanır ama DM gönderilemez; olay günlüğünde \"gönderilemedi\" görürsünüz.")));
+}
+
+function apiKutusu() {
+  const v = durum.veri, a = v.atolye;
+  let acik = false;
+  const kodSpan = el("code", {}, "•".repeat(24));
+  const goster = el("button", { class: "d kucuk", onclick: () => { acik = !acik; kodSpan.textContent = acik ? a.anahtar : "•".repeat(24); goster.textContent = acik ? "Gizle" : "Göster"; } }, "Göster");
+  const mcpKomut = `claude mcp add --transport http ${v.urun_adi.toLowerCase().replace(/[^a-z0-9]+/g, "-")} ${v.kok}/mcp --header "Authorization: Bearer ${a.anahtar}"`;
+  const curl = `curl -sS -X PUT -H "Authorization: Bearer ${a.anahtar}" --data-binary @video.mp4 "${v.kok}/api/disari/video?ad=video.mp4"`;
+  return el("div", { class: "kutu", style: "margin-top:16px" },
+    el("div", { class: "kutuBaslik" }, el("h2", {}, "Claude ve API bağlantısı"), el("span", { class: "bosluk" }), el("span", { class: "not gizleDar" }, "MCP ile sohbet ederek yönetin")),
+    el("div", { class: "kutuIc", style: "display:grid;gap:14px" },
+      el("div", {}, el("div", { class: "not", style: "margin-bottom:6px" }, "Atölye anahtarı · bunu bilen herkes hesaplarınızı yönetebilir, paylaşmayın"),
+        el("div", { class: "anahtarKutu" }, kodSpan, goster, el("button", { class: "d kucuk", onclick: () => kopyala(a.anahtar, "Anahtar kopyalandı") }, ikon("kopyala"), "Kopyala"),
+          el("button", { class: "d kucuk ince sil", onclick: async () => {
+            if (!(await onayla("Anahtar yenilensin mi?", "Eski anahtar hemen geçersiz olur; Claude ve betiklerdeki anahtarı güncellemeniz gerekir.", "Yenile"))) return;
+            try { const r = await istek("/api/atolye/anahtar", { method: "POST" }); a.anahtar = r.anahtar; bildir("Anahtar yenilendi", "iyi"); icerikCiz(); } catch (e) { hataGoster(e); }
+          } }, "Yenile"))),
+      el("div", {}, el("b", {}, "Claude Code"), el("div", { class: "not", style: "margin:2px 0 6px" }, "Terminalde bir kez çalıştırın; sonra \"cumartesi 19:00'a şu videoyu koy, yorumlara liste yazana linki gönder\" diyebilirsiniz."), kodKutusu(mcpKomut)),
+      el("div", {}, el("b", {}, "claude.ai / Claude uygulaması"), el("div", { class: "not", style: "margin:2px 0 6px" }, "Ayarlar → Bağlayıcılar → Özel bağlayıcı; kimlik doğrulama \"yok\", adres:"), kodKutusu(`${v.kok}/mcp/${a.anahtar}`)),
+      el("div", {}, el("b", {}, "Video yükleme (terminal)"), el("div", { class: "not", style: "margin:2px 0 6px" }, "Çıktıdaki \"dosya\" değeri Claude'daki gonderi_planla aracına verilir."), kodKutusu(curl))));
+}
+
+function atolyeKutusu() {
+  const a = durum.veri.atolye;
+  const ad = el("input", { type: "text", value: a.ad, maxlength: "60", style: "max-width:320px" });
+  return el("form", { class: "kutu", style: "margin-top:16px", onsubmit: async (e) => {
+    e.preventDefault();
+    try { await istek("/api/atolye", { method: "POST", body: JSON.stringify({ ad: ad.value }) }); bildir("Kaydedildi", "iyi"); yukle(); } catch (er) { hataGoster(er); }
+  } },
+    el("div", { class: "kutuBaslik" }, el("h2", {}, "Atölye"), el("span", { class: "bosluk" }), el("span", { class: "rozet " + (a.plan === "pro" ? "mor" : "pasif") }, a.plan === "pro" ? "Pro" : "Ücretsiz")),
+    el("div", { class: "kutuIc", style: "display:grid;gap:10px" },
+      el("label", { class: "alan" }, "Atölye adı", el("small", {}, "Panelde ve bildirimlerde görünür."), ad),
+      el("div", { class: "satir", style: "justify-content:flex-start" }, el("button", { class: "d" }, "Kaydet"), el("span", { class: "not" }, "Açılış: " + new Date(a.olusturma).toLocaleDateString("tr-TR")))),
+    el("div", { class: "kutuAlt" }, el("a", { href: "/gizlilik", target: "_blank" }, "Gizlilik"), " · ", el("a", { href: "/kosullar", target: "_blank" }, "Koşullar"), " · ", el("a", { href: "/veri-silme", target: "_blank" }, "Veri silme"),
+      durum.veri.iletisim ? [" · ", el("a", { href: "mailto:" + durum.veri.iletisim }, durum.veri.iletisim)] : null));
+}
+
+function ayarCiz() { return el("div", {}, hesaplarKutusu(), mesajErisimKutusu(), apiKutusu(), atolyeKutusu()); }
+
+// --- Yönetim (yalnız yönetici) ------------------------------------------------------------
+async function yonetimYukle() {
+  durum.yonetim = null; icerikCiz();
+  try { durum.yonetim = await istek("/api/yonetici/atolyeler"); } catch (e) { durum.yonetim = { atolyeler: [], kayit: [], uyarilar: [], hata: e.message }; }
+  icerikCiz();
+}
+
+function yonetimCiz() {
+  const y = durum.yonetim;
+  if (!y) return yukleniyor(5);
+  if (y.hata) return bosDurum("uyari", "Okunamadı", y.hata);
+  const kart = (b, d, alt) => el("div", { class: "sayiKart" }, el("span", {}, b), el("b", {}, bin(d)), el("small", {}, alt));
+  const gir = async (a) => { await istek("/api/yonetici/gir/" + a.id, { method: "POST" }); location.hash = "genel"; location.reload(); };
+  const guncelle = async (a, alan) => { try { await istek("/api/yonetici/atolye/" + a.id, { method: "POST", body: JSON.stringify(alan) }); Object.assign(a, alan); bildir("Kaydedildi", "iyi"); } catch (e) { hataGoster(e); yonetimYukle(); } };
+  const dene = el("button", { class: "d kucuk", onclick: async () => { dene.disabled = true; try { const r = await istek("/api/yonetici/bildirim-dene", { method: "POST" }); bildir(r.bildirim ? "Telegram'a deneme mesajı gönderildi" : "Telegram ayarlı değil", r.bildirim ? "iyi" : "kotu"); } catch (e) { hataGoster(e); } finally { dene.disabled = false; } } }, "Deneme bildirimi");
+  return el("div", {},
+    el("div", { class: "yonKartlar" }, kart("Atölye", y.atolyeler.length, "kayıtlı"), kart("Instagram hesabı", y.toplam?.hesap ?? 0, "bağlı"), kart("Aktif otomasyon", y.toplam?.kural ?? 0, "tüm atölyeler"), kart("Kişi", y.toplam?.kisi ?? 0, "12 ay tutulur")),
+    y.uyarilar?.length ? el("div", { class: "serit kotu", style: "border-radius:12px;margin-bottom:16px;border:0" }, ikon("uyari"), el("div", {}, y.uyarilar.map((u) => el("span", {}, el("b", {}, saat(u.zaman)), u.metin)))) : null,
+    el("div", { class: "kutu" },
+      el("div", { class: "kutuBaslik" }, el("h2", {}, "Atölyeler"), el("span", { class: "bosluk" }),
+        el("span", { class: "rozet " + (y.video ? "iyi" : "uyari") }, y.video ? "Video depolama açık" : "R2 kapalı"), el("span", { class: "rozet " + (y.bildirim ? "iyi" : "uyari") }, y.bildirim ? "Telegram bağlı" : "Telegram yok"), dene),
+      y.atolyeler.length ? el("table", {},
+        el("thead", {}, el("tr", {}, el("th", {}, "Atölye"), el("th", {}, "Hesaplar"), el("th", { class: "s" }, "Kural"), el("th", { class: "s gizleDar" }, "Teslim 30g"), el("th", { class: "s gizleDar" }, "Sırada"), el("th", { class: "gizleDar" }, "Son giriş"), el("th", {}, "Plan"), el("th", {}, "Etkin"), el("th", {}))),
+        el("tbody", {}, y.atolyeler.map((a) => el("tr", {},
+          el("td", {}, el("b", {}, a.ad), el("div", { class: "not", style: "font-size:12px" }, "#" + a.id + (a.notlar ? " · " + a.notlar.slice(0, 60) : ""))),
+          el("td", {}, a.kullanicilar ? a.kullanicilar.split(", ").map((k) => el("span", { class: "etiket", style: "margin-right:4px" }, "@" + k)) : el("span", { class: "not" }, "yok")),
+          el("td", { class: "s" }, bin(a.kural)), el("td", { class: "s gizleDar" }, bin(a.teslim30)), el("td", { class: "s gizleDar" }, bin(a.bekleyen_gonderi)),
+          el("td", { class: "gizleDar" }, onceki(a.son_giris)),
+          el("td", {}, el("select", { class: "planSec", onchange: (e) => guncelle(a, { plan: e.target.value }) }, ["ucretsiz", "pro"].map((p) => el("option", { value: p, selected: a.plan === p }, p === "pro" ? "Pro" : "Ücretsiz")))),
+          el("td", {}, el("label", { class: "anahtar" }, el("input", { type: "checkbox", checked: !!a.aktif, onchange: (e) => guncelle(a, { aktif: e.target.checked }) }), el("i"))),
+          el("td", {}, el("div", { style: "display:flex;gap:4px;justify-content:flex-end" },
+            el("button", { class: "d kucuk ince", title: "Not", onclick: () => { const n = prompt("Not (yalnız yönetici görür):", a.notlar || ""); if (n != null) guncelle(a, { notlar: n }); } }, "Not"),
+            el("button", { class: "d kucuk ana", onclick: () => gir(a) }, "Gir")))))))
+      : el("p", { class: "bos" }, "Henüz atölye yok. İlk kullanıcı Instagram ile giriş yapınca burada görünür."),
+      el("div", { class: "kutuAlt" }, "Etkin kapatılırsa atölyenin botları durur, kullanıcı panele girebilir ama \"Atölye durdurulmuş\" görür.")),
+    el("div", { class: "kutu", style: "margin-top:16px" }, el("div", { class: "kutuBaslik" }, el("h2", {}, "Sistem olayları"), el("span", { class: "bosluk" }), el("span", { class: "not" }, "atölyelere ait olmayan kayıtlar")),
+      olayListesi(60, y.kayit, [])));
 }
 
 yukle().catch((e) => { if (e.message !== "giriş") $("#uygulama").replaceChildren(el("p", { class: "bos" }, "Hata: " + e.message)); });

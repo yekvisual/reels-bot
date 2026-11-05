@@ -1,0 +1,42 @@
+# Instagram planlı paylaşım + yorum→DM otomasyonu (çok kullanıcılı). Kurulum: README.md, ürünleştirme: BASVURU.md
+name = "yeklab-dm"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+workers_dev = true
+preview_urls = false
+
+[[d1_databases]]
+binding = "DB"
+database_name = "yeklab-dm"
+database_id = "997f4f7a-3137-42e0-8369-54013d7f242f"
+
+# Planlı gönderilerin videoları. Cloudflare panelinde R2 etkinleştirilip `npx wrangler r2 bucket create yeklab-dm-video`
+# çalıştırıldıktan sonra aşağıdaki iki satırın başındaki # kaldırılır ve `npm run deploy` yapılır. Bağlı değilken panel
+# "video depolama kapalı" der, diğer her şey çalışır.
+[[r2_buckets]]
+binding = "VIDEO"
+bucket_name = "yeklab-dm-video"
+
+[triggers]
+# Her dakika: yorum taraması (sırayla 12 hesap), gönderi kuyruğu, webhook gelmiyorsa DM yoklama. Pazartesi 07:00 TR: token yenileme
+crons = ["* * * * *", "0 4 * * 1"]
+
+[vars]
+DENEME = "1"                      # "1": Instagram'a hiçbir şey gönderilmez, yalnız günlüğe yazılır
+URUN_ADI = "YEK Lab DM"           # panelde, giriş sayfasında ve bildirimlerde görünen ad
+ILETISIM = "iletisim@yeklab.com.tr" # gizlilik/koşullar sayfalarındaki destek adresi
+KAPALI_BETA = "1"                 # "1": giriş sayfası "davetli hesaplar" rozeti gösterir (Meta App Review'dan önce)
+KOK = "http://127.0.0.1:8787"
+LINK_KOK = "https://yeklab.com.tr/l" # teslim edilen linkler bu kökün altında kısa kodla gider; site 404 sayfası Worker'a sorar
+SITE_KOK = "https://yeklab.com.tr"   # tıklama sayacına JSON ile sorabilen site (CORS)
+# Meta → uygulama → Instagram → API setup with Instagram login → Instagram app ID. Aynı sayfada Business login settings →
+# OAuth redirect URIs'e https://yeklab-dm.yeklab.workers.dev/oauth eklenmeli.
+INSTAGRAM_APP_ID = "4525985417675883"
+
+# Gizli değerler (npx wrangler secret put …): APP_SECRET, VERIFY_TOKEN, PANEL_SIFRE (yönetici), OTURUM_GIZLI (isteğe bağlı; yoksa PANEL_SIFRE),
+# OTOMASYON_ANAHTARI (eski publish.py anahtarı → 1 numaralı atölye), TELEGRAM_TOKEN + TELEGRAM_CHAT (yöneticiye bildirim), HEALTHCHECK_URL
+
+[[rules]]
+type = "Text"
+globs = ["**/*.html"]
+fallthrough = true

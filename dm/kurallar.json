@@ -44,8 +44,16 @@
       "anahtar": [
         "flux"
       ],
-      "baslik": "FLUX 3 Klein denemesi",
-      "icerik": "Türkçe özet: https://yeklab.com.tr/gundem/2026/10/flux-3-image-klein/\nResmi duyuru: https://bfl.ai/blog/flux-3-image-klein\nModel dosyaları: https://huggingface.co/black-forest-labs/flux-3-image-klein"
+      "baslik": "FLUX 3 Klein kurulum kılavuzu",
+      "icerik": "Kurulum kılavuzu (adım adım, 4K ayarları ve videodaki istemler): https://yeklab.com.tr/bilmeniz-gerekenler/flux-3-klein-kurulum/\nModel dosyaları: https://huggingface.co/black-forest-labs/flux-3-image-klein-comfy\nComfyUI: https://www.comfy.org/download"
+    },
+    {
+      "video": "videos/005_pika-h3-flex.mp4",
+      "anahtar": [
+        "pika"
+      ],
+      "baslik": "Pika H3 Flex kurulum kılavuzu",
+      "icerik": "Kurulum kılavuzu (NVIDIA ve Mac, Mac düzeltmesi, videodaki istemler): https://yeklab.com.tr/bilmeniz-gerekenler/pika-h3-flex-kurulum/\nTürkçe özet: https://yeklab.com.tr/gundem/2026/10/pika-h3-flex/\nModel dosyaları: https://huggingface.co/Comfy-Org/MiniMax-H3"
     }
   ]
 }

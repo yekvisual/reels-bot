@@ -1,28 +1,45 @@
-// D1 yardımcıları
+// D1 yardımcıları ve ortak tipler
 
 export interface Env {
   DB: D1Database;
-  APP_SECRET: string;   // Meta panelindeki Instagram app secret (webhook imzası)
-  VERIFY_TOKEN: string; // Meta panelindeki webhook doğrulama anahtarı
-  PANEL_SIFRE: string;
-  OTOMASYON_ANAHTARI?: string; // publish.py'nin /api/disari/kural için Bearer anahtarı
-  TELEGRAM_TOKEN?: string;     // hata bildirimi: BotFather'dan alınan bot anahtarı
-  TELEGRAM_CHAT?: string;      // bildirimin gideceği sohbet kimliği
-  HEALTHCHECK_URL?: string;    // her dakikalık iş sonunda ping (healthchecks.io); kesilirse onlar haber verir
-  INSTAGRAM_APP_ID?: string;   // panelden Instagram girişiyle hesap bağlamak için (boşsa yalnız anahtar yapıştırma)
-  LINK_KOK?: string;           // "https://yeklab.com.tr/l"
-  SITE_KOK?: string;           // CORS için site adresi
-  DENEME?: string;
+  VIDEO?: R2Bucket;            // planlı gönderilerin videoları (R2 etkinleştirilince wrangler.toml'da bağlanır)
+  APP_SECRET: string;          // Meta panelindeki Instagram app secret (webhook imzası, OAuth)
+  VERIFY_TOKEN: string;        // Meta panelindeki webhook doğrulama anahtarı
+  PANEL_SIFRE: string;         // yönetici şifresi
+  OTURUM_GIZLI?: string;       // oturum çerezi imzası (yoksa PANEL_SIFRE kullanılır)
+  OTOMASYON_ANAHTARI?: string; // eski publish.py anahtarı: 1 numaralı atölyeye eşlenir
+  TELEGRAM_TOKEN?: string;     // yöneticiye hata bildirimi
+  TELEGRAM_CHAT?: string;
+  HEALTHCHECK_URL?: string;
+  INSTAGRAM_APP_ID?: string;   // Instagram ile giriş / hesap bağlama
+  LINK_KOK?: string;           // kısa linklerin kökü, ör. "https://yeklab.com.tr/l"
+  SITE_KOK?: string;           // kısa link JSON'una sorabilen site (CORS)
+  KOK?: string;                // Worker'ın kendi adresi (cron'da video adresi için): "https://yeklab-dm.yeklab.workers.dev"
+  URUN_ADI?: string;           // panelde ve mesajlarda görünen ad
+  ILETISIM?: string;           // destek e-postası (gizlilik, koşullar)
+  KAPALI_BETA?: string;        // "1": giriş sayfası "davetli hesaplar" der
+  DENEME?: string;             // "1": Instagram'a hiçbir şey gönderilmez, yalnız günlüğe yazılır
 }
 
-export interface Hesap { id: string; kullanici: string; token: string; token_yenilendi: number; aktif: number }
-
+export interface Atolye { id: number; ad: string; anahtar: string; plan: string; aktif: number; notlar: string; olusturma: number; son_giris: number }
+export interface Hesap {
+  id: string; atolye: number; kullanici: string; token: string; token_yenilendi: number; aktif: number;
+  izinler: string; son_tarama: number; eklenme: number;
+}
 export interface Kural {
   id: number; hesap: string; medya: string; anahtar: string; baslik: string; icerik: string;
   takip_sart: number; yorum_yaniti: number; aktif: number; olusturma: number;
 }
-
+export interface Gonderi {
+  id: number; atolye: number; hesap: string; dosya: string; ad: string; boyut: number; aciklama: string; zaman: number; feed: number;
+  durum: "bekliyor" | "isleniyor" | "yayinlaniyor" | "yayinda" | "hata" | "iptal"; konteyner: string | null; medya: string | null; kalici: string | null;
+  hata: string | null; deneme: number; adim_zamani: number; kural_anahtar: string; kural_baslik: string; kural_icerik: string;
+  kural_takip: number; kural: number | null; olusturma: number; yayin: number | null;
+}
 export interface HazirSoru { soru: string; tur: "son" | "metin"; cevap: string }
+
+export const SISTEM = 0; // sistem ayarları ve günlüğü için atölye kimliği
+export const urunAdi = (env: Env) => env.URUN_ADI || "YEK Lab DM";
 
 export const VARSAYILAN_AYAR: Record<string, string> = {
   ilk_buton: "Merhaba! {baslik} için linkleri hemen göndereyim. @{kullanici} hesabını takip edip aşağıdaki butona basmanız yeterli.",
@@ -41,14 +58,15 @@ export const VARSAYILAN_AYAR: Record<string, string> = {
   hazir_sorular: "[]",
 };
 
-export async function ayarlar(env: Env): Promise<Record<string, string>> {
-  const { results } = await env.DB.prepare("SELECT ad, deger FROM ayarlar").all<{ ad: string; deger: string }>();
+// --- Ayarlar (atölye başına) -----------------------------------------------------------
+export async function ayarlar(env: Env, atolye: number): Promise<Record<string, string>> {
+  const { results } = await env.DB.prepare("SELECT ad, deger FROM ayarlar WHERE atolye = ?").bind(atolye).all<{ ad: string; deger: string }>();
   return { ...VARSAYILAN_AYAR, ...Object.fromEntries(results.map((r) => [r.ad, r.deger])) };
 }
 
-export async function ayarYaz(env: Env, ad: string, deger: string) {
-  await env.DB.prepare("INSERT INTO ayarlar (ad, deger) VALUES (?, ?) ON CONFLICT (ad) DO UPDATE SET deger = excluded.deger")
-    .bind(ad, deger).run();
+export async function ayarYaz(env: Env, atolye: number, ad: string, deger: string) {
+  await env.DB.prepare("INSERT INTO ayarlar (atolye, ad, deger) VALUES (?, ?, ?) ON CONFLICT (atolye, ad) DO UPDATE SET deger = excluded.deger")
+    .bind(atolye, ad, deger).run();
 }
 
 export function hazirSorular(ayar: Record<string, string>): HazirSoru[] {
@@ -60,6 +78,62 @@ export function hazirSorular(ayar: Record<string, string>): HazirSoru[] {
   }
 }
 
+// --- Atölyeler ve hesaplar -------------------------------------------------------------
+export const yeniAnahtar = () => [...crypto.getRandomValues(new Uint8Array(24))].map((b) => b.toString(16).padStart(2, "0")).join("");
+
+export async function atolyeBul(env: Env, id: number): Promise<Atolye | null> {
+  return env.DB.prepare("SELECT * FROM atolyeler WHERE id = ?").bind(id).first<Atolye>();
+}
+
+export async function atolyeAc(env: Env, ad: string): Promise<Atolye> {
+  const r = await env.DB.prepare("INSERT INTO atolyeler (ad, anahtar, olusturma, son_giris) VALUES (?, ?, ?, ?) RETURNING *")
+    .bind(ad.slice(0, 60), yeniAnahtar(), Date.now(), Date.now()).first<Atolye>();
+  if (!r) throw new Error("Atölye açılamadı");
+  return r;
+}
+
+/** Bearer anahtarından atölye: atölyenin kendi anahtarı ya da eski OTOMASYON_ANAHTARI (→ 1). */
+export async function anahtarlaAtolye(env: Env, verilen: string): Promise<Atolye | null> {
+  if (!verilen || verilen.length < 16) return null;
+  if (env.OTOMASYON_ANAHTARI && (await esitOzet(verilen, env.OTOMASYON_ANAHTARI))) return atolyeBul(env, 1);
+  const a = await env.DB.prepare("SELECT * FROM atolyeler WHERE anahtar = ?").bind(verilen).first<Atolye>();
+  return a && (await esitOzet(verilen, a.anahtar)) ? a : null;
+}
+
+/** Zamanlama sızıntısı olmadan karşılaştırma: iki değerin özeti alınır, özetler eşit uzunluktadır. */
+export async function esitOzet(a: string, b: string): Promise<boolean> {
+  const [x, y] = await Promise.all([ozet("e", a), ozet("e", b)]);
+  let fark = 0;
+  for (let i = 0; i < x.length; i++) fark |= x.charCodeAt(i) ^ y.charCodeAt(i);
+  return fark === 0;
+}
+
+export async function hesaplar(env: Env, atolye?: number, hepsi = false): Promise<Hesap[]> {
+  const kosul = [hepsi ? "" : "h.aktif = 1 AND a.aktif = 1", atolye == null ? "" : "h.atolye = ?"].filter(Boolean).join(" AND ");
+  const q = env.DB.prepare(`SELECT h.* FROM hesaplar h JOIN atolyeler a ON a.id = h.atolye ${kosul ? "WHERE " + kosul : ""} ORDER BY h.kullanici`);
+  const { results } = await (atolye == null ? q : q.bind(atolye)).all<Hesap>();
+  return results;
+}
+
+export async function hesapBul(env: Env, id: string): Promise<Hesap | null> {
+  return env.DB.prepare("SELECT * FROM hesaplar WHERE id = ?").bind(id).first<Hesap>();
+}
+
+/** Hesabın bütün verisini siler (hesap kaldırma, Meta veri silme isteği, uygulama yetkisinin alınması). */
+export async function hesapSil(env: Env, id: string) {
+  await env.DB.batch([
+    env.DB.prepare("DELETE FROM istatistik WHERE kural IN (SELECT id FROM kurallar WHERE hesap = ?)").bind(id),
+    env.DB.prepare("DELETE FROM linkler WHERE kural IN (SELECT id FROM kurallar WHERE hesap = ?)").bind(id),
+    env.DB.prepare("DELETE FROM kurallar WHERE hesap = ?").bind(id),
+    env.DB.prepare("DELETE FROM bekleyen WHERE hesap = ?").bind(id),
+    env.DB.prepare("DELETE FROM kisiler WHERE hesap = ?").bind(id),
+    env.DB.prepare("DELETE FROM teslimler WHERE hesap = ?").bind(id),
+    env.DB.prepare("UPDATE gonderiler SET durum = 'iptal' WHERE hesap = ? AND durum IN ('bekliyor', 'isleniyor')").bind(id),
+    env.DB.prepare("DELETE FROM hesaplar WHERE id = ?").bind(id),
+  ]);
+}
+
+// --- Özet, sahiplenme, deneme ----------------------------------------------------------
 export async function ozet(...parca: string[]): Promise<string> {
   const h = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(parca.join("|")));
   return [...new Uint8Array(h).slice(0, 8)].map((b) => b.toString(16).padStart(2, "0")).join("");
@@ -167,24 +241,26 @@ export async function tiklamaSay(env: Env, kod: string, kural: number) {
 // --- Bildirim ---------------------------------------------------------------------------
 const BILDIRIM_ARA = 6 * 36e5;
 
-/** Aynı türden bildirim 6 saatte bir: Telegram'a gönderir, panelde kırmızı şerit için ayarlara yazar. */
-export async function bildir(env: Env, tur: string, metin: string) {
-  const ayar = await ayarlar(env);
+/** Uyarı: atölyenin panelinde 24 saat şerit olarak görünür (atolye 0 = yalnız yönetici). Aynı tür 6 saatte bir
+ *  Telegram'a (yöneticiye) gider ve günlüğe yazılır. */
+export async function bildir(env: Env, tur: string, metin: string, atolye = SISTEM) {
+  const ayar = await ayarlar(env, atolye);
   const son = Number(ayar[`bildirim_son:${tur}`] ?? 0);
-  await ayarYaz(env, `uyari:${tur}`, JSON.stringify({ zaman: Date.now(), metin }));
+  await ayarYaz(env, atolye, `uyari:${tur}`, JSON.stringify({ zaman: Date.now(), metin }));
   if (Date.now() - son < BILDIRIM_ARA) return;
-  await ayarYaz(env, `bildirim_son:${tur}`, String(Date.now()));
-  await kaydet(env, null, `⚠ ${metin}`);
+  await ayarYaz(env, atolye, `bildirim_son:${tur}`, String(Date.now()));
+  await kaydet(env, atolye, null, `⚠ ${metin}`);
   if (!env.TELEGRAM_TOKEN || !env.TELEGRAM_CHAT) return;
+  const on = atolye === SISTEM ? "" : `[atölye ${atolye}] `;
   try {
     const r = await fetch(`https://api.telegram.org/bot${env.TELEGRAM_TOKEN}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: env.TELEGRAM_CHAT, text: `YEK Lab DM · ${metin}`, disable_web_page_preview: true }),
+      body: JSON.stringify({ chat_id: env.TELEGRAM_CHAT, text: `${urunAdi(env)} · ${on}${metin}`, disable_web_page_preview: true }),
     });
-    if (!r.ok) await kaydet(env, null, `Telegram bildirimi gönderilemedi (${r.status})`);
+    if (!r.ok) await kaydet(env, SISTEM, null, `Telegram bildirimi gönderilemedi (${r.status})`);
   } catch (e) {
-    await kaydet(env, null, `Telegram bildirimi gönderilemedi: ${(e as Error).message}`);
+    await kaydet(env, SISTEM, null, `Telegram bildirimi gönderilemedi: ${(e as Error).message}`);
   }
 }
 
@@ -201,6 +277,10 @@ export function uyarilar(ayar: Record<string, string>): { tur: string; zaman: nu
   return out.sort((a, b) => b.zaman - a.zaman);
 }
 
+export async function uyariKapat(env: Env, atolye: number, tur: string) {
+  await env.DB.prepare("DELETE FROM ayarlar WHERE atolye = ? AND ad = ?").bind(atolye, `uyari:${tur}`).run();
+}
+
 /** Türkiye saatiyle gün (UTC+3, yaz saati yok): panelde "bugün" gece yarısı değişsin */
 export const trGun = (ms: number) => new Date(ms + 3 * 36e5).toISOString().slice(0, 10);
 
@@ -211,21 +291,24 @@ export async function say(env: Env, kural: number, tur: string) {
   ).bind(kural, gun, tur).run();
 }
 
-export async function kaydet(env: Env, hesap: string | null, metin: string) {
-  console.log(`[${hesap ?? "-"}] ${metin}`);
-  await env.DB.prepare("INSERT INTO kayit (zaman, hesap, metin) VALUES (?, ?, ?)").bind(Date.now(), hesap, metin.slice(0, 500)).run();
+export async function kaydet(env: Env, atolye: number, hesap: string | null, metin: string) {
+  console.log(`[${atolye}/${hesap ?? "-"}] ${metin}`);
+  await env.DB.prepare("INSERT INTO kayit (zaman, atolye, hesap, metin) VALUES (?, ?, ?, ?)").bind(Date.now(), atolye, hesap, metin.slice(0, 500)).run();
 }
 
 /** Eski kayıtları temizler (saatte bir çağrılır). */
 export async function temizle(env: Env) {
   const simdi = Date.now();
   await env.DB.batch([
-    env.DB.prepare("DELETE FROM kayit WHERE id <= (SELECT MAX(id) FROM kayit) - 1000"),
+    env.DB.prepare("DELETE FROM kayit WHERE zaman < ?").bind(simdi - 90 * 864e5),
     env.DB.prepare("DELETE FROM islenen WHERE zaman < ?").bind(simdi - 30 * 864e5),
     env.DB.prepare("DELETE FROM bekleyen WHERE zaman < ?").bind(simdi - 7 * 864e5),
     env.DB.prepare("DELETE FROM deneme WHERE zaman < ?").bind(simdi - 30 * 864e5),
     env.DB.prepare("DELETE FROM giris_deneme WHERE zaman < ?").bind(simdi - 864e5),
     env.DB.prepare("DELETE FROM teslimler WHERE zaman < ?").bind(simdi - 365 * 864e5),
     env.DB.prepare("DELETE FROM kisiler WHERE son < ?").bind(simdi - 365 * 864e5),
+    env.DB.prepare("DELETE FROM gonderiler WHERE durum IN ('yayinda', 'iptal', 'hata') AND olusturma < ?").bind(simdi - 180 * 864e5),
+    env.DB.prepare("DELETE FROM ayarlar WHERE (ad LIKE 'uyari:%' OR ad LIKE 'silme:%') AND COALESCE(json_extract(deger, '$.zaman'), 0) < ?").bind(simdi - 30 * 864e5),
+    env.DB.prepare("DELETE FROM ayarlar WHERE ad LIKE 'bildirim_son:%' AND CAST(deger AS INTEGER) < ?").bind(simdi - 30 * 864e5),
   ]);
 }
