@@ -1,0 +1,12 @@
+Bu gördüğünüz görsellerin hepsi 4K, ücretsiz ve kendi bilgisayarımda üretildi.
+
+FLUX 3 Klein açık kaynak bir görsel modeli. ComfyUI ile bir kez kurduktan sonra:
+• Kredi yok, kullanım sınırı yok
+• Üretim internet bağlantısı olmadan çalışır
+• Dikey 4K (2160×3840) doğrudan çıkar, sonradan büyütme yok
+
+Kurulum kılavuzu için yorumlara "flux" yazın, DM'den göndereyim: NVIDIA ekran kartlı PC ve Mac için adım adım kurulum, 4K ayarları ve videodaki görsellerin istemleri.
+
+Görseller: YEK Lab denemesi (FLUX 3 Image Klein ile üretildi)
+
+#flux #comfyui #yapayzeka #açıkkaynak #yeklab #görselüretim
