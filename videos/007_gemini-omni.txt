@@ -1,0 +1,14 @@
+Google'ın yeni video modeli Omni 1.2 Flash'ı denedim 🎬
+
+Google Vids'te, dikey 9:16 formatta, 15 saniye, 1080p:
+• Her klip 1,5–2 dakikada hazır
+• Konuşma ve anlatım kelimesi kelimesine doğru çıktı
+• "Tek plan, kesme yok" dediğimde 15 saniye boyunca hiç kesmedi
+• Tek cümlelik "gece yap" düzenlemesi kamera hareketini korudu, yalnız klip 10 sn'ye indi
+• Hataları: konuşmalı videoya istemediğim halde alt yazı ekledi ve alt yazıdaki kelimeleri bozdu; tebeşir yazısında son kelimeyi yarım bıraktı
+
+Google'a göre Google hesabı olan herkes Vids'te ayda 3 videoyu ücretsiz üretebiliyor. Ben ücretli hesabımla denedim.
+
+Kullandığım 5 prompt ve ipuçları için yorumlara "omni" yaz, DM'den göndereyim.
+
+#gemini #google #yapayzeka #yeklab #videoüretim #omni
