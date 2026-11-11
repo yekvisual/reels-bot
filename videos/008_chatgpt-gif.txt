@@ -1,0 +1,13 @@
+ChatGPT artık GIF yapıyor 🎞️
+
+Görsel modeli Images 2.6 ile, yeni Mac uygulamasında denedim:
+• Tek cümle yazdım, ~100 saniyede tahtaya tebeşirle yazılan bir GIF geldi; harfler tek tek beliriyor, ğ ve ü hatasız
+• Vapurlu GIF'e "bacasından duman çıksın" dedim, bir dakikada düzeltti
+• Logomu verdim, şeffaf arka planlı bir animasyon yaptı
+• Tek kusuru küçük olması: kare başına 360–510 piksel
+
+İsteğin sonuna "döngü GIF yap" eklemeniz yeterli. Plus hesapla denedim; ücretsiz planda açık mı, doğrulamadım.
+
+Denediğim promptlar için yorumlara "gif" yaz, DM'den göndereyim.
+
+#chatgpt #openai #yapayzeka #yeklab #gif #animasyon
