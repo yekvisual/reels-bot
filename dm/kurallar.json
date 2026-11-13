@@ -70,6 +70,14 @@
       "baslik": "ChatGPT ile GIF: promptlar",
       "icerik": "Tebeşir GIF'i: \"Kara tahtada tebeşirle yazılan “Öğretmenler Günü Kutlu Olsun” yazısı, harfler tek tek belirsin, sonunda küçük bir kalp çizilsin. Döngü GIF.\"\nDüzenleme: \"Vapurun bacasından duman çıksın, vapur yavaşça geçsin.\"\nDört denemenin tamamı, sonuçlar ve sınırlar: https://yeklab.com.tr/gundem/2026/11/chatgpt-images-2-6-gif/?ref=instagram\nChatGPT: https://chatgpt.com",
       "video": "videos/008_chatgpt-gif.mp4"
+    },
+    {
+      "video": "videos/009_hangisi-fable.mp4",
+      "anahtar": [
+        "fable"
+      ],
+      "baslik": "Fable 5.2 ve Opus 5.5: iki istem",
+      "icerik": "İki istemin tam metni, süreler ve notlar: https://yeklab.com.tr/gundem/2026/11/claude-fable-5-2/?ref=instagram#denedim-opus-55-ile-aynı-istem\nClaude: https://claude.ai"
     }
   ]
 }

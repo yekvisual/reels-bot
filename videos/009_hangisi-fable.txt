@@ -1,0 +1,13 @@
+Hangisi yeni model? A mı, B mi? 🤔
+
+Claude'un yeni modeli Fable 5.2'ye ve Opus 5.5'e aynı iki cümleyi verdim:
+• 3D bir yüzde 13 ışık stili
+• Gün batımında Boğaz'da vapur
+
+Yazılan kodu çalıştırıp videoya kaydettim. Sonuç başa baş. Kendi ölçümlerine göre ikisi de yaklaşık 20 dakika sürdü. Fable'ı ikinci kez denedim, bu kez 8 dakikada bitti. Tek deneme bir şey kanıtlamaz.
+
+Not: Yüzleri sonradan kadına çevirdim; ışık ve zamanlama modellerin yazdığı kod.
+
+İki istemin tam metni için yorumlara "fable" yaz, DM'den göndereyim. Ayrıntılar yeklab.com.tr'de.
+
+#claude #anthropic #yapayzeka #yeklab #threejs #kodlavideo
