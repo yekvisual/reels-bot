@@ -1,0 +1,73 @@
+name: Zamanlı karusel
+
+# Tek seferlik zamanlanmış kaydırmalı post. Tarih ve klasör aşağıda.
+# 15 Kasım 2026 Pazar 19:00 Türkiye saati = 16:00 UTC: kaydirmali/002_hafta-46
+# Paylaşıldıktan sonra posted.json tekrarı engeller; yine de iş bitince bu dosya silinebilir.
+on:
+  schedule:
+    - cron: "0 16 15 11 *"
+  workflow_dispatch:
+    inputs:
+      klasor:
+        description: "Kaydırmalı post klasörü"
+        required: false
+        default: "kaydirmali/002_hafta-46"
+      mode:
+        description: "paylas = paylaş, deneme = yalnız göster"
+        type: choice
+        options: [paylas, deneme]
+        default: paylas
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: reels-publish
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r requirements.txt
+
+      - name: Karuseli paylaş
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          DM_WORKER_ANAHTAR: ${{ secrets.DM_WORKER_ANAHTAR }}
+          IG_API: ${{ vars.IG_API || 'instagram' }}
+          UPLOAD_MODE: ${{ vars.UPLOAD_MODE }}
+          VIDEO_BASE_URL: ${{ vars.VIDEO_BASE_URL }}
+          KARUSEL_DIR: ${{ inputs.klasor || 'kaydirmali/002_hafta-46' }}
+          MODE: ${{ inputs.mode || 'paylas' }}
+        run: |
+          if [ "$MODE" = "deneme" ]; then python publish.py --karusel "$KARUSEL_DIR" --dry-run; else python publish.py --karusel "$KARUSEL_DIR"; fi
+
+      - name: posted.json'u kaydet
+        run: |
+          if ! git diff --quiet posted.json; then
+            git config user.name "reels-bot"
+            git config user.email "reels-bot@users.noreply.github.com"
+            git add posted.json
+            git commit -m "Karusel paylaşıldı [skip ci]"
+            git pull --rebase
+            git push
+            echo "YENI_PAYLASIM=1" >> "$GITHUB_ENV"
+          fi
+
+      - name: Sitedeki Instagram bölümünü güncelle
+        if: env.YENI_PAYLASIM == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sleep 600
+          gh workflow run instagram-sync.yml --repo "$GITHUB_REPOSITORY"

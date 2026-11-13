@@ -78,6 +78,22 @@
       ],
       "baslik": "Fable 5.2 ve Opus 5.5: iki istem",
       "icerik": "İki istemin tam metni, süreler ve notlar: https://yeklab.com.tr/gundem/2026/11/claude-fable-5-2/?ref=instagram#denedim-opus-55-ile-aynı-istem\nClaude: https://claude.ai"
+    },
+    {
+      "video": "videos/010_seedream.mp4",
+      "anahtar": [
+        "seedream"
+      ],
+      "baslik": "Seedream 5.5: denediğim istemler",
+      "icerik": "Şeffaf çıktı ve 20 tur düzenlemenin istemleri, sonuçlar: https://yeklab.com.tr/gundem/2026/11/seedream-5-5/?ref=instagram#denedim-şeffaf-çıktı-ve-20-tur-düzenleme\nMagnific: https://www.magnific.com"
+    },
+    {
+      "klasor": "kaydirmali/002_hafta-46",
+      "anahtar": [
+        "hafta"
+      ],
+      "baslik": "46. hafta: 7 gelişmenin bağlantıları",
+      "icerik": "1. Seedream 5.5: https://yeklab.com.tr/gundem/2026/11/seedream-5-5/?ref=instagram\n2. Claude Fable 5.2: https://yeklab.com.tr/gundem/2026/11/claude-fable-5-2/?ref=instagram\n3. Adobe MAX 2026: https://yeklab.com.tr/gundem/2026/11/adobe-max-2026/?ref=instagram\n4. MiniMax H3-Image: https://www.minimax.io/blog/minimax-h3-image\n5. Beeble SwitchX 3.0: https://www.beeble.ai/research/switchx-3-0\n6. Instagram Edits (Mac): https://thenextweb.com/news/instagram-launches-free-edits-video-editor-for-mac-with-4k-exports\n7. Gemini 4 Carbon: https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/"
     }
   ]
 }

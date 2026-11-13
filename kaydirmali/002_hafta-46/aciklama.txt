@@ -1,0 +1,15 @@
+Bu hafta yapay zekâda 7 gelişme (hafta 46, 6–12 Kasım):
+
+1. Seedream 5.5: şeffaf arka planlı görseli doğrudan üretiyor
+2. Claude Fable 5.2: yanıtlar yüzde 30'a kadar daha hızlı
+3. Adobe MAX 2026: Premiere'de Color Mode, Photoshop'ta Relight
+4. MiniMax H3-Image: 4096×4096 görsel 10 saniyenin altında, ağırlıkları açık
+5. Beeble SwitchX 3.0: oyuncu aynı kalıyor, ışık ve ortam değişiyor
+6. Instagram Edits Mac'te: 4K filigransız çıktı, MCP desteği
+7. Gemini 4 Carbon: AI Ultra abonelerine açıldı
+
+Hepsinin bağlantısı için yorumlara HAFTA yaz, mesajla göndereyim. Yanına hangisini denememi istediğini de ekle.
+
+Ayrıntısı yeklab.com.tr'de.
+
+#yapayzeka #yapayzekâ #seedream #claude #adobemax #içeriküretimi
