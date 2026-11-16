@@ -1,0 +1,50 @@
+name: Paylaşım metrikleri
+
+# Yalnız okuma: @yekvisual'ın son paylaşımlarının beğeni/yorum ve insights değerlerini iş kaydına tablo olarak yazar.
+# Depoya hiçbir şey yazmaz. Elle çalıştırılır.
+on:
+  workflow_dispatch:
+    inputs:
+      adet:
+        description: "Kaç paylaşım"
+        required: false
+        default: "20"
+
+permissions:
+  contents: read
+
+jobs:
+  metrik:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Metrikleri çek
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          ADET: ${{ inputs.adet || '20' }}
+        run: |
+          set -uo pipefail
+          T="$(printf %s "$IG_ACCESS_TOKEN" | tr -d '[:space:]')"
+          U="$(printf %s "${IG_USER_ID:-me}" | tr -d '[:space:]')"
+          G=https://graph.instagram.com/v26.0
+          echo "== Hesap"
+          curl -sS -G "$G/${U:-me}" --data-urlencode "fields=username,followers_count,follows_count,media_count" --data-urlencode "access_token=$T" | jq -c .
+          echo "== Paylaşımlar"
+          curl -sS -G "$G/${U:-me}/media" \
+            --data-urlencode "fields=id,media_type,media_product_type,permalink,timestamp,like_count,comments_count,caption" \
+            --data-urlencode "limit=$ADET" --data-urlencode "access_token=$T" > media.json
+          jq -r '.data[] | [.id, .media_type, .timestamp[0:10], (.like_count//"-"), (.comments_count//"-"), .permalink, ((.caption//"")|split("\n")[0][0:60])] | @tsv' media.json
+          echo "== Insights (metrik=değer)"
+          for id in $(jq -r '.data[].id' media.json); do
+            tip=$(jq -r --arg id "$id" '.data[]|select(.id==$id)|.media_product_type' media.json)
+            for m in "views,reach,saved,shares,total_interactions" "reach,saved,shares,total_interactions" "reach,saved"; do
+              r=$(curl -sS -G "$G/$id/insights" --data-urlencode "metric=$m" --data-urlencode "access_token=$T")
+              if [ "$(echo "$r" | jq -r '.data|length // 0')" != "0" ]; then
+                echo "$id $tip $(echo "$r" | jq -r '[.data[]|"\(.name)=\(.values[0].value // .total_value.value)"]|join(" ")')"
+                break
+              fi
+            done || true
+          done
+          echo "== Hata örneği (varsa)"; echo "${r:-}" | jq -c '.error // empty'
+          rm -f media.json
